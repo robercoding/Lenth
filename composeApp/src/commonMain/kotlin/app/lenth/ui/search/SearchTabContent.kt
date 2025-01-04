@@ -12,11 +12,15 @@ import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.Orientation
+import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -24,9 +28,12 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.statusBars
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
 import androidx.compose.material.Icon
@@ -63,7 +70,6 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import app.lenth.ui.SearchViewModel
 import app.lenth.ui.components.LenthPrimaryButton
 import app.lenth.ui.utils.BackHandler
-import co.touchlab.kermit.Logger
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -94,44 +100,56 @@ fun SearchTabContent(viewModel: SearchViewModel) {
         val cities = remember { mutableListOf("Valencia", "Barcelona", "Madrid", "Zaragoza", "Galicia", "Granada", "Malaga", "Cadiz") }
         var currentBottomOffset by remember { mutableStateOf(0.dp) }
         val animateCurrentBottomOffset by animateDpAsState(currentBottomOffset)
+        // val scroll = scroll
+        val scrollableState = rememberScrollState()
+        var statusBarPaddingTop = with(LocalDensity.current) { WindowInsets.statusBars.getTop(this).toDp() }
+        val statusBarPaddingBottom = with(LocalDensity.current) { WindowInsets.statusBars.getBottom(this).toDp() }
+        val statusBarHeight = statusBarPaddingTop + statusBarPaddingBottom
+
         Column(
             modifier = Modifier
                 .fillMaxWidth()
+                .statusBarsPadding()
                 .padding(16.dp),
         ) {
-            Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
-                state.inputPlaces.forEachIndexed { index, inputPlace ->
-                    val city = remember { cities.random() }
-                    PlaceInputField(
-                        text = inputPlace.place,
-                        hint = "e.g. $city",
-                        onQueryChanged = {
-                            editingPlaceIndex?.let { placeIndex ->
-                                viewModel.onQueryChanged(query = it, placeIndex = placeIndex)
-                            }
-                        },
-                        isSetByAutocomplete = inputPlace.selectedFromAutocomplete,
-                        onClickDelete = {
-                            viewModel.onClearInputPlace(placeIndex = index)
-                        },
-                        onFocused = {
-                            editingPlaceIndex = index
-                            currentBottomOffset = it
-                        },
+            Column(modifier = Modifier.weight(1f)) {
+                LazyColumn(
+                    modifier = Modifier
+                        .weight(1f, fill = false),
+                    verticalArrangement = Arrangement.spacedBy(16.dp),
+                ) {
+                    items(state.inputPlaces) { inputPlace ->
+                        val city = remember { cities.random() }
+                        PlaceInputField(
+                            text = inputPlace.place,
+                            hint = "e.g. $city",
+                            onQueryChanged = {
+                                editingPlaceIndex?.let { placeIndex ->
+                                    viewModel.onQueryChanged(query = it, placeIndex = placeIndex)
+                                }
+                            },
+                            isSetByAutocomplete = inputPlace.selectedFromAutocomplete,
+                            onClickDelete = {
+                                viewModel.onClearInputPlace(placeIndex = state.inputPlaces.indexOf(inputPlace))
+                            },
+                            onFocused = {
+                                editingPlaceIndex = state.inputPlaces.indexOf(inputPlace)
+                                currentBottomOffset = it - statusBarHeight - 16.dp
+                            },
+                        )
+                    }
+                }
+                Spacer(modifier = Modifier.height(20.dp))
+                Box {
+                    LenthPrimaryButton(
+                        text = "Clear all",
+                        textColor = Color.White,
+                        backgroundColor = Color.DarkGray,
+                        onClick = { viewModel.resetInputPlaces() },
                     )
                 }
             }
-            Spacer(modifier = Modifier.height(20.dp))
-            Box {
-                LenthPrimaryButton(
-                    text = "Clear all",
-                    textColor = Color.White,
-                    backgroundColor = Color.DarkGray,
-                    onClick = { viewModel.resetInputPlaces() },
-                )
-            }
 
-            Spacer(modifier = Modifier.weight(1f))
 
             androidx.compose.animation.AnimatedVisibility(
                 modifier = Modifier.fillMaxWidth(),

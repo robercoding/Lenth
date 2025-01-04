@@ -59,7 +59,6 @@ internal fun LenthPrimaryButton(
                         color = textColor,
                         fontWeight = FontWeight.Bold,
                         modifier = Modifier.padding(vertical = 8.dp),
-                        // textAlign = TextAlign.Center,
                     )
                 }
             }
