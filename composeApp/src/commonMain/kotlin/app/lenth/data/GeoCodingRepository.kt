@@ -9,11 +9,11 @@ import io.ktor.client.call.body
 import io.ktor.client.request.get
 
 class GeoCodingRepository(private val httpClient: HttpClient) {
-    suspend fun getGeoCoding(): LocationDomain {
-        val response = httpClient.get(urlString = "https://maps.googleapis.com/maps/api/geocode/json?address=Massamagrell&key=AIzaSyAzZxcgwEhBH4S6WPTE9FNfPHqeAS9EqqY\n").body<Response>()
+    suspend fun getGeoCoding(place: String): LocationDomain {
+        val response = httpClient.get(urlString = "https://maps.googleapis.com/maps/api/geocode/json?address=$place&key=AIzaSyAzZxcgwEhBH4S6WPTE9FNfPHqeAS9EqqY\n").body<Response>()
 
         Logger.i(tag = "this.", throwable = null, messageString = "Response: ${response.results[0].geometry.location}")
-        return LocationDomain(0.0, 0.0)
+        return LocationDomain(response.results[0].geometry.location.lat, response.results[0].geometry.location.lng)
     }
 
     suspend fun getPlacesList(input: String): List<String> {

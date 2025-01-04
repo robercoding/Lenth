@@ -43,6 +43,7 @@ kotlin {
             implementation(compose.foundation)
             implementation(compose.material)
             implementation(compose.ui)
+            implementation(compose.material3)
             implementation(compose.components.resources)
             implementation(compose.components.uiToolingPreview)
             implementation(libs.androidx.lifecycle.viewmodel)
@@ -56,9 +57,19 @@ kotlin {
             // DI
             implementation(libs.koin.core)
             implementation(libs.koin.compose)
+            implementation(libs.koin.compose.viewModel)
+            // implementation(libs.koin.androidx.compose)
 
             // Logger
             implementation(libs.touchlab.kermit)
+
+            // implementation(compose)
+            // implementation(libs.essenty.backHandler)
+
+            val nav_version = "2.8.0-alpha11"
+            implementation("org.jetbrains.androidx.navigation:navigation-compose:$nav_version")
+
+                // implementation("androidx.navigation:navigation-compose:$nav_version")
         }
 
         iosMain.dependencies {

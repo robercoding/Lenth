@@ -14,6 +14,8 @@ import app.lenth.data.GeoCodingRepository
 import app.lenth.di.defaultModules
 import app.lenth.di.networkModule
 import app.lenth.di.repositoryModule
+import app.lenth.di.useCaseModules
+import app.lenth.di.viewModelModules
 import app.lenth.ui.LenthScreen
 import co.touchlab.kermit.Logger
 import kotlinx.coroutines.launch
@@ -30,7 +32,7 @@ import org.koin.compose.koinInject
 fun App() {
 
     KoinApplication(
-        application = { modules(defaultModules, networkModule, repositoryModule) }
+        application = { modules(defaultModules, networkModule, repositoryModule, viewModelModules, useCaseModules) }
     ) {
         val greeting = koinInject<Greeting>()
         val repository = koinInject<GeoCodingRepository>()
