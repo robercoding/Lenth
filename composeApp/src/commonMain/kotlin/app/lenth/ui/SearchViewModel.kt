@@ -114,8 +114,7 @@ private val mockExamplesToFilter = listOf(
     "Coin",
 )
 
-private val mockInitialState = SearchState(
-    inputPlaces = listOf(
+private val mockInitialState =listOf(
         InputPlace("Valencia", true),
         InputPlace("Barcelona", true),
         InputPlace("Zaragoza", true),
@@ -127,20 +126,21 @@ private val mockInitialState = SearchState(
         InputPlace("Alicante", true),
         InputPlace("Albacete", true),
         InputPlace("", false),
-    ),
 )
+
 class SearchViewModel(
     private val findHamiltonianCycleMinimumCostUseCase: FindHamiltonianCycleMinimumCostUseCase,
     private val searchPlacesByInputQueryUseCase: SearchPlacesByInputQueryUseCase,
 ) : ViewModel() {
     private val _state: MutableStateFlow<SearchState> = MutableStateFlow(
         SearchState(
-            // inputPlaces = mockInitialState
-        ),
+            inputPlaces = mockInitialState,
+        )
     )
+
     val state: StateFlow<SearchState> = _state
 
-    var job: Job? = null
+    private var job: Job? = null
 
     fun onQueryChanged(query: String, placeIndex: Int) {
         _state.update {

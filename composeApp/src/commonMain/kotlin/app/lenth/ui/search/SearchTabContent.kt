@@ -71,11 +71,9 @@ import app.lenth.ui.utils.BackHandler
 import co.touchlab.kermit.Logger
 import kotlinx.coroutines.launch
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SearchTabContent(viewModel: SearchViewModel) {
     val state by viewModel.state.collectAsStateWithLifecycle()
-    // val inputPlacesState by viewModel.inputPlacesQuery.collectAsStateWithLifecycle()
     val focusManager = LocalFocusManager.current
     var focusedPlaceIndex by remember { mutableStateOf<Int?>(null) }
     var isTextFieldFocused by remember { mutableStateOf(false) }
@@ -198,7 +196,7 @@ fun SearchTabContent(viewModel: SearchViewModel) {
                         initialValue = 0f,
                         targetValue = 10f,
                         animationSpec = infiniteRepeatable(
-                            animation = tween(durationMillis = 800, easing = LinearEasing),
+                            animation = tween(durationMillis = 450, easing = LinearEasing),
                             repeatMode = RepeatMode.Reverse,
                         ),
                     )
@@ -252,7 +250,7 @@ fun SearchTabContent(viewModel: SearchViewModel) {
                     .fillMaxWidth()
                     .fillMaxHeight()
                     .offset(y = 72.dp) // Height of the place input field
-                    .zIndex(1f)
+                    .zIndex(1f) // not sure if this is needed
                     .background(Color.Black, RoundedCornerShape(8.dp))
                     .padding(horizontal = 16.dp)
                     .padding(top = 12.dp)
