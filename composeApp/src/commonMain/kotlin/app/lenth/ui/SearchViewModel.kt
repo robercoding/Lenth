@@ -9,11 +9,27 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
-private val cities = listOf("Valencia", "Barcelona", "Madrid", "Seville", "Bilbao", "Zaragoza", "Malaga", "Granada", "Alicante", "Murcia", "Ma")
+private val cities = listOf("Valencia", "Barcelona", "Madrid", "Seville", "Bilbao", "Zaragoza", "Malaga", "Granada", "Alicante", "Albacete", "Murcia", "Cordoba", "Toledo", "Salamanca", "Santander", "Valladolid", "Pamplona", "Logrono", "Oviedo", "Gijon", "Avila", "Segovia", "Cuenca", "Caceres", "Merida", "Badajoz", "Huelva", "Cadiz", "Almeria", "Jaen", "Huesca", "Teruel", "Guadalajara", "Soria", "Palencia", "Leon", "Zamora", "Burgos", "Vitoria", "San Sebastian", "Pontevedra", "Ourense", "Lugo", "A Coruna", "Santiago de Compostela", "Lleida", "Tarragona", "Girona", "Castellon", "Alcoy", "Elche", "Orihuela", "Cartagena", "Lorca", "Almeria", "Roquetas de Mar", "El Ejido", "Motril", "Almunecar", "Marbella", "Estepona", "Ronda", "Antequera", "Torremolinos", "Fuengirola", "Benalmadena", "Mijas", "Torrox", "Nerja", "Velez-Malaga", "Torre del Mar", "Alhaurin de la Torre", "Coin", "Alhaurin el Grande", "Mijas", "Rincon de la Victoria", "Torrox", "Nerja", "Velez-Malaga", "Torre del Mar", "Alhaurin de la Torre", "Coin", "Alhaurin el Grande", "Mijas", "Rincon de la Victoria", "Torrox", "Nerja", "Velez-Malaga", "Torre del Mar", "Alhaurin de la Torre", "Coin", "Alhaurin el Grande", "Mijas", "Rincon de la Victoria", "Torrox", "Nerja", "Velez-Malaga", "Torre del Mar", "Alhaurin de la Torre", "Coin")
 class SearchViewModel(
     private val findHamiltonianCycleMinimumCostUseCase: FindHamiltonianCycleMinimumCostUseCase
 ): ViewModel() {
-    private val _state: MutableStateFlow<SearchState> = MutableStateFlow(SearchState())
+    private val _state: MutableStateFlow<SearchState> = MutableStateFlow(SearchState(
+        inputPlaces = listOf(
+            InputPlace("Valencia", true),
+            InputPlace("Barcelona", true),
+            InputPlace("Zaragoza", true),
+            InputPlace("Madrid", true),
+            InputPlace("Seville", true),
+            InputPlace("Bilbao", true),
+            InputPlace("Malaga", true),
+            InputPlace("Granada", true),
+            InputPlace("Alicante", true),
+            InputPlace("Albacete", true),
+            InputPlace("", false),
+
+
+        ))
+    )
     val state: StateFlow<SearchState> = _state
 
     // private val inputPlaces = MutableStateFlow(mutableListOf(InputPlace("", false), InputPlace("", false)))
