@@ -4,31 +4,136 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import app.lenth.domain.FindHamiltonianCycleMinimumCostUseCase
 import app.lenth.domain.MinimumCostPath
+import app.lenth.domain.SearchPlacesByInputQueryUseCase
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
-private val cities = listOf("Valencia", "Barcelona", "Madrid", "Seville", "Bilbao", "Zaragoza", "Malaga", "Granada", "Alicante", "Albacete", "Murcia", "Cordoba", "Toledo", "Salamanca", "Santander", "Valladolid", "Pamplona", "Logrono", "Oviedo", "Gijon", "Avila", "Segovia", "Cuenca", "Caceres", "Merida", "Badajoz", "Huelva", "Cadiz", "Almeria", "Jaen", "Huesca", "Teruel", "Guadalajara", "Soria", "Palencia", "Leon", "Zamora", "Burgos", "Vitoria", "San Sebastian", "Pontevedra", "Ourense", "Lugo", "A Coruna", "Santiago de Compostela", "Lleida", "Tarragona", "Girona", "Castellon", "Alcoy", "Elche", "Orihuela", "Cartagena", "Lorca", "Almeria", "Roquetas de Mar", "El Ejido", "Motril", "Almunecar", "Marbella", "Estepona", "Ronda", "Antequera", "Torremolinos", "Fuengirola", "Benalmadena", "Mijas", "Torrox", "Nerja", "Velez-Malaga", "Torre del Mar", "Alhaurin de la Torre", "Coin", "Alhaurin el Grande", "Mijas", "Rincon de la Victoria", "Torrox", "Nerja", "Velez-Malaga", "Torre del Mar", "Alhaurin de la Torre", "Coin", "Alhaurin el Grande", "Mijas", "Rincon de la Victoria", "Torrox", "Nerja", "Velez-Malaga", "Torre del Mar", "Alhaurin de la Torre", "Coin", "Alhaurin el Grande", "Mijas", "Rincon de la Victoria", "Torrox", "Nerja", "Velez-Malaga", "Torre del Mar", "Alhaurin de la Torre", "Coin")
+private val cities = listOf(
+    "Valencia",
+    "Barcelona",
+    "Madrid",
+    "Seville",
+    "Bilbao",
+    "Zaragoza",
+    "Malaga",
+    "Granada",
+    "Alicante",
+    "Albacete",
+    "Murcia",
+    "Cordoba",
+    "Toledo",
+    "Salamanca",
+    "Santander",
+    "Valladolid",
+    "Pamplona",
+    "Logrono",
+    "Oviedo",
+    "Gijon",
+    "Avila",
+    "Segovia",
+    "Cuenca",
+    "Caceres",
+    "Merida",
+    "Badajoz",
+    "Huelva",
+    "Cadiz",
+    "Almeria",
+    "Jaen",
+    "Huesca",
+    "Teruel",
+    "Guadalajara",
+    "Soria",
+    "Palencia",
+    "Leon",
+    "Zamora",
+    "Burgos",
+    "Vitoria",
+    "San Sebastian",
+    "Pontevedra",
+    "Ourense",
+    "Lugo",
+    "A Coruna",
+    "Santiago de Compostela",
+    "Lleida",
+    "Tarragona",
+    "Girona",
+    "Castellon",
+    "Alcoy",
+    "Elche",
+    "Orihuela",
+    "Cartagena",
+    "Lorca",
+    "Almeria",
+    "Roquetas de Mar",
+    "El Ejido",
+    "Motril",
+    "Almunecar",
+    "Marbella",
+    "Estepona",
+    "Ronda",
+    "Antequera",
+    "Torremolinos",
+    "Fuengirola",
+    "Benalmadena",
+    "Mijas",
+    "Torrox",
+    "Nerja",
+    "Velez-Malaga",
+    "Torre del Mar",
+    "Alhaurin de la Torre",
+    "Coin",
+    "Alhaurin el Grande",
+    "Mijas",
+    "Rincon de la Victoria",
+    "Torrox",
+    "Nerja",
+    "Velez-Malaga",
+    "Torre del Mar",
+    "Alhaurin de la Torre",
+    "Coin",
+    "Alhaurin el Grande",
+    "Mijas",
+    "Rincon de la Victoria",
+    "Torrox",
+    "Nerja",
+    "Velez-Malaga",
+    "Torre del Mar",
+    "Alhaurin de la Torre",
+    "Coin",
+    "Alhaurin el Grande",
+    "Mijas",
+    "Rincon de la Victoria",
+    "Torrox",
+    "Nerja",
+    "Velez-Malaga",
+    "Torre del Mar",
+    "Alhaurin de la Torre",
+    "Coin",
+)
+
 class SearchViewModel(
-    private val findHamiltonianCycleMinimumCostUseCase: FindHamiltonianCycleMinimumCostUseCase
-): ViewModel() {
-    private val _state: MutableStateFlow<SearchState> = MutableStateFlow(SearchState(
-        inputPlaces = listOf(
-            InputPlace("Valencia", true),
-            InputPlace("Barcelona", true),
-            InputPlace("Zaragoza", true),
-            InputPlace("Madrid", true),
-            InputPlace("Seville", true),
-            InputPlace("Bilbao", true),
-            InputPlace("Malaga", true),
-            InputPlace("Granada", true),
-            InputPlace("Alicante", true),
-            InputPlace("Albacete", true),
-            InputPlace("", false),
-
-
-        ))
+    private val findHamiltonianCycleMinimumCostUseCase: FindHamiltonianCycleMinimumCostUseCase,
+    private val searchPlacesByInputQueryUseCase: SearchPlacesByInputQueryUseCase,
+) : ViewModel() {
+    private val _state: MutableStateFlow<SearchState> = MutableStateFlow(
+        SearchState(
+            // inputPlaces = listOf(
+            //     InputPlace("Valencia", true),
+            //     InputPlace("Barcelona", true),
+            //     InputPlace("Zaragoza", true),
+            //     InputPlace("Madrid", true),
+            //     InputPlace("Seville", true),
+            //     InputPlace("Bilbao", true),
+            //     InputPlace("Malaga", true),
+            //     InputPlace("Granada", true),
+            //     InputPlace("Alicante", true),
+            //     InputPlace("Albacete", true),
+            //     InputPlace("", false),
+            //
+            //     ),
+        ),
     )
     val state: StateFlow<SearchState> = _state
 
@@ -47,14 +152,36 @@ class SearchViewModel(
     // }
 
     fun onQueryChanged(query: String, placeIndex: Int) {
-        val currentValue = _state.value
-        val filter = cities.filter { city -> city.contains(query, ignoreCase = true) && !currentValue.inputPlaces.any { inputPlace ->inputPlace.place.contains(city) }} // Simulate cities search
-        _state.update {
-            val places = it.inputPlaces.toMutableList()
-            places.apply {
-                set(placeIndex, InputPlace(query, false))
+        viewModelScope.launch {
+            val currentValue = _state.value
+            _state.update {
+                val places = it.inputPlaces.toMutableList()
+                places.apply {
+                    set(placeIndex, InputPlace(query, false))
+                }
+                it.copy(inputPlaces = places)
             }
-            it.copy(inputPlaces = places, autoCompleteResults = filter)
+
+            val filter = searchPlacesByInputQueryUseCase(query)
+                .filter { city ->
+                    city.contains(
+                        query,
+                        ignoreCase = true,
+                    ) && !currentValue.inputPlaces.any { inputPlace -> inputPlace.place.contains(city) }
+                } // Simulate cities search
+            // val filter = cities.filter { city ->
+            //     city.contains(
+            //         query,
+            //         ignoreCase = true,
+            //     ) && !currentValue.inputPlaces.any { inputPlace -> inputPlace.place.contains(city) }
+            // } // Simulate cities search
+            _state.update {
+                val places = it.inputPlaces.toMutableList()
+                places.apply {
+                    set(placeIndex, InputPlace(query, false))
+                }
+                it.copy(inputPlaces = places, autoCompleteResults = filter)
+            }
         }
     }
 
@@ -91,7 +218,7 @@ class SearchViewModel(
     private fun clearInputPlace(index: Int) {
         _state.update {
             val places = it.inputPlaces.toMutableList()
-            if(index < places.indices.last && places.size > 2) {
+            if (index < places.indices.last && places.size > 2) {
                 places.apply {
                     removeAt(index)
                     if (places.last().place.isNotEmpty()) {
@@ -133,10 +260,10 @@ data class SearchState(
     val inputPlaces: List<InputPlace> = listOf(InputPlace("", false), InputPlace("", false)),
     val autoCompleteResults: List<String> = emptyList(),
     val isOptimizingRoute: Boolean = false,
-    val minimumCostPath: MinimumCostPath? = null
+    val minimumCostPath: MinimumCostPath? = null,
 )
 
-data class InputPlace (
+data class InputPlace(
     val place: String,
-    val selectedFromAutocomplete: Boolean
+    val selectedFromAutocomplete: Boolean,
 )

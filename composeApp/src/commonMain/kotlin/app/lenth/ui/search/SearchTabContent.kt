@@ -84,7 +84,6 @@ import kotlinx.coroutines.launch
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SearchTabContent(viewModel: SearchViewModel) {
-
     val state by viewModel.state.collectAsStateWithLifecycle()
     val focusManager = LocalFocusManager.current
     var focusedPlaceIndex by remember { mutableStateOf<Int?>(null) }
@@ -156,7 +155,6 @@ fun SearchTabContent(viewModel: SearchViewModel) {
                                 },
                                 onFocused = {
                                     val currentPosition = lazyColumnState.layoutInfo.visibleItemsInfo.firstOrNull { it.index == index }
-                                    // val itemHeight = currentPosition?.
                                     val currentItemOffsetPosition = currentPosition?.offset ?: 0
                                     with(density) {
                                         scope.launch {
@@ -295,15 +293,8 @@ fun SearchTabContent(viewModel: SearchViewModel) {
         }
 
         val stateSheet = rememberModalBottomSheetState()
-        val scope = rememberCoroutineScope()
-        var showBottomSheet by remember(state.minimumCostPath) {
+        val showBottomSheet by remember(state.minimumCostPath) {
             mutableStateOf(state.minimumCostPath != null)
-        }
-        LaunchedEffect(key1 = stateSheet) {
-            // state.hide()
-        }
-        LaunchedEffect(Unit) {
-            // state.hide()
         }
 
         if (showBottomSheet) {
@@ -339,8 +330,7 @@ fun SearchTabContent(viewModel: SearchViewModel) {
                 onDismissRequest = {
                     viewModel.onDismissMinimumCostPath()
                 },
-
-                )
+            )
         }
     }
 }

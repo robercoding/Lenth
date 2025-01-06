@@ -24,6 +24,7 @@ actual val networkModule: Module = org.koin.dsl.module {
                         allowSpecialFloatingPointValues = true
                         allowStructuredMapKeys = true
                         prettyPrint = true
+                        ignoreUnknownKeys = true
                         useArrayPolymorphism = false
                     },
                 )
