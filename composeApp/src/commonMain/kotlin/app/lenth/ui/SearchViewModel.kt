@@ -5,12 +5,13 @@ import androidx.lifecycle.viewModelScope
 import app.lenth.domain.FindHamiltonianCycleMinimumCostUseCase
 import app.lenth.domain.MinimumCostPath
 import app.lenth.domain.SearchPlacesByInputQueryUseCase
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
-private val cities = listOf(
+private val mockExamplesToFilter = listOf(
     "Valencia",
     "Barcelona",
     "Madrid",
@@ -113,54 +114,45 @@ private val cities = listOf(
     "Coin",
 )
 
+private val mockInitialState = SearchState(
+    inputPlaces = listOf(
+        InputPlace("Valencia", true),
+        InputPlace("Barcelona", true),
+        InputPlace("Zaragoza", true),
+        InputPlace("Madrid", true),
+        InputPlace("Seville", true),
+        InputPlace("Bilbao", true),
+        InputPlace("Malaga", true),
+        InputPlace("Granada", true),
+        InputPlace("Alicante", true),
+        InputPlace("Albacete", true),
+        InputPlace("", false),
+    ),
+)
 class SearchViewModel(
     private val findHamiltonianCycleMinimumCostUseCase: FindHamiltonianCycleMinimumCostUseCase,
     private val searchPlacesByInputQueryUseCase: SearchPlacesByInputQueryUseCase,
 ) : ViewModel() {
     private val _state: MutableStateFlow<SearchState> = MutableStateFlow(
         SearchState(
-            // inputPlaces = listOf(
-            //     InputPlace("Valencia", true),
-            //     InputPlace("Barcelona", true),
-            //     InputPlace("Zaragoza", true),
-            //     InputPlace("Madrid", true),
-            //     InputPlace("Seville", true),
-            //     InputPlace("Bilbao", true),
-            //     InputPlace("Malaga", true),
-            //     InputPlace("Granada", true),
-            //     InputPlace("Alicante", true),
-            //     InputPlace("Albacete", true),
-            //     InputPlace("", false),
-            //
-            //     ),
+            // inputPlaces = mockInitialState
         ),
     )
     val state: StateFlow<SearchState> = _state
 
-    // private val inputPlaces = MutableStateFlow(mutableListOf(InputPlace("", false), InputPlace("", false)))
-    // private val autoCompleteResults = MutableStateFlow(emptyList<String>())
-    //
-    // val newState = combine(inputPlaces, autoCompleteResults) { inputPlaces, autoCompleteResults ->
-    //     // Add another inputPlace based on the amount of selected by autocomplete
-    //     inputPlaces.count { it.selectedFromAutocomplete }.let { selectedCount ->
-    //         if (selectedCount < inputPlaces.size) {
-    //             inputPlaces.add(InputPlace("", false))
-    //         }
-    //     }
-    //
-    //     SearchState(inputPlaces, autoCompleteResults)
-    // }
+    var job: Job? = null
 
     fun onQueryChanged(query: String, placeIndex: Int) {
-        viewModelScope.launch {
-            val currentValue = _state.value
-            _state.update {
-                val places = it.inputPlaces.toMutableList()
-                places.apply {
-                    set(placeIndex, InputPlace(query, false))
-                }
-                it.copy(inputPlaces = places)
+        _state.update {
+            val places = it.inputPlaces.toMutableList()
+            places.apply {
+                set(placeIndex, InputPlace(query, false))
             }
+            it.copy(inputPlaces = places)
+        }
+        job?.cancel()
+        job = viewModelScope.launch {
+            val currentValue = _state.value
 
             val filter = searchPlacesByInputQueryUseCase(query)
                 .filter { city ->
@@ -168,13 +160,16 @@ class SearchViewModel(
                         query,
                         ignoreCase = true,
                     ) && !currentValue.inputPlaces.any { inputPlace -> inputPlace.place.contains(city) }
-                } // Simulate cities search
-            // val filter = cities.filter { city ->
+                }
+
+            // Simulate cities search
+            // val filter = mockExamplesToFilter.filter { city ->
             //     city.contains(
             //         query,
             //         ignoreCase = true,
             //     ) && !currentValue.inputPlaces.any { inputPlace -> inputPlace.place.contains(city) }
             // } // Simulate cities search
+
             _state.update {
                 val places = it.inputPlaces.toMutableList()
                 places.apply {
