@@ -61,8 +61,8 @@ class FindHamiltonianCycleMinimumCostUseCase(private val geoCodingRepository: Ge
 
     fun heldKarp(distanceMatrix: Array<DoubleArray>): Pair<Double, List<Int>> {
         val n = distanceMatrix.size
-        val memo = Array(1 shl n) { DoubleArray(n) { Double.MAX_VALUE } }
-        val parent = Array(1 shl n) { IntArray(n) { -1 } }
+        val memo = Array(1 shl n) { DoubleArray(n) { Double.MAX_VALUE } } // Initialize with infinity
+        val parent = Array(1 shl n) { IntArray(n) { -1 } } // Initialize with -1
 
         // Base case: Starting from every city except the start city (index 0)
         for (i in 1 until n) {

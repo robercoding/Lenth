@@ -38,6 +38,20 @@ fun OptimalPathSheet(
             content = {
                 Box(modifier = Modifier.fillMaxWidth().background(Color.DarkGray), contentAlignment = Alignment.CenterStart) {
                     Column(modifier = Modifier.padding(horizontal = 16.dp)) {
+                        // I need to show the cost of the path in a cool way
+                        minimumCostPath?.let {
+                            val costSplits = it.cost.toString().split(".")
+                            val costIntegerPart = costSplits[0]
+                            val costDecimalPart = costSplits[1]
+                            Text(
+                                text = "$costIntegerPart.${costDecimalPart.take(2)} km",
+                                color = Color.White,
+                                style = MaterialTheme.typography.h6,
+                                modifier = Modifier.padding(vertical = 8.dp),
+                            )
+                        }
+
+
                         minimumCostPath?.let {
                             it.path.forEachIndexed { index, place ->
                                 Row(
@@ -55,6 +69,23 @@ fun OptimalPathSheet(
                                         color = Color.White,
                                         style = MaterialTheme.typography.body1,
                                     )
+
+                                    Spacer(modifier = Modifier.width(8.dp))
+
+                                    // Draw emoji start and end indicators
+                                    if (index == 0) {
+                                        Text(
+                                            text = "🏁",
+                                            color = Color.White,
+                                            style = MaterialTheme.typography.body1,
+                                        )
+                                    } else if (index == it.path.size - 1) {
+                                        Text(
+                                            text = "🏁",
+                                            color = Color.White,
+                                            style = MaterialTheme.typography.body1,
+                                        )
+                                    }
                                 }
                             }
                         }

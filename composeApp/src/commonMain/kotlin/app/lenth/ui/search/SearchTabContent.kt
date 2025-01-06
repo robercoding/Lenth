@@ -121,7 +121,10 @@ fun SearchTabContent(viewModel: SearchViewModel) {
                         .weight(weight = 1f, fill = false),
                     verticalArrangement = Arrangement.spacedBy(16.dp),
                 ) {
-                    itemsIndexed(state.inputPlaces) { index, inputPlace ->
+                    itemsIndexed(
+                        state.inputPlaces,
+                        key = { index, inputPlace -> "key$index$inputPlace" },
+                    ) { index, inputPlace ->
                         val city = remember { mutableStateOf("e.g. Valencia") }
                         val scope = rememberCoroutineScope()
 

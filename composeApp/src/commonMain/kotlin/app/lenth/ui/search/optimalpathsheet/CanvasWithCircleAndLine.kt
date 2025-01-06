@@ -2,6 +2,7 @@ package app.lenth.ui.search.optimalpathsheet
 
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.MaterialTheme
@@ -40,10 +41,10 @@ fun CanvasWithCircleAndLine(index: Int, totalItems: Int) {
         }
 
         // Draw the index inside the circle
-        Text(
-            text = "${index + 1}",
-            color = Color.White, // Adjust text color for contrast
-            style = MaterialTheme.typography.body2,
-        )
+            Text(
+                text = "${index + 1}",
+                color = Color.White, // Adjust text color for contrast
+                style = MaterialTheme.typography.body2,
+            )
     }
 }
