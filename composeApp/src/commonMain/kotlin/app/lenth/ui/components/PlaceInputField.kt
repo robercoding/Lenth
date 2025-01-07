@@ -60,7 +60,6 @@ fun PlaceInputField(
         modifier = modifier
             .fillMaxWidth()
             .background(Color.DarkGray, RoundedCornerShape(8.dp)),
-        // .padding(16.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         TextField(

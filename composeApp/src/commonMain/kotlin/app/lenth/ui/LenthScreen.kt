@@ -133,7 +133,6 @@ fun LenthScreen() {
                                     text = title,
                                     color = if (selectedTab == index) Color.White else Color.Gray,
                                     modifier = Modifier.onPlaced {
-                                        Logger.i("Text offset: ${it.positionOnScreen()}")
                                         tabPositionText = TabPositionText(
                                             width = it.size.width.dp,
                                             left = it.positionInRoot().x.dp,

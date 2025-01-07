@@ -16,9 +16,9 @@ class GeoCodingRepository(private val httpClient: HttpClient) {
         return LocationDomain(response.results[0].geometry.location.lat, response.results[0].geometry.location.lng)
     }
 
-    suspend fun getPlacesList(input: String): List<String> {
+    suspend fun getPlacesList(input: String, searchTypeDomain: SearchTypeDomain): List<String> {
         try {
-            val response = httpClient.get(urlString = "https://maps.googleapis.com/maps/api/place/autocomplete/json?input=$input&types=geocode&key=AIzaSyAzZxcgwEhBH4S6WPTE9FNfPHqeAS9EqqY").body<PlacePredictionsResponse>()
+            val response = httpClient.get(urlString = "https://maps.googleapis.com/maps/api/place/autocomplete/json?input=$input&types=${searchTypeDomain.type}&key=AIzaSyAzZxcgwEhBH4S6WPTE9FNfPHqeAS9EqqY").body<PlacePredictionsResponse>()
 
             val predictions = response.placePredictions.map { it.placeDescription }
             Logger.i(tag = "this.", throwable = null, messageString = "Response: $predictions")
@@ -31,17 +31,15 @@ class GeoCodingRepository(private val httpClient: HttpClient) {
     }
 }
 
-enum class SearchType(val type: String) {
-    ALL("all"), // Represents no filter, includes all types
-    ADDRESSES("address"), // Specific street addresses
-    CITIES_TOWNS("locality"), // City or town names
-    REGIONS("administrative_area_level_1"), // States, provinces, countries
-    LANDMARKS("point_of_interest"), // Landmarks, parks, attractions
-    BUSINESSES_PLACES("establishment"), // Commercial establishments
-    POSTAL_CODES("postal_code"), // ZIP codes or postal areas
-    TRANSIT_STATIONS("transit_station"), // Train, bus, and other stations
-    NATURAL_FEATURES("natural_feature"), // Mountains, rivers, lakes
-    NEIGHBORHOODS("neighborhood"); // Defined areas within cities
+enum class SearchTypeDomain(val type: String) {
+    ALL(""), // Represents no filter, includes all types
+
+    // Table 3 Types
+    GEOCODE("geocode"), // Geocoding results (e.g., addresses or places with coordinates)
+    ADDRESSES("address"), // Specific and precise street addresses
+    ESTABLISHMENTS("establishment"), // Business results
+    REGIONS("(regions)"), // Broad geographic areas
+    CITIES("(cities)"); // Cities or administrative areas level 3
 
     companion object {
         fun getAllTypes(): List<String> {

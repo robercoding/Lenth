@@ -1,10 +1,13 @@
 package app.lenth.ui
 
+import androidx.compose.runtime.Immutable
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import app.lenth.domain.FindHamiltonianCycleMinimumCostUseCase
 import app.lenth.domain.MinimumCostPath
 import app.lenth.domain.SearchPlacesByInputQueryUseCase
+import app.lenth.ui.search.filter.SearchTypeUi
+import app.lenth.ui.search.filter.toDomain
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -154,7 +157,7 @@ class SearchViewModel(
         job = viewModelScope.launch {
             val currentValue = _state.value
 
-            val filter = searchPlacesByInputQueryUseCase(query)
+            val filter = searchPlacesByInputQueryUseCase(query, currentValue.searchType.toDomain())
                 .filter { city ->
                     city.contains(
                         query,
@@ -239,7 +242,7 @@ class SearchViewModel(
 
             val count = places.count { it.selectedFromAutocomplete }
             if (count >= 2 && places.last().place.isNotEmpty()) {
-                places.add(InputPlace("", false))
+                // places.add(InputPlace("", false))
             }
             it.copy(inputPlaces = places, autoCompleteResults = emptyList())
         }
@@ -249,15 +252,22 @@ class SearchViewModel(
         clearInputPlace(placeIndex)
         _state.update { it.copy(autoCompleteResults = emptyList()) }
     }
+
+    fun onSearchTypeChanged(searchType: SearchTypeUi) {
+        _state.update { it.copy(searchType = searchType) }
+    }
 }
 
+@Immutable
 data class SearchState(
     val inputPlaces: List<InputPlace> = listOf(InputPlace("", false), InputPlace("", false)),
     val autoCompleteResults: List<String> = emptyList(),
     val isOptimizingRoute: Boolean = false,
+    val searchType: SearchTypeUi = SearchTypeUi.ALL,
     val minimumCostPath: MinimumCostPath? = null,
 )
 
+@Immutable
 data class InputPlace(
     val place: String,
     val selectedFromAutocomplete: Boolean,

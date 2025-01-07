@@ -1,11 +1,13 @@
 package app.lenth.domain
 
+import androidx.compose.runtime.Immutable
 import app.lenth.data.GeoCodingRepository
 import app.lenth.data.models.LocationDomain
 import co.touchlab.kermit.Logger
 import kotlin.math.*
 
 data class PlaceWithCoordinates(val place: String, val lat: Double, val lng: Double)
+@Immutable
 data class MinimumCostPath(val cost: Double, val path: List<String>)
 class FindHamiltonianCycleMinimumCostUseCase(private val geoCodingRepository: GeoCodingRepository) {
     suspend operator fun invoke(places: List<String>): MinimumCostPath {

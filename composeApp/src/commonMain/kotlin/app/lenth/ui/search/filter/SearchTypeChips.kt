@@ -5,7 +5,6 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -13,10 +12,8 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.Stable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
@@ -24,27 +21,15 @@ import androidx.compose.ui.unit.dp
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 // Define the search types as an enum
-enum class SearchTypeUi(val displayName: String) {
-    ALL("All"),
-    ADDRESSES("Addresses"),
-    CITIES_TOWNS("Cities/Towns"),
-    REGIONS("Regions"),
-    LANDMARKS("Landmarks"),
-    BUSINESSES_PLACES("Businesses/Places"),
-    POSTAL_CODES("Postal Codes"),
-    TRANSIT_STATIONS("Transit Stations"),
-    NATURAL_FEATURES("Natural Features"),
-    NEIGHBORHOODS("Neighborhoods");
-}
+
 
 // Composable function to display the row of chips
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun SearchTypeChips(
+    selectedSearchType: SearchTypeUi,
     onChipSelected: (SearchTypeUi) -> Unit
 ) {
-    var selectedChip by remember { mutableStateOf(SearchTypeUi.ALL) }
-
     FlowRow(
         modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.spacedBy(8.dp),
@@ -53,9 +38,8 @@ fun SearchTypeChips(
         SearchTypeUi.values().forEach { searchType ->
             Chip(
                 searchType = searchType,
-                isSelected = searchType == selectedChip,
+                isSelected = searchType == selectedSearchType,
                 onClick = {
-                    selectedChip = searchType
                     onChipSelected(searchType)
                 }
             )
@@ -100,7 +84,9 @@ fun Chip(
 @Preview
 fun SearchTypeChipsPreview() {
     MaterialTheme {
-        SearchTypeChips { selectedType ->
+        SearchTypeChips(
+            selectedSearchType = SearchTypeUi.ALL
+        ) { selectedType ->
             println("Selected: ${selectedType.name}")
         }
     }
