@@ -8,6 +8,7 @@ import app.lenth.domain.MinimumCostPath
 import app.lenth.domain.SearchPlacesByInputQueryUseCase
 import app.lenth.ui.search.filter.SearchTypeUi
 import app.lenth.ui.search.filter.toDomain
+import kotlin.random.Random
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -118,17 +119,17 @@ private val mockExamplesToFilter = listOf(
 )
 
 private val mockInitialState =listOf(
-        InputPlace("Valencia", true),
-        InputPlace("Barcelona", true),
-        InputPlace("Zaragoza", true),
-        InputPlace("Madrid", true),
-        InputPlace("Seville", true),
-        InputPlace("Bilbao", true),
-        InputPlace("Malaga", true),
-        InputPlace("Granada", true),
-        InputPlace("Alicante", true),
-        InputPlace("Albacete", true),
-        InputPlace("", false),
+        // InputPlace("Valencia", true),
+        InputPlace(place = "Barcelona",  selectedFromAutocomplete = true),
+        InputPlace(place = "Zaragoza", selectedFromAutocomplete = true),
+        InputPlace(place = "Madrid", selectedFromAutocomplete = true),
+        InputPlace(place = "Seville",selectedFromAutocomplete =  true),
+        InputPlace(place = "Bilbao", selectedFromAutocomplete = true),
+        InputPlace(place = "Malaga", selectedFromAutocomplete = true),
+        InputPlace(place = "Granada",selectedFromAutocomplete =  true),
+        InputPlace(place = "Alicante",selectedFromAutocomplete =  true),
+        InputPlace(place = "Albacete", selectedFromAutocomplete = true),
+        InputPlace(place = "", selectedFromAutocomplete = false),
 )
 
 class SearchViewModel(
@@ -149,7 +150,7 @@ class SearchViewModel(
         _state.update {
             val places = it.inputPlaces.toMutableList()
             places.apply {
-                set(placeIndex, InputPlace(query, false))
+                set(placeIndex, get(placeIndex).copy(place = query, selectedFromAutocomplete = false))
             }
             it.copy(inputPlaces = places)
         }
@@ -158,11 +159,8 @@ class SearchViewModel(
             val currentValue = _state.value
 
             val filter = searchPlacesByInputQueryUseCase(query, currentValue.searchType.toDomain())
-                .filter { city ->
-                    city.contains(
-                        query,
-                        ignoreCase = true,
-                    ) && !currentValue.inputPlaces.any { inputPlace -> inputPlace.place.contains(city) }
+                .filter { foundCitiesByQuery ->
+                    !currentValue.inputPlaces.any { inputPlace -> inputPlace.place.equals(foundCitiesByQuery, ignoreCase = true) }
                 }
 
             // Simulate cities search
@@ -175,9 +173,6 @@ class SearchViewModel(
 
             _state.update {
                 val places = it.inputPlaces.toMutableList()
-                places.apply {
-                    set(placeIndex, InputPlace(query, false))
-                }
                 it.copy(inputPlaces = places, autoCompleteResults = filter)
             }
         }
@@ -205,7 +200,7 @@ class SearchViewModel(
 
     fun resetInputPlaces() {
         _state.update {
-            it.copy(inputPlaces = listOf(InputPlace("", false), InputPlace("", false)))
+            it.copy(inputPlaces = listOf(InputPlace(place ="", selectedFromAutocomplete = false), InputPlace(place = "", selectedFromAutocomplete =  false)))
         }
     }
 
@@ -220,12 +215,12 @@ class SearchViewModel(
                 places.apply {
                     removeAt(index)
                     if (places.last().place.isNotEmpty()) {
-                        add(InputPlace("", false))
+                        add(InputPlace(place = "", selectedFromAutocomplete =  false))
                     }
                 }
             } else {
                 places.apply {
-                    set(index, InputPlace("", false))
+                    set(index, InputPlace(place ="", selectedFromAutocomplete = false))
                 }
             }
 
@@ -237,12 +232,12 @@ class SearchViewModel(
         _state.update {
             val places = it.inputPlaces.toMutableList()
             places.apply {
-                set(placeIndex, InputPlace(result, true))
+                set(placeIndex, get(placeIndex).copy(place = result, selectedFromAutocomplete =  true))
             }
 
             val count = places.count { it.selectedFromAutocomplete }
             if (count >= 2 && places.last().place.isNotEmpty()) {
-                // places.add(InputPlace("", false))
+                places.add(InputPlace(place = "", selectedFromAutocomplete =  false))
             }
             it.copy(inputPlaces = places, autoCompleteResults = emptyList())
         }
@@ -260,7 +255,7 @@ class SearchViewModel(
 
 @Immutable
 data class SearchState(
-    val inputPlaces: List<InputPlace> = listOf(InputPlace("", false), InputPlace("", false)),
+    val inputPlaces: List<InputPlace> = listOf(InputPlace(place = "", selectedFromAutocomplete =  false), InputPlace(place = "", selectedFromAutocomplete =  false)),
     val autoCompleteResults: List<String> = emptyList(),
     val isOptimizingRoute: Boolean = false,
     val searchType: SearchTypeUi = SearchTypeUi.ALL,
@@ -269,6 +264,7 @@ data class SearchState(
 
 @Immutable
 data class InputPlace(
+    val id: Long = Random.nextLong(),
     val place: String,
     val selectedFromAutocomplete: Boolean,
 )

@@ -17,6 +17,7 @@ class GeoCodingRepository(private val httpClient: HttpClient) {
     }
 
     suspend fun getPlacesList(input: String, searchTypeDomain: SearchTypeDomain): List<String> {
+        Logger.i(tag = "this.", throwable = null, messageString = "Input: $input & type: ${searchTypeDomain.type}")
         try {
             val response = httpClient.get(urlString = "https://maps.googleapis.com/maps/api/place/autocomplete/json?input=$input&types=${searchTypeDomain.type}&key=AIzaSyAzZxcgwEhBH4S6WPTE9FNfPHqeAS9EqqY").body<PlacePredictionsResponse>()
 

@@ -66,7 +66,7 @@ fun SearchTabListLocations(
     ) {
         itemsIndexed(
             inputPlaces,
-            key = { index, inputPlace -> index },
+            key = { index, inputPlace -> "${inputPlace.id}" },
         ) { index, inputPlace ->
             val city = remember { mutableStateOf("e.g. Valencia") }
 
