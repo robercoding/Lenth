@@ -15,7 +15,6 @@ import androidx.compose.animation.expandVertically
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.shrinkVertically
-import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.scrollBy
@@ -24,6 +23,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.absoluteOffset
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -32,7 +32,6 @@ import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
@@ -42,9 +41,7 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropDown
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.ModalBottomSheet
-import androidx.compose.material3.rememberModalBottomSheetState
+import androidx.compose.material.icons.filled.Tune
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -55,17 +52,21 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.layout.onPlaced
+import androidx.compose.ui.layout.positionInParent
+import androidx.compose.ui.layout.positionInRoot
+import androidx.compose.ui.layout.positionInWindow
+import androidx.compose.ui.layout.positionOnScreen
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.zIndex
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import app.lenth.ui.SearchViewModel
 import app.lenth.ui.components.LenthPrimaryButton
 import app.lenth.ui.components.PlaceInputField
+import app.lenth.ui.search.filter.SearchTypeChips
 import app.lenth.ui.search.optimalpathsheet.OptimalPathSheet
 import app.lenth.ui.utils.BackHandler
 import co.touchlab.kermit.Logger
@@ -100,19 +101,79 @@ fun SearchTabContent(viewModel: SearchViewModel) {
     val currentInputFieldOffsetAnimated by animateDpAsState(if (isTextFieldFocused) currentTopOffset else 0.dp, tween(250))
     val density = LocalDensity.current
 
+    var textFieldOffset by remember { mutableStateOf(0f) } // Y offset of the TextField
+    var textFieldHeight by remember { mutableStateOf(0) }
+
     val cities = remember { mutableListOf("Valencia", "Barcelona", "Madrid", "Zaragoza", "Galicia", "Granada", "Malaga", "Cadiz") }
     var alreadyScrolled by rememberSaveable { mutableStateOf(false) }
     val shouldShowArrow = lazyColumnState.canScrollForward && !alreadyScrolled
 
+    val showFilterChips = remember { mutableStateOf(false) }
     Box(modifier = Modifier.fillMaxSize()) {
-
         Column(
             modifier = Modifier
                 .fillMaxWidth()
                 .statusBarsPadding()
                 .padding(16.dp),
         ) {
-            Column(modifier = Modifier.weight(1f)) {
+            Column {
+                Row {
+                    Text(
+                        text = "Locations",
+                        style = MaterialTheme.typography.h6,
+                        color = Color.White,
+                        modifier = Modifier,
+                    )
+                    Spacer(modifier = Modifier.weight(1f))
+
+                    // Filter icon
+                    Icon(
+                        imageVector = Icons.Default.Tune,
+                        contentDescription = "Filter",
+                        tint = Color.White,
+                        modifier = Modifier
+                            .size(24.dp)
+                            .clickable {
+                                showFilterChips.value = !showFilterChips.value
+                            },
+                    )
+                }
+
+
+                Spacer(modifier = Modifier.height(16.dp))
+                AnimatedVisibility(
+                    visible = showFilterChips.value,
+                    enter = fadeIn() + expandVertically(expandFrom = Alignment.Top),
+                    exit = fadeOut() + shrinkVertically(shrinkTowards = Alignment.Top),
+
+                    ) {
+                    Column {
+                        SearchTypeChips(
+                            onChipSelected = { searchType ->
+                                // viewModel.onChipSelected(searchType)
+                            },
+                        )
+                        Spacer(modifier = Modifier.height(16.dp))
+                    }
+                }
+            }
+
+            Column(modifier = Modifier
+                .weight(1f)
+                .onGloballyPositioned {
+                    // if (focusedPlaceIndex == index) {
+                        textFieldOffset = it.positionInParent().y
+                        // textFieldHeight = it.size.height
+
+                        Logger.i("TextFieldOffset: $textFieldOffset")
+                        Logger.i("PositionOnscreen: ${it.positionOnScreen().y}")
+                        Logger.i("PositionInRoot: ${it.positionInRoot().y}")
+                        Logger.i("PositionInWindow: ${it.positionInWindow().y}")
+
+                        Logger.i("TextFieldHeight: $textFieldHeight")
+                    }
+                // }
+            ) {
                 // LazyColumn for input places
                 LazyColumn(
                     state = lazyColumnState,
@@ -123,7 +184,7 @@ fun SearchTabContent(viewModel: SearchViewModel) {
                 ) {
                     itemsIndexed(
                         state.inputPlaces,
-                        key = { index, inputPlace -> "key$index$inputPlace" },
+                        key = { index, inputPlace -> index },
                     ) { index, inputPlace ->
                         val city = remember { mutableStateOf("e.g. Valencia") }
                         val scope = rememberCoroutineScope()
@@ -131,9 +192,17 @@ fun SearchTabContent(viewModel: SearchViewModel) {
                         Box(
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .offset(y = if (focusedPlaceIndex == index) currentInputFieldOffsetAnimated else 0.dp),
-                        ) {
+                                .offset(y = if (focusedPlaceIndex == index) currentInputFieldOffsetAnimated else 0.dp)
+                                .background(Color.Black)
+                                .animateItem(),
+
+                            ) {
                             PlaceInputField(
+                                modifier = Modifier .onGloballyPositioned {
+                                    if (focusedPlaceIndex == index) {
+                                        textFieldHeight = it.size.height
+                                    }
+                                },
                                 text = inputPlace.place,
                                 hint = city.value,
                                 onQueryChanged = { query ->
@@ -252,8 +321,10 @@ fun SearchTabContent(viewModel: SearchViewModel) {
                 modifier = Modifier
                     .fillMaxWidth()
                     .fillMaxHeight()
-                    .offset(y = 72.dp) // Height of the place input field
-                    .zIndex(1f) // not sure if this is needed
+                    .absoluteOffset(
+                        x = 0.dp,
+                        y = with(LocalDensity.current) { (textFieldOffset + textFieldHeight).toDp() + 16.dp },
+                    )
                     .background(Color.Black, RoundedCornerShape(8.dp))
                     .padding(horizontal = 16.dp)
                     .padding(top = 12.dp)

@@ -31,6 +31,7 @@ import androidx.compose.ui.unit.dp
 
 @Composable
 fun PlaceInputField(
+    modifier: Modifier = Modifier,
     text: String,
     isSetByAutocomplete: Boolean,
     hint: String,
@@ -56,7 +57,7 @@ fun PlaceInputField(
     }
 
     Row(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .background(Color.DarkGray, RoundedCornerShape(8.dp)),
         // .padding(16.dp),

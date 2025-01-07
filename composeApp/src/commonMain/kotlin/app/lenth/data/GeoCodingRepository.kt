@@ -30,3 +30,22 @@ class GeoCodingRepository(private val httpClient: HttpClient) {
 
     }
 }
+
+enum class SearchType(val type: String) {
+    ALL("all"), // Represents no filter, includes all types
+    ADDRESSES("address"), // Specific street addresses
+    CITIES_TOWNS("locality"), // City or town names
+    REGIONS("administrative_area_level_1"), // States, provinces, countries
+    LANDMARKS("point_of_interest"), // Landmarks, parks, attractions
+    BUSINESSES_PLACES("establishment"), // Commercial establishments
+    POSTAL_CODES("postal_code"), // ZIP codes or postal areas
+    TRANSIT_STATIONS("transit_station"), // Train, bus, and other stations
+    NATURAL_FEATURES("natural_feature"), // Mountains, rivers, lakes
+    NEIGHBORHOODS("neighborhood"); // Defined areas within cities
+
+    companion object {
+        fun getAllTypes(): List<String> {
+            return values().map { it.type }
+        }
+    }
+}
