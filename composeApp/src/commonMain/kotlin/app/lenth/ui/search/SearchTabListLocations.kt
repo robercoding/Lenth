@@ -1,10 +1,7 @@
 package app.lenth.ui.search
 
-import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.scrollBy
 import androidx.compose.foundation.layout.Arrangement
@@ -13,7 +10,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.itemsIndexed
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -28,7 +24,6 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.dp
 import app.lenth.ui.InputPlace
 import app.lenth.ui.components.PlaceInputField
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 @Composable
@@ -43,7 +38,7 @@ fun SearchTabListLocations(
     onUpdateTextFieldHeight: (Int) -> Unit,
     onUpdateFocusedPlaceIndex: (Int) -> Unit,
     onEndCalculationFocus: () -> Unit,
-    onFinishTranslation: () -> Unit,
+    onFinishPlaceInputAnimateBack: () -> Unit,
 ) {
     val density = LocalDensity.current
     val scope = rememberCoroutineScope()
@@ -53,7 +48,7 @@ fun SearchTabListLocations(
         targetValue = if (isTextFieldFocused) currentTopTranslationY else 0f, tween(250),
         finishedListener =  {
             if(!isTextFieldFocused) {
-                onFinishTranslation()
+                onFinishPlaceInputAnimateBack()
             }
         }
     )

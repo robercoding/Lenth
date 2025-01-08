@@ -1,12 +1,19 @@
 package app.lenth.ui.search
 
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.animateContentSize
+import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.LinearOutSlowInEasing
+import androidx.compose.animation.core.RepeatMode
+import androidx.compose.animation.core.animateFloat
+import androidx.compose.animation.core.infiniteRepeatable
+import androidx.compose.animation.core.rememberInfiniteTransition
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.expandHorizontally
 import androidx.compose.animation.expandVertically
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
+import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -18,13 +25,19 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.Icon
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -75,10 +88,19 @@ fun SearchTabContent(viewModel: SearchViewModel) {
     var listOffsetInParent by remember { mutableStateOf(0f) } // Y offset of the TextField
     var textFieldHeight by remember { mutableStateOf(0) }
 
-    val cities = remember { mutableListOf("Valencia", "Barcelona", "Madrid", "Zaragoza", "Galicia", "Granada", "Malaga", "Cadiz") }
+    // val cities = remember { mutableListOf("Valencia", "Barcelona", "Madrid", "Zaragoza", "Galicia", "Granada", "Malaga", "Cadiz") }
     var alreadyScrolled by rememberSaveable { mutableStateOf(false) }
     val shouldShowArrow = lazyColumnState.canScrollForward && !alreadyScrolled
-    var previousListSize by remember { mutableStateOf(0) }
+
+
+    LaunchedEffect(lazyColumnState.firstVisibleItemIndex) {
+        if (alreadyScrolled) {
+            return@LaunchedEffect
+        }
+        if (lazyColumnState.firstVisibleItemIndex > 0) {
+            alreadyScrolled = true
+        }
+    }
 
     var showFilterChips by remember { mutableStateOf(false) }
     Box(modifier = Modifier.fillMaxSize()) {
@@ -106,11 +128,7 @@ fun SearchTabContent(viewModel: SearchViewModel) {
                     }
             ) {
                 Column {
-                    Column(
-                        modifier = Modifier
-                            .weight(1f)
-                            ,
-                    ) {
+                    Column(modifier = Modifier.weight(1f),) {
                         SearchTabListLocations(
                             Modifier.padding(horizontal = 8.dp)
                                 .weight(weight = 1f, fill = false),
@@ -126,7 +144,7 @@ fun SearchTabContent(viewModel: SearchViewModel) {
                             onUpdateFocusedPlaceIndex = { index ->
                                 focusedPlaceIndex = index
                             },
-                            onFinishTranslation = {
+                            onFinishPlaceInputAnimateBack = {
                                 focusedPlaceIndex = null
                             },
                             onEndCalculationFocus = {
@@ -135,6 +153,34 @@ fun SearchTabContent(viewModel: SearchViewModel) {
                         )
 
                         Spacer(modifier = Modifier.height(8.dp))
+
+                        androidx.compose.animation.AnimatedVisibility(
+                            modifier = Modifier.fillMaxWidth().animateContentSize(),
+                            visible = shouldShowArrow && lazyColumnState.canScrollForward,
+                            enter = fadeIn() + expandVertically(expandFrom = Alignment.CenterVertically),
+                            exit = fadeOut() + shrinkVertically(),
+                        ) {
+                            val infiniteTransition = rememberInfiniteTransition()
+                            val arrowOffset by infiniteTransition.animateFloat(
+                                initialValue = 0f,
+                                targetValue = 10f,
+                                animationSpec = infiniteRepeatable(
+                                    animation = tween(durationMillis = 450, easing = LinearEasing),
+                                    repeatMode = RepeatMode.Reverse,
+                                ),
+                            )
+
+                            Icon(
+                                imageVector = Icons.Default.ArrowDropDown,
+                                contentDescription = "Scroll down",
+                                tint = Color.White,
+                                modifier = Modifier
+                                    .align(Alignment.CenterHorizontally)
+                                    .offset(y = arrowOffset.dp)
+                                    .size(24.dp),
+                            )
+                        }
+
                         Box(
                             modifier = Modifier.padding(16.dp),
                         ) {
