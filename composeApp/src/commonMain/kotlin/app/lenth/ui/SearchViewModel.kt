@@ -224,7 +224,7 @@ class SearchViewModel(
                 }
             }
 
-            it.copy(inputPlaces = places)
+            it.copy(inputPlaces = places, autoCompleteResults = emptyList())
         }
     }
 

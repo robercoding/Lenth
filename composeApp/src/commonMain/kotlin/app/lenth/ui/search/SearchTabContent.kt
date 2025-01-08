@@ -36,6 +36,11 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Icon
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropDown
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -83,6 +88,11 @@ fun SearchTabContent(viewModel: SearchViewModel) {
         },
     )
 
+    fun clearFocus() {
+        focusManager.clearFocus(force = true)
+        isTextFieldFocused = false
+    }
+
     val lazyColumnState = rememberLazyListState()
 
     var listOffsetInParent by rememberSaveable { mutableStateOf(0f) } // Y offset of the TextField
@@ -91,6 +101,7 @@ fun SearchTabContent(viewModel: SearchViewModel) {
     // val cities = remember { mutableListOf("Valencia", "Barcelona", "Madrid", "Zaragoza", "Galicia", "Granada", "Malaga", "Cadiz") }
     var alreadyScrolled by rememberSaveable { mutableStateOf(false) }
     val shouldShowArrow = lazyColumnState.canScrollForward && !alreadyScrolled
+    var isDiscardCurrentInputAlertDialogVisible by rememberSaveable { mutableStateOf(false) }
 
 
     LaunchedEffect(lazyColumnState.firstVisibleItemIndex) {
@@ -125,10 +136,10 @@ fun SearchTabContent(viewModel: SearchViewModel) {
                         Logger.i("Position in parent: ${it.positionInParent().y}")
                         Logger.i("Position in root: ${it.positionInRoot().y}")
                         listOffsetInParent = it.positionInParent().y
-                    }
+                    },
             ) {
                 Column {
-                    Column(modifier = Modifier.weight(1f),) {
+                    Column(modifier = Modifier.weight(1f)) {
                         SearchTabListLocations(
                             Modifier.padding(horizontal = 8.dp)
                                 .weight(weight = 1f, fill = false),
@@ -137,7 +148,10 @@ fun SearchTabContent(viewModel: SearchViewModel) {
                             isTextFieldFocused = isTextFieldFocused,
                             focusedPlaceIndex = focusedPlaceIndex,
                             onQueryChanged = viewModel::onQueryChanged,
-                            onClearInputPlace = viewModel::onClearInputPlace,
+                            onClearInputPlace = {
+                                clearFocus()
+                                viewModel.onClearInputPlace(it)
+                            },
                             onUpdateTextFieldHeight = { height ->
                                 textFieldHeight = height
                             },
@@ -233,9 +247,16 @@ fun SearchTabContent(viewModel: SearchViewModel) {
                     .padding(horizontal = 16.dp)
                     .padding(top = 12.dp)
                     .clickable {
-                        Logger.i("Clicked clear focus")
-                        focusManager.clearFocus(force = true)
-                        isTextFieldFocused = false
+                        val indexNotNull = focusedPlaceIndex ?: return@clickable
+                        val inputPlace = state.inputPlaces.getOrNull(indexNotNull) ?: return@clickable
+
+                        if (!inputPlace.selectedFromAutocomplete && inputPlace.place.isNotEmpty()) {
+                            isDiscardCurrentInputAlertDialogVisible = true
+                        } else {
+                            Logger.i("Clicked clear focus")
+                            clearFocus()
+                        }
+
                     },
                 verticalArrangement = Arrangement.spacedBy(8.dp),
             ) {
@@ -254,8 +275,7 @@ fun SearchTabContent(viewModel: SearchViewModel) {
                             .clickable {
                                 focusedPlaceIndex?.let { index ->
                                     viewModel.onClickResultAutoComplete(result, index)
-                                    focusManager.clearFocus(force = true)
-                                    isTextFieldFocused = false
+                                    clearFocus()
                                 }
                             },
                     )
@@ -263,9 +283,56 @@ fun SearchTabContent(viewModel: SearchViewModel) {
             }
         }
 
+        AnimatedVisibility(
+            isDiscardCurrentInputAlertDialogVisible,
+            enter = fadeIn() + expandVertically(expandFrom = Alignment.Top),
+            exit = fadeOut(),
+        ) {
+            androidx.compose.material.AlertDialog(
+                onDismissRequest = { isDiscardCurrentInputAlertDialogVisible = false },
+                title = { Text(
+                    text = "Discard current input?",
+                    color = Color.White,
+                    style = MaterialTheme.typography.bodyLarge,
+                ) },
+                text = { Text(
+                    text = "You haven't selected any place from the autocomplete list. Do you want to discard the current input?",
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = Color.White,
+                ) },
+                confirmButton = {
+                    Button(
+                        onClick = {
+                            isDiscardCurrentInputAlertDialogVisible = false
+                            viewModel.onClearInputPlace(focusedPlaceIndex ?: return@Button)
+                            clearFocus()
+                        },
+                        colors = ButtonDefaults.buttonColors(containerColor = Color.Transparent),
+                    ) {
+                        Text(
+                            "Discard",
+                            style = MaterialTheme.typography.bodyMedium,
+                        )
+                    }
+                },
+                dismissButton = {
+                    Button(
+                        onClick = { isDiscardCurrentInputAlertDialogVisible = false },
+                        colors = ButtonDefaults.buttonColors(containerColor = Color.Transparent),
+                        shape = RoundedCornerShape(8.dp),
+                    ) {
+                        Text("Cancel", style = MaterialTheme.typography.bodyMedium)
+                    }
+                },
+                shape = RoundedCornerShape(16.dp),
+                backgroundColor = Color.DarkGray,
+            )
+        }
+
         OptimalPathSheet(
             minimumCostPath = state.minimumCostPath,
             onDismissMinimumCostPath = { viewModel.onDismissMinimumCostPath() },
         )
     }
+
 }
