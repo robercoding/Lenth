@@ -71,27 +71,6 @@ fun SearchTabContent(viewModel: SearchViewModel) {
     var focusedPlaceIndex by rememberSaveable { mutableStateOf<Int?>(null) }
     var isTextFieldFocused by rememberSaveable { mutableStateOf(false) }
 
-    val isButtonSearchOptimalRouteVisible by remember(state.inputPlaces) {
-        val placesNotEmpty = state.inputPlaces.filter { it.place.isNotEmpty() && it.selectedFromAutocomplete }
-        val isVisible = placesNotEmpty.size >= 2
-        mutableStateOf(isVisible)
-    }
-
-    BackHandler(
-        isEnabled = state.autoCompleteResults.isNotEmpty(),
-        onBack = {
-            focusedPlaceIndex?.let { placeIndex ->
-                focusManager.clearFocus(force = true)
-                viewModel.onBackHandler(placeIndex = placeIndex)
-                focusedPlaceIndex = null
-            }
-        },
-    )
-
-    fun clearFocus() {
-        focusManager.clearFocus(force = true)
-        isTextFieldFocused = false
-    }
 
     val lazyColumnState = rememberLazyListState()
 
@@ -102,6 +81,43 @@ fun SearchTabContent(viewModel: SearchViewModel) {
     var alreadyScrolled by rememberSaveable { mutableStateOf(false) }
     val shouldShowArrow = lazyColumnState.canScrollForward && !alreadyScrolled
     var isDiscardCurrentInputAlertDialogVisible by rememberSaveable { mutableStateOf(false) }
+
+    val isButtonSearchOptimalRouteVisible by remember(state.inputPlaces) {
+        val placesNotEmpty = state.inputPlaces.filter { it.place.isNotEmpty() && it.selectedFromAutocomplete }
+        val isVisible = placesNotEmpty.size >= 2
+        mutableStateOf(isVisible)
+    }
+
+    fun clearFocus() {
+        focusManager.clearFocus(force = true)
+        isTextFieldFocused = false
+    }
+
+    fun onBackOnFocusedPlace() {
+        val indexNotNull = focusedPlaceIndex ?: return
+        val inputPlace = state.inputPlaces.getOrNull(indexNotNull) ?: return
+
+        if (!inputPlace.selectedFromAutocomplete && inputPlace.place.isNotEmpty()) {
+            isDiscardCurrentInputAlertDialogVisible = true
+        } else {
+            if(inputPlace.place.isEmpty() && state.inputPlaces.lastIndex != indexNotNull) {
+                viewModel.onClearInputPlace(indexNotNull)
+            }
+            Logger.i("Clicked clear focus")
+            clearFocus()
+            viewModel.onBackHandler()
+        }
+    }
+
+    BackHandler(
+        isEnabled = isTextFieldFocused,
+        onBack = {
+            focusedPlaceIndex?.let { placeIndex ->
+                onBackOnFocusedPlace()
+            }
+        },
+    )
+
 
 
     LaunchedEffect(lazyColumnState.firstVisibleItemIndex) {
@@ -246,18 +262,7 @@ fun SearchTabContent(viewModel: SearchViewModel) {
                     .background(Color.Black, RoundedCornerShape(8.dp))
                     .padding(horizontal = 16.dp)
                     .padding(top = 12.dp)
-                    .clickable {
-                        val indexNotNull = focusedPlaceIndex ?: return@clickable
-                        val inputPlace = state.inputPlaces.getOrNull(indexNotNull) ?: return@clickable
-
-                        if (!inputPlace.selectedFromAutocomplete && inputPlace.place.isNotEmpty()) {
-                            isDiscardCurrentInputAlertDialogVisible = true
-                        } else {
-                            Logger.i("Clicked clear focus")
-                            clearFocus()
-                        }
-
-                    },
+                    .clickable { onBackOnFocusedPlace() },
                 verticalArrangement = Arrangement.spacedBy(8.dp),
             ) {
                 itemsIndexed(state.autoCompleteResults, key = { index, result -> result }) { index, result ->

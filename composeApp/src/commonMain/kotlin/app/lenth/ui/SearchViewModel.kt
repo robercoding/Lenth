@@ -243,8 +243,7 @@ class SearchViewModel(
         }
     }
 
-    fun onBackHandler(placeIndex: Int) {
-        clearInputPlace(placeIndex)
+    fun onBackHandler() {
         _state.update { it.copy(autoCompleteResults = emptyList()) }
     }
 
