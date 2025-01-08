@@ -63,8 +63,8 @@ import co.touchlab.kermit.Logger
 fun SearchTabContent(viewModel: SearchViewModel) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     val focusManager = LocalFocusManager.current
-    var focusedPlaceIndex by remember { mutableStateOf<Int?>(null) }
-    var isTextFieldFocused by remember { mutableStateOf(false) }
+    var focusedPlaceIndex by rememberSaveable { mutableStateOf<Int?>(null) }
+    var isTextFieldFocused by rememberSaveable { mutableStateOf(false) }
 
     val isButtonSearchOptimalRouteVisible by remember(state.inputPlaces) {
         val placesNotEmpty = state.inputPlaces.filter { it.place.isNotEmpty() && it.selectedFromAutocomplete }
@@ -85,8 +85,8 @@ fun SearchTabContent(viewModel: SearchViewModel) {
 
     val lazyColumnState = rememberLazyListState()
 
-    var listOffsetInParent by remember { mutableStateOf(0f) } // Y offset of the TextField
-    var textFieldHeight by remember { mutableStateOf(0) }
+    var listOffsetInParent by rememberSaveable { mutableStateOf(0f) } // Y offset of the TextField
+    var textFieldHeight by rememberSaveable { mutableStateOf(0) }
 
     // val cities = remember { mutableListOf("Valencia", "Barcelona", "Madrid", "Zaragoza", "Galicia", "Granada", "Malaga", "Cadiz") }
     var alreadyScrolled by rememberSaveable { mutableStateOf(false) }
