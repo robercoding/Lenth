@@ -60,6 +60,9 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import app.lenth.ui.SearchViewModel
 import app.lenth.ui.components.LenthPrimaryButton
+import app.lenth.ui.search.autocomplete.AutoCompleteInputList
+import app.lenth.ui.search.dialog.DiscardCurrentPlaceInput
+import app.lenth.ui.search.indicator.ArrowIndicator
 import app.lenth.ui.search.optimalpathsheet.OptimalPathSheet
 import app.lenth.ui.utils.BackHandler
 import co.touchlab.kermit.Logger
@@ -78,16 +81,13 @@ fun SearchTabContent(viewModel: SearchViewModel) {
     var textFieldHeight by rememberSaveable { mutableStateOf(0) }
 
     // val cities = remember { mutableListOf("Valencia", "Barcelona", "Madrid", "Zaragoza", "Galicia", "Granada", "Malaga", "Cadiz") }
-    var alreadyScrolled by rememberSaveable { mutableStateOf(false) }
-    val shouldShowArrow = lazyColumnState.canScrollForward && !alreadyScrolled
-    var isDiscardCurrentInputAlertDialogVisible by rememberSaveable { mutableStateOf(false) }
-
     val isButtonSearchOptimalRouteVisible by remember(state.inputPlaces) {
         val placesNotEmpty = state.inputPlaces.filter { it.place.isNotEmpty() && it.selectedFromAutocomplete }
         val isVisible = placesNotEmpty.size >= 2
         mutableStateOf(isVisible)
     }
 
+    var isDiscardCurrentInputAlertDialogVisible by rememberSaveable { mutableStateOf(false) }
     fun clearFocus() {
         focusManager.clearFocus(force = true)
         isTextFieldFocused = false
@@ -117,17 +117,6 @@ fun SearchTabContent(viewModel: SearchViewModel) {
             }
         },
     )
-
-
-
-    LaunchedEffect(lazyColumnState.firstVisibleItemIndex) {
-        if (alreadyScrolled) {
-            return@LaunchedEffect
-        }
-        if (lazyColumnState.firstVisibleItemIndex > 0) {
-            alreadyScrolled = true
-        }
-    }
 
     var showFilterChips by remember { mutableStateOf(false) }
     Box(modifier = Modifier.fillMaxSize()) {
@@ -184,33 +173,7 @@ fun SearchTabContent(viewModel: SearchViewModel) {
 
                         Spacer(modifier = Modifier.height(8.dp))
 
-                        androidx.compose.animation.AnimatedVisibility(
-                            modifier = Modifier.fillMaxWidth().animateContentSize(),
-                            visible = shouldShowArrow && lazyColumnState.canScrollForward,
-                            enter = fadeIn() + expandVertically(expandFrom = Alignment.CenterVertically),
-                            exit = fadeOut() + shrinkVertically(),
-                        ) {
-                            val infiniteTransition = rememberInfiniteTransition()
-                            val arrowOffset by infiniteTransition.animateFloat(
-                                initialValue = 0f,
-                                targetValue = 10f,
-                                animationSpec = infiniteRepeatable(
-                                    animation = tween(durationMillis = 450, easing = LinearEasing),
-                                    repeatMode = RepeatMode.Reverse,
-                                ),
-                            )
-
-                            Icon(
-                                imageVector = Icons.Default.ArrowDropDown,
-                                contentDescription = "Scroll down",
-                                tint = Color.White,
-                                modifier = Modifier
-                                    .align(Alignment.CenterHorizontally)
-                                    .offset(y = arrowOffset.dp)
-                                    .size(24.dp),
-                            )
-                        }
-
+                        ArrowIndicator(lazyColumnState = lazyColumnState,)
                         Box(
                             modifier = Modifier.padding(16.dp),
                         ) {
@@ -240,6 +203,7 @@ fun SearchTabContent(viewModel: SearchViewModel) {
                     }
                 }
 
+                // Overlay to close the filter chips
                 if (showFilterChips) {
                     Box(
                         modifier = Modifier.matchParentSize().clickable {
@@ -250,89 +214,29 @@ fun SearchTabContent(viewModel: SearchViewModel) {
             }
         }
 
-        AnimatedVisibility(isTextFieldFocused, enter = fadeIn(tween(delayMillis = 100)) + expandVertically(expandFrom = Alignment.Top), exit = fadeOut()) {
-            LazyColumn(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .fillMaxHeight()
-                    .absoluteOffset(
-                        x = 0.dp,
-                        y = with(LocalDensity.current) { (listOffsetInParent + textFieldHeight).toDp() + 16.dp },
-                    )
-                    .background(Color.Black, RoundedCornerShape(8.dp))
-                    .padding(horizontal = 16.dp)
-                    .padding(top = 12.dp)
-                    .clickable { onBackOnFocusedPlace() },
-                verticalArrangement = Arrangement.spacedBy(8.dp),
-            ) {
-                itemsIndexed(state.autoCompleteResults, key = { index, result -> result }) { index, result ->
-                    SearchResultItem(
-                        result = result,
-                        modifier = Modifier
-                            .padding(horizontal = 8.dp)
-                            .fillMaxWidth()
-                            .animateItem(
-                                fadeInSpec = tween(
-                                    durationMillis = 100 + (index * 40),
-                                    easing = LinearOutSlowInEasing,
-                                ),
-                            )
-                            .clickable {
-                                focusedPlaceIndex?.let { index ->
-                                    viewModel.onClickResultAutoComplete(result, index)
-                                    clearFocus()
-                                }
-                            },
-                    )
+        AutoCompleteInputList(
+            autoCompleteResults = state.autoCompleteResults,
+            isTextFieldFocused = isTextFieldFocused,
+            listOffsetInParent = listOffsetInParent,
+            textFieldHeight = textFieldHeight,
+            onBackOnFocusedPlace = { onBackOnFocusedPlace() },
+            onClickResultAutoComplete = { result ->
+                focusedPlaceIndex?.let { index ->
+                    viewModel.onClickResultAutoComplete(result, index)
                 }
-            }
-        }
+                clearFocus()
+            },
+        )
 
-        AnimatedVisibility(
+        DiscardCurrentPlaceInput(
             isDiscardCurrentInputAlertDialogVisible,
-            enter = fadeIn() + expandVertically(expandFrom = Alignment.Top),
-            exit = fadeOut(),
-        ) {
-            androidx.compose.material.AlertDialog(
-                onDismissRequest = { isDiscardCurrentInputAlertDialogVisible = false },
-                title = { Text(
-                    text = "Discard current input?",
-                    color = Color.White,
-                    style = MaterialTheme.typography.bodyLarge,
-                ) },
-                text = { Text(
-                    text = "You haven't selected any place from the autocomplete list. Do you want to discard the current input?",
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = Color.White,
-                ) },
-                confirmButton = {
-                    Button(
-                        onClick = {
-                            isDiscardCurrentInputAlertDialogVisible = false
-                            viewModel.onClearInputPlace(focusedPlaceIndex ?: return@Button)
-                            clearFocus()
-                        },
-                        colors = ButtonDefaults.buttonColors(containerColor = Color.Transparent),
-                    ) {
-                        Text(
-                            "Discard",
-                            style = MaterialTheme.typography.bodyMedium,
-                        )
-                    }
-                },
-                dismissButton = {
-                    Button(
-                        onClick = { isDiscardCurrentInputAlertDialogVisible = false },
-                        colors = ButtonDefaults.buttonColors(containerColor = Color.Transparent),
-                        shape = RoundedCornerShape(8.dp),
-                    ) {
-                        Text("Cancel", style = MaterialTheme.typography.bodyMedium)
-                    }
-                },
-                shape = RoundedCornerShape(16.dp),
-                backgroundColor = Color.DarkGray,
-            )
-        }
+            onDismissRequest = { isDiscardCurrentInputAlertDialogVisible = false },
+            onConfirmDiscard = {
+                isDiscardCurrentInputAlertDialogVisible = false
+                focusedPlaceIndex?.let { viewModel.onClearInputPlace(it) }
+                clearFocus()
+            },
+        )
 
         OptimalPathSheet(
             minimumCostPath = state.minimumCostPath,
