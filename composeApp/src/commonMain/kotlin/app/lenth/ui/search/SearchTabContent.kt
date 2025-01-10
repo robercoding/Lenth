@@ -2,47 +2,20 @@ package app.lenth.ui.search
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateContentSize
-import androidx.compose.animation.core.LinearEasing
-import androidx.compose.animation.core.LinearOutSlowInEasing
-import androidx.compose.animation.core.RepeatMode
-import androidx.compose.animation.core.animateFloat
-import androidx.compose.animation.core.infiniteRepeatable
-import androidx.compose.animation.core.rememberInfiniteTransition
-import androidx.compose.animation.core.tween
 import androidx.compose.animation.expandHorizontally
-import androidx.compose.animation.expandVertically
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
-import androidx.compose.animation.shrinkVertically
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.absoluteOffset
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Icon
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowDropDown
-import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -50,20 +23,21 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.layout.positionInParent
 import androidx.compose.ui.layout.positionInRoot
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import app.lenth.ui.SearchViewModel
 import app.lenth.ui.components.LenthPrimaryButton
 import app.lenth.ui.search.autocomplete.AutoCompleteInputList
+import app.lenth.ui.search.dialog.ClearAllAlertDialog
 import app.lenth.ui.search.dialog.DiscardCurrentPlaceInput
 import app.lenth.ui.search.indicator.ArrowIndicator
 import app.lenth.ui.search.optimalpathsheet.OptimalPathSheet
+import app.lenth.ui.theme.ActionBlue
+import app.lenth.ui.theme.OnActionBlue
 import app.lenth.ui.utils.BackHandler
 import co.touchlab.kermit.Logger
 
@@ -87,7 +61,9 @@ fun SearchTabContent(viewModel: SearchViewModel) {
         mutableStateOf(isVisible)
     }
 
+    var isClearAllAlertDialogVisible by rememberSaveable { mutableStateOf(false) }
     var isDiscardCurrentInputAlertDialogVisible by rememberSaveable { mutableStateOf(false) }
+
     fun clearFocus() {
         focusManager.clearFocus(force = true)
         isTextFieldFocused = false
@@ -127,10 +103,14 @@ fun SearchTabContent(viewModel: SearchViewModel) {
                 .padding(16.dp),
         ) {
             SearchTabHeader(
+                focusedTextField = isTextFieldFocused,
                 showFilterChips = showFilterChips,
-                onToggleFilterChips = { showFilterChips = !showFilterChips },
+                onCancelSearch = {
+                    onBackOnFocusedPlace()
+                },
                 searchType = state.searchType,
                 onSearchTypeChanged = viewModel::onSearchTypeChanged,
+                onClearAll = { isClearAllAlertDialogVisible = true },
             )
 
             Box(
@@ -146,8 +126,11 @@ fun SearchTabContent(viewModel: SearchViewModel) {
                 Column {
                     Column(modifier = Modifier.weight(1f)) {
                         SearchTabListLocations(
-                            Modifier.padding(horizontal = 8.dp)
-                                .weight(weight = 1f, fill = false),
+                            Modifier
+                                .padding(horizontal = 8.dp)
+                                .weight(weight = 1f, fill = false)
+                                .animateContentSize()
+                            ,
                             lazyListState = lazyColumnState,
                             inputPlaces = state.inputPlaces,
                             isTextFieldFocused = isTextFieldFocused,
@@ -173,17 +156,17 @@ fun SearchTabContent(viewModel: SearchViewModel) {
 
                         Spacer(modifier = Modifier.height(8.dp))
 
-                        ArrowIndicator(lazyColumnState = lazyColumnState,)
-                        Box(
-                            modifier = Modifier.padding(16.dp),
-                        ) {
-                            LenthPrimaryButton(
-                                text = "Clear all",
-                                textColor = Color.White,
-                                backgroundColor = Color.DarkGray,
-                                onClick = { viewModel.resetInputPlaces() },
-                            )
-                        }
+                        ArrowIndicator(lazyColumnState = lazyColumnState)
+                        // Box(
+                        //     modifier = Modifier.padding(16.dp),
+                        // ) {
+                        //     LenthPrimaryButton(
+                        //         text = "Clear all",
+                        //         textColor = MaterialTheme.colorScheme.onSecondaryContainer,
+                        //         backgroundColor = MaterialTheme.colorScheme.secondaryContainer,
+                        //         onClick = { viewModel.resetInputPlaces() },
+                        //     )
+                        // }
                     }
 
                     AnimatedVisibility(
@@ -194,10 +177,10 @@ fun SearchTabContent(viewModel: SearchViewModel) {
                     ) {
                         LenthPrimaryButton(
                             text = "Search optimal route",
-                            textColor = Color.White,
+                            textColor = OnActionBlue,
+                            backgroundColor = ActionBlue,
                             isLoading = state.isOptimizingRoute,
                             modifier = Modifier.padding(16.dp),
-                            backgroundColor = Color(53, 132, 220),
                             onClick = { viewModel.onSearch() },
                         )
                     }
@@ -238,10 +221,18 @@ fun SearchTabContent(viewModel: SearchViewModel) {
             },
         )
 
+        ClearAllAlertDialog(
+            isClearAllAlertDialogVisible,
+            onDismissRequest = { isClearAllAlertDialogVisible = false },
+            onConfirmClearAll = {
+                isClearAllAlertDialogVisible = false
+                viewModel.resetInputPlaces()
+            },
+        )
+
         OptimalPathSheet(
             minimumCostPath = state.minimumCostPath,
             onDismissMinimumCostPath = { viewModel.onDismissMinimumCostPath() },
         )
     }
-
 }

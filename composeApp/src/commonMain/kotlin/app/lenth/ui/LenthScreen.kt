@@ -1,89 +1,50 @@
 package app.lenth.ui
 
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.Crossfade
-import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.tween
-import androidx.compose.animation.expandHorizontally
-import androidx.compose.animation.expandVertically
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
-import androidx.compose.animation.scaleIn
-import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentSize
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Button
-import androidx.compose.material.ButtonDefaults
-import androidx.compose.material.Card
-import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Icon
-import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Surface
-import androidx.compose.material.Tab
-import androidx.compose.material.TabRow
-import androidx.compose.material.Text
-import androidx.compose.material.TextField
-import androidx.compose.material.TextFieldDefaults
-import androidx.compose.material.TopAppBar
+import androidx.compose.material3.Tab
+import androidx.compose.material3.TabRow
+import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Place
 import androidx.compose.material.icons.filled.Settings
-import androidx.compose.material.icons.outlined.Delete
+import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.ModalBottomSheet
-import androidx.compose.material3.rememberModalBottomSheetState
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.composed
-import androidx.compose.ui.focus.onFocusChanged
-import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.StrokeCap
-import androidx.compose.ui.graphics.drawscope.Stroke
-import androidx.compose.ui.layout.boundsInRoot
-import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.layout.onPlaced
 import androidx.compose.ui.layout.positionInRoot
-import androidx.compose.ui.layout.positionOnScreen
-import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.debugInspectorInfo
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import app.lenth.ui.search.SearchTabContent
-import app.lenth.ui.utils.BackHandler
 import co.touchlab.kermit.Logger
 import org.koin.compose.viewmodel.koinViewModel
 
@@ -95,24 +56,34 @@ fun LenthScreen() {
     var tabPositionText by remember { mutableStateOf(TabPositionText(0.dp, 0.dp)) }
     val viewModel = koinViewModel<SearchViewModel>()
 
-    Surface(modifier = Modifier.background(Color.Black), color = Color.Black) {
+    Surface(
+        modifier = Modifier.background(MaterialTheme.colorScheme.background),
+        color = MaterialTheme.colorScheme.background,
+    ) {
         Scaffold(
             modifier = Modifier.statusBarsPadding(),
             topBar = {
                 TopAppBar(
-                    backgroundColor = Color.Black,
-                    title = { Text("Design your travel", color = Color.White) },
+                    title = {
+                        Text(
+                            text = "Design your travel",
+                            style = MaterialTheme.typography.headlineSmall,
+                            color = MaterialTheme.colorScheme.onSurface, // Adjusted for better contrast
+                        )
+                    },
                     actions = {
                         Icon(
                             imageVector = Icons.Default.Settings,
                             contentDescription = "Settings",
-                            tint = Color.White,
-                            modifier = Modifier.clickable { /* Handle settings action */ },
+                            tint = MaterialTheme.colorScheme.onSurface, // Adjusted for consistency
+                            modifier = Modifier
+                                .clip(RoundedCornerShape(percent = 50))
+                                .clickable { /* Handle settings action */ },
                         )
                     },
                 )
             },
-            backgroundColor = Color.Black,
+            backgroundColor = MaterialTheme.colorScheme.background,
         ) { paddingValues ->
             Column(
                 modifier = Modifier
@@ -121,8 +92,8 @@ fun LenthScreen() {
             ) {
                 TabRow(
                     selectedTabIndex = selectedTab,
-                    backgroundColor = Color.Black,
-                    contentColor = Color.White,
+                    containerColor = MaterialTheme.colorScheme.surface,
+                    contentColor = MaterialTheme.colorScheme.onSurface,
                 ) {
                     tabs.forEachIndexed { index, title ->
                         Tab(
@@ -131,7 +102,10 @@ fun LenthScreen() {
                             text = {
                                 Text(
                                     text = title,
-                                    color = if (selectedTab == index) Color.White else Color.Gray,
+                                    color = if (selectedTab == index)
+                                        MaterialTheme.colorScheme.onSurface
+                                    else
+                                        MaterialTheme.colorScheme.onSurfaceVariant,
                                     modifier = Modifier.onPlaced {
                                         tabPositionText = TabPositionText(
                                             width = it.size.width.dp,
@@ -154,9 +128,6 @@ fun LenthScreen() {
         }
     }
 }
-
-
-
 
 @Composable
 fun HistoryTabContent() {

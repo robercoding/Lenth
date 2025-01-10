@@ -10,7 +10,8 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.CircularProgressIndicator
-import androidx.compose.material.Text
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -44,7 +45,7 @@ internal fun LenthPrimaryButton(
                 ) {
                     CircularProgressIndicator(
                         modifier = Modifier.size(24.dp).align(Alignment.Center),
-                        color = Color.White,
+                        color = textColor,
                         strokeCap = StrokeCap.Round,
                         strokeWidth = 2.dp,
                     )
@@ -57,12 +58,11 @@ internal fun LenthPrimaryButton(
                     Text(
                         text = text,
                         color = textColor,
-                        fontWeight = FontWeight.Bold,
-                        modifier = Modifier.padding(vertical = 8.dp),
+                        style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Bold,),
+                        modifier = Modifier,
                     )
                 }
             }
         }
-
     }
 }

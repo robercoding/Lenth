@@ -8,6 +8,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
 import androidx.compose.ui.graphics.Color
 
+val OnActionBlue = Color.White
+val ActionBlue = Color(0xFF3584DC) // Hex for Color(53, 132, 220)
+
 private val lightScheme = lightColorScheme(
     primary = primaryLight,
     onPrimary = onPrimaryLight,
@@ -260,7 +263,7 @@ fun AppTheme(
   }
 
   MaterialTheme(
-    colorScheme = colorScheme,
+    colorScheme = lightScheme,
     typography = AppTypography,
     content = content
   )

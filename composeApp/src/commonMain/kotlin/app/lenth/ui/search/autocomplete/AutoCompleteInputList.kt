@@ -16,6 +16,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -33,7 +34,11 @@ fun AutoCompleteInputList(
     onBackOnFocusedPlace: () -> Unit,
     onClickResultAutoComplete: (String) -> Unit,
 ) {
-    AnimatedVisibility(isTextFieldFocused, enter = fadeIn(tween(delayMillis = 100)) + expandVertically(expandFrom = Alignment.Top), exit = fadeOut()) {
+    AnimatedVisibility(
+        isTextFieldFocused,
+        enter = fadeIn(tween(delayMillis = 100)) + expandVertically(expandFrom = Alignment.Top),
+        exit = fadeOut()
+    ) {
         LazyColumn(
             modifier = Modifier
                 .fillMaxWidth()
@@ -42,10 +47,13 @@ fun AutoCompleteInputList(
                     x = 0.dp,
                     y = with(LocalDensity.current) { (listOffsetInParent + textFieldHeight).toDp() + 16.dp },
                 )
-                .background(Color.Black, RoundedCornerShape(8.dp))
+                .background(MaterialTheme.colorScheme.surface, RoundedCornerShape(8.dp))
                 .padding(horizontal = 16.dp)
                 .padding(top = 12.dp)
-                .clickable { onBackOnFocusedPlace() },
+                .clickable(
+                    indication = null,
+                    interactionSource = null
+                ) { onBackOnFocusedPlace() },
             verticalArrangement = Arrangement.spacedBy(8.dp),
         ) {
             itemsIndexed(autoCompleteResults, key = { index, result -> result }) { index, result ->
@@ -65,5 +73,4 @@ fun AutoCompleteInputList(
             }
         }
     }
-
 }

@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -46,8 +47,8 @@ fun SearchTabListLocations(
     var currentTopTranslationY by remember { mutableStateOf(0f) }
     val currentInputFieldTranslationYAnimated by animateFloatAsState(
         targetValue = if (isTextFieldFocused) currentTopTranslationY else 0f, tween(250),
-        finishedListener =  {
-            if(!isTextFieldFocused) {
+        finishedListener = {
+            if (!isTextFieldFocused) {
                 onFinishPlaceInputAnimateBack()
             }
         }
@@ -71,7 +72,7 @@ fun SearchTabListLocations(
                     .graphicsLayer {
                         translationY = if (focusedPlaceIndex == index) currentInputFieldTranslationYAnimated else 0f
                     }
-                    .background(Color.Black)
+                    .background(MaterialTheme.colorScheme.surface)
                     .animateItem(),
             ) {
                 PlaceInputField(
@@ -93,9 +94,9 @@ fun SearchTabListLocations(
                     },
                     onFocused = {
                         scope.launch {
-                        val currentPosition = lazyListState.layoutInfo.visibleItemsInfo.firstOrNull { it.index == index }
-                        val currentItemOffsetPosition = currentPosition?.offset ?: 0
-                        with(density) {
+                            val currentPosition = lazyListState.layoutInfo.visibleItemsInfo.firstOrNull { it.index == index }
+                            val currentItemOffsetPosition = currentPosition?.offset ?: 0
+                            with(density) {
                                 val currentHeight = currentPosition?.size ?: 0
                                 val viewportEnd = lazyListState.layoutInfo.viewportEndOffset
                                 val exceedsViewportEnd = (currentItemOffsetPosition + currentHeight) > viewportEnd
@@ -119,15 +120,6 @@ fun SearchTabListLocations(
                         }
                     },
                 )
-
-                // AnimatedVisibility(
-                //     visible = focusedPlaceIndex != index && focusedPlaceIndex != null,
-                //     enter = fadeIn(),
-                //     exit = fadeOut(tween(250)),
-                //     modifier = Modifier.matchParentSize().background(Color.Black, shape = RoundedCornerShape(8.dp))
-                // ) {
-                //     Box(modifier = Modifier.matchParentSize().background(Color.Black, shape = RoundedCornerShape(8.dp)))
-                // }
             }
         }
     }

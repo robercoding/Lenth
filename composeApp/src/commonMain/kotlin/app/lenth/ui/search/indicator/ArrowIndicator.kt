@@ -74,5 +74,4 @@ fun ArrowIndicator(lazyColumnState: LazyListState) {
             )
         }
     }
-
 }

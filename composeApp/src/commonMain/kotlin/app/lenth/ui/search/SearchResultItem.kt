@@ -7,12 +7,13 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Card
-import androidx.compose.material.Icon
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
+import androidx.compose.material3.Card
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Place
+import androidx.compose.material3.CardDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -26,9 +27,11 @@ fun SearchResultItem(
 ) {
     Card(
         modifier = modifier,
-        backgroundColor = Color.DarkGray,
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.surfaceVariant // Changed from Color.DarkGray
+        ),
         shape = RoundedCornerShape(8.dp),
-        elevation = 4.dp,
+        elevation = CardDefaults.elevatedCardElevation(defaultElevation = 4.dp) // Material 3 standard
     ) {
         Row(
             modifier = Modifier
@@ -39,14 +42,14 @@ fun SearchResultItem(
             Icon(
                 imageVector = Icons.Default.Place,
                 contentDescription = "Location",
-                tint = Color.White,
+                tint = MaterialTheme.colorScheme.onSurfaceVariant, // Changed from Color.White
                 modifier = Modifier.size(24.dp),
             )
             Spacer(modifier = Modifier.width(8.dp))
             Text(
                 text = result,
-                color = Color.White,
-                style = MaterialTheme.typography.body1,
+                color = MaterialTheme.colorScheme.onSurface, // Changed from Color.White
+                style = MaterialTheme.typography.bodyMedium, // Updated typography to Material 3
             )
         }
     }

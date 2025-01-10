@@ -11,12 +11,12 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Icon
-import androidx.compose.material.Text
-import androidx.compose.material.TextField
-import androidx.compose.material.TextFieldDefaults
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Delete
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -40,17 +40,19 @@ fun PlaceInputField(
     onFocused: () -> Unit,
 ) {
     var isFocused by remember { mutableStateOf(false) }
-    val borderColor by animateColorAsState(if (isFocused) Color.White else Color.Transparent)
+    val borderColor by animateColorAsState(
+        if (isFocused) MaterialTheme.colorScheme.primary else Color.Transparent
+    )
     var internalText by remember { mutableStateOf(text) }
     LaunchedEffect(isSetByAutocomplete) {
         // Got priority from autocomplete
-        if(isSetByAutocomplete) {
+        if (isSetByAutocomplete) {
             internalText = text
             return@LaunchedEffect
         }
 
         // Cleared all
-        if(!isSetByAutocomplete && text.isEmpty()) {
+        if (!isSetByAutocomplete && text.isEmpty()) {
             internalText = ""
             return@LaunchedEffect
         }
@@ -59,16 +61,24 @@ fun PlaceInputField(
     Row(
         modifier = modifier
             .fillMaxWidth()
-            .background(Color.DarkGray, RoundedCornerShape(8.dp)),
+            .background(MaterialTheme.colorScheme.surface),
         verticalAlignment = Alignment.CenterVertically,
     ) {
-        TextField(
+        androidx.compose.material3.TextField(
+            shape = RoundedCornerShape(8.dp),
             value = internalText,
+            textStyle = MaterialTheme.typography.bodyLarge,
             onValueChange = {
                 internalText = it
                 onQueryChanged(it)
             },
-            placeholder = { Text(hint, color = Color.Gray) },
+            placeholder = {
+                Text(
+                    text = hint,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    style = MaterialTheme.typography.bodyLarge,
+                )
+            },
             modifier = Modifier
                 .weight(1f)
                 .border(1.dp, borderColor, RoundedCornerShape(8.dp))
@@ -87,19 +97,40 @@ fun PlaceInputField(
                     Icon(
                         imageVector = Icons.Outlined.Delete,
                         contentDescription = "Clear",
-                        tint = Color.White,
+                        tint = MaterialTheme.colorScheme.onSurfaceVariant,
                         modifier = Modifier.size(24.dp).clickable(onClick = onClickDelete),
                     )
                 }
             },
-            colors = TextFieldDefaults.textFieldColors(
-                textColor = Color.White,
-                backgroundColor = Color.Transparent,
-                cursorColor = Color.White,
+            colors = TextFieldDefaults.colors(
+                // focusedTextColor = MaterialTheme.colorScheme.onSurface,
+                // unfocusedTextColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                // disabledTextColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.38f),
+                // errorTextColor = MaterialTheme.colorScheme.error,
+                // focusedContainerColor = MaterialTheme.colorScheme.surface,
+                // unfocusedContainerColor = MaterialTheme.colorScheme.surface,
+                // disabledContainerColor = MaterialTheme.colorScheme.surfaceVariant,
+                // errorContainerColor = MaterialTheme.colorScheme.errorContainer,
+                cursorColor = MaterialTheme.colorScheme.primary,
+                errorCursorColor = MaterialTheme.colorScheme.error,
                 focusedIndicatorColor = Color.Transparent,
                 unfocusedIndicatorColor = Color.Transparent,
-                placeholderColor = Color.Gray,
-            ),
+                disabledIndicatorColor = Color.Transparent,
+                errorIndicatorColor = Color.Transparent,
+                // focusedPlaceholderColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                // unfocusedPlaceholderColor = MaterialTheme.colorScheme.onSurfaceVariant
+            )
         )
     }
 }
+
+
+// colors = TextFieldDefaults.colors(
+//     focusedPlaceholderColor = Color.Gray,
+//     unf = Color.White,
+//     backgroundColor = Color.Transparent,
+//     cursorColor = Color.White,
+//     focusedIndicatorColor = Color.Transparent,
+//     unfocusedIndicatorColor = Color.Transparent,
+//     placeholderColor = Color.Gray,
+// ),
