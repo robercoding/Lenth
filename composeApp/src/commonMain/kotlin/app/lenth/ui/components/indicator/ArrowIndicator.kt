@@ -1,4 +1,4 @@
-package app.lenth.ui.search.indicator
+package app.lenth.ui.components.indicator
 
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.LinearEasing
@@ -19,6 +19,7 @@ import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.material.Icon
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropDown
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -67,7 +68,7 @@ fun ArrowIndicator(lazyColumnState: LazyListState) {
             Icon(
                 imageVector = Icons.Default.ArrowDropDown,
                 contentDescription = "Scroll down",
-                tint = Color.White,
+                tint = MaterialTheme.colorScheme.onSurface,
                 modifier = Modifier
                     .offset(y = arrowOffset.dp)
                     .size(24.dp),

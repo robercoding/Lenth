@@ -16,6 +16,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -27,14 +28,15 @@ import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.layout.positionInParent
 import androidx.compose.ui.layout.positionInRoot
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import app.lenth.ui.SearchViewModel
 import app.lenth.ui.components.LenthPrimaryButton
+import app.lenth.ui.components.indicator.ArrowIndicator
 import app.lenth.ui.search.autocomplete.AutoCompleteInputList
 import app.lenth.ui.search.dialog.ClearAllAlertDialog
 import app.lenth.ui.search.dialog.DiscardCurrentPlaceInput
-import app.lenth.ui.search.indicator.ArrowIndicator
 import app.lenth.ui.search.optimalpathsheet.OptimalPathSheet
 import app.lenth.ui.theme.ActionBlue
 import app.lenth.ui.theme.OnActionBlue
@@ -47,7 +49,6 @@ fun SearchTabContent(viewModel: SearchViewModel) {
     val focusManager = LocalFocusManager.current
     var focusedPlaceIndex by rememberSaveable { mutableStateOf<Int?>(null) }
     var isTextFieldFocused by rememberSaveable { mutableStateOf(false) }
-
 
     val lazyColumnState = rememberLazyListState()
 
@@ -76,10 +77,17 @@ fun SearchTabContent(viewModel: SearchViewModel) {
         if (!inputPlace.selectedFromAutocomplete && inputPlace.place.isNotEmpty()) {
             isDiscardCurrentInputAlertDialogVisible = true
         } else {
-            if(inputPlace.place.isEmpty() && state.inputPlaces.lastIndex != indexNotNull) {
+            if (inputPlace.place.isEmpty() && state.inputPlaces.lastIndex != indexNotNull) {
                 viewModel.onClearInputPlace(indexNotNull)
             }
             Logger.i("Clicked clear focus")
+            clearFocus()
+            viewModel.onBackHandler()
+        }
+    }
+
+    DisposableEffect(Unit) {
+        onDispose {
             clearFocus()
             viewModel.onBackHandler()
         }
@@ -129,8 +137,7 @@ fun SearchTabContent(viewModel: SearchViewModel) {
                             Modifier
                                 .padding(horizontal = 8.dp)
                                 .weight(weight = 1f, fill = false)
-                                .animateContentSize()
-                            ,
+                                .animateContentSize(),
                             lazyListState = lazyColumnState,
                             inputPlaces = state.inputPlaces,
                             isTextFieldFocused = isTextFieldFocused,

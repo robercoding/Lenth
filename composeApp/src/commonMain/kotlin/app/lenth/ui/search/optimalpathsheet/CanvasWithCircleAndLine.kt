@@ -55,8 +55,8 @@ fun CanvasWithCircleAndLine(
     index: Int,
     isNotEnd: Boolean,
 ) {
-    val onSurfaceColor = MaterialTheme.colorScheme.onSurfaceVariant
-    val primaryColor = MaterialTheme.colorScheme.primary
+    // val onSurfaceColor = MaterialTheme.colorScheme.onSurfaceVariant
+    val onSurfaceColor =  MaterialTheme.colorScheme.onSurface
     Box(
         contentAlignment = Alignment.Center,
         modifier = Modifier.size(40.dp),
@@ -64,7 +64,7 @@ fun CanvasWithCircleAndLine(
         Canvas(modifier = Modifier.fillMaxSize()) {
             // Draw the circle
             drawCircle(
-                color = primaryColor, // Use theme color
+                color = onSurfaceColor, // Use theme color
                 radius = size.minDimension / 2,
                 style = Stroke(width = 2.dp.toPx()), // Outline stroke
             )
@@ -83,7 +83,7 @@ fun CanvasWithCircleAndLine(
         // Draw the index inside the circle
         Text(
             text = "${index + 1}",
-            color = primaryColor, // Match the circle color
+            color = onSurfaceColor, // Match the circle color
             style = MaterialTheme.typography.bodyMedium,
         )
     }

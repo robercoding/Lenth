@@ -7,8 +7,9 @@ import org.koin.core.module.Module
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.json.Json
+import org.koin.dsl.module
 
-actual val networkModule: Module = org.koin.dsl.module {
+actual val networkModule: Module = module {
     single<HttpClient> {
         HttpClient(OkHttp) {
             install(HttpTimeout) {

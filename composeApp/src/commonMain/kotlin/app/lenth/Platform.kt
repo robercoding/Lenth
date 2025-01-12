@@ -2,6 +2,13 @@ package app.lenth
 
 interface Platform {
     val name: String
-}
 
-expect fun getPlatform(): Platform
+    val version: String
+    val language: String
+    val type: Type
+
+    enum class Type {
+        ANDROID,
+        IOS,
+    }
+}

@@ -36,6 +36,7 @@ kotlin {
             implementation(libs.androidx.activity.compose)
             implementation(libs.koin.android)
             implementation(libs.androidx.startup.runtime)
+            implementation(libs.androidx.core.splashscreen)
 
             implementation(libs.ktor.client.okhttp)
         }
@@ -50,6 +51,11 @@ kotlin {
             implementation(compose.components.uiToolingPreview)
             implementation(libs.androidx.lifecycle.viewmodel)
             implementation(libs.androidx.lifecycle.runtime.compose)
+            implementation(libs.jetbrains.androidx.navigation.compose)
+
+            // Datastore
+            implementation(libs.androidx.datastore)
+            implementation(libs.androidx.datastore.preferences)
 
             // Network
             implementation(libs.ktor.client.core)
