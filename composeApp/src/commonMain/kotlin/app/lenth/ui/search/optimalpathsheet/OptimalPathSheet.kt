@@ -32,6 +32,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import app.lenth.domain.MinimumCostPath
+import app.lenth.ui.components.LenthPrimaryButton
+import app.lenth.ui.theme.ActionBlue
+import app.lenth.ui.theme.OnActionBlue
 import app.lenth.ui.utils.openGoogleMaps
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -70,20 +73,16 @@ fun OptimalPathSheet(
 
                         // Summary Card
                         minimumCostPath?.let {
-                            Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.padding(horizontal = 0.dp, vertical = 8.dp)) {
-                                SummaryCard(modifier = Modifier.weight(1f),totalDistance = it.cost)
-                                Spacer(modifier = Modifier.width(16.dp))
-                                FloatingActionButton(
+                            Column (horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.padding(horizontal = 0.dp, vertical = 8.dp)) {
+                                SummaryCard(modifier = Modifier,totalDistance = it.cost)
+                                Spacer(modifier = Modifier.height(8.dp))
+                                LenthPrimaryButton(
+                                    text = "Open in Google Maps",
+                                    textColor = OnActionBlue,
+                                    backgroundColor = ActionBlue,
                                     onClick = { openGoogleMaps(it.path) },
-                                    modifier = Modifier
-                                ) {
-                                    Icon(
-                                        imageVector = Icons.Default.Map,
-                                        contentDescription = "Open in Google Maps",
-                                    )
-                                }
+                                )
                             }
-
                         }
 
                         // Route List
