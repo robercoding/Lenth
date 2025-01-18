@@ -1,0 +1,39 @@
+<resources>
+    <string name="app_title_design_your_travel">Diseinatu zure bidaia</string>
+    <string name="app_title_settings">Ezarpenak</string>
+
+    <!--  Tab naming -->
+    <string name="tab_search_section">Bilatu</string>
+    <string name="tab_history_section">Historia</string>
+
+    <!--  Search tab  -->
+    <string name="tab_search_title_locations">Kokalekuak</string>
+    <string name="tab_search_title_searching">Bilatu</string>
+    <string name="tab_search_action_clear_all">Garbitu dena</string>
+    <string name="tab_search_action_search_optimal_route">Bila ezazu ibilbide optimoa</string>
+
+    <string name="tab_search_sheet_optimal_route_title">Ibilbide optimoa</string>
+    <string name="tab_search_sheet_optimal_route_total_distance">Distantzia osoa</string>
+    <string name="tab_search_sheet_optimal_route_action_open_google_maps">Ireki Google Maps-en</string>
+
+    <!--  Dialogs  -->
+    <string name="tab_search_dialog_discard_current_place_title">Uneko lekua baztertu?</string>
+    <string name="tab_search_dialog_discard_current_place_message">Ez duzu zerrendatik tokirik aukeratu. Uneko lekua baztertu nahi duzu?</string>
+    <string name="tab_search_dialog_discard_current_place_action_discard">Baztertu</string>
+    <string name="tab_search_dialog_discard_current_place_action_cancel">Utzi</string>
+
+    <string name="tab_search_dialog_clear_all_title">Garbitu dena?</string>
+    <string name="tab_search_dialog_clear_all_message">Gehitutako toki guztiak garbitu nahi dituzu?</string>
+    <string name="tab_search_dialog_clear_all_action_clear">Garbitu</string>
+    <string name="tab_search_dialog_clear_all_action_cancel">Utzi</string>
+
+    <!--  History tab  -->
+
+    <!--  Settings screen  -->
+    <string name="settings_current_theme_title_light">Argi gaia</string>
+    <string name="settings_current_theme_title_dark">Ilun gaia</string>
+    <string name="settings_current_theme_subtitle">Ukitu gaia aldatzeko!</string>
+
+    <string name="settings_current_language_title">Euskara</string>
+    <string name="settings_current_language_subtitle">Ukitu hizkuntza aldatzeko!</string>
+</resources>

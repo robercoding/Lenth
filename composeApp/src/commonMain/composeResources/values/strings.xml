@@ -1,0 +1,40 @@
+<resources>
+    <string name="app_title_design_your_travel">Design your travel</string>
+    <string name="app_title_settings">Settings</string>
+
+    <!--  Tab naming -->
+    <string name="tab_search_section">Search</string>
+    <string name="tab_history_section">History</string>
+
+    <!--  Search tab  -->
+    <string name="tab_search_title_locations">Locations</string>
+    <string name="tab_search_title_searching">Search</string>
+    <string name="tab_search_action_clear_all">Clear all</string>
+    <string name="tab_search_action_search_optimal_route">Search optimal route</string>
+
+    <string name="tab_search_sheet_optimal_route_title">Optimal route</string>
+    <string name="tab_search_sheet_optimal_route_total_distance">Total distance</string>
+    <string name="tab_search_sheet_optimal_route_action_open_google_maps">Open in Google Maps</string>
+
+    <!--  Dialogs  -->
+    <string name="tab_search_dialog_discard_current_place_title">Discard current place?</string>
+    <string name="tab_search_dialog_discard_current_place_message">You haven't selected any place from the list. Do you want to discard the current place?</string>
+    <string name="tab_search_dialog_discard_current_place_action_discard">Discard</string>
+    <string name="tab_search_dialog_discard_current_place_action_cancel">Cancel</string>
+
+    <string name="tab_search_dialog_clear_all_title">Clear all?</string>
+    <string name="tab_search_dialog_clear_all_message">Do you want to clear all the places that you have added?</string>
+    <string name="tab_search_dialog_clear_all_action_clear">Clear</string>
+    <string name="tab_search_dialog_clear_all_action_cancel">Cancel</string>
+
+    <!--  History tab  -->
+
+
+    <!--  Settings screen  -->
+    <string name="settings_current_theme_title_light">Light theme</string>
+    <string name="settings_current_theme_title_dark">Dark theme</string>
+    <string name="settings_current_theme_subtitle">Tap to change the theme!</string>
+
+    <string name="settings_current_language_title">Unknown</string>
+    <string name="settings_current_language_subtitle">Tap to change the language!</string>
+</resources>

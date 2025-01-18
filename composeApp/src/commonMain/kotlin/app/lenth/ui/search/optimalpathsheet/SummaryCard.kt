@@ -16,6 +16,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import kotlin.math.pow
 import kotlin.math.round
+import lenth.composeapp.generated.resources.Res
+import lenth.composeapp.generated.resources.tab_search_sheet_optimal_route_total_distance
+import org.jetbrains.compose.resources.stringResource
 
 fun Double.toTwoDecimalString(): String {
     val factor = 10.0.pow(2) // Multiply by 100 for 2 decimals
@@ -41,7 +44,7 @@ fun SummaryCard(
         ) {
             // Total Distance
             Text(
-                text = "Total Distance",
+                text = stringResource(Res.string.tab_search_sheet_optimal_route_total_distance),
                 style = MaterialTheme.typography.labelMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )

@@ -23,7 +23,7 @@ class SettingsViewModel(
         .mapLatest {
             SettingsState(
                 appConfiguration = AppConfiguration(
-                    language = platform.language,
+                    language = mapLanguage(platform.language),
                     version = platform.version,
                     platformType = platform.type,
                     isDarkMode = it ?: false,
@@ -34,7 +34,7 @@ class SettingsViewModel(
         started = SharingStarted.WhileSubscribed(),
         initialValue = SettingsState(
             appConfiguration = AppConfiguration(
-                language = platform.language,
+                language = mapLanguage(platform.language),
                 version = platform.version,
                 platformType = Platform.Type.ANDROID,
                 isDarkMode = developmentPreference.getData(DevelopmentPreference.PREFERENCE_THEME_IS_DARK_MODE) ?: false
@@ -49,6 +49,16 @@ class SettingsViewModel(
     }
 }
 
+private fun mapLanguage(language: String): String {
+    return when (language) {
+        "en" -> "English"
+        "es" -> "Español"
+        "ca" -> "Català"
+        "gl" -> "Galego"
+        "eu" -> "Euskara"
+        else -> language
+    }
+}
 
 data class AppConfiguration(
     val language: String,

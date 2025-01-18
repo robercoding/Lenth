@@ -1,6 +1,12 @@
 package app.lenth.ui.search.dialog
 
 import androidx.compose.runtime.Composable
+import lenth.composeapp.generated.resources.Res
+import lenth.composeapp.generated.resources.tab_search_dialog_clear_all_action_cancel
+import lenth.composeapp.generated.resources.tab_search_dialog_clear_all_action_clear
+import lenth.composeapp.generated.resources.tab_search_dialog_clear_all_message
+import lenth.composeapp.generated.resources.tab_search_dialog_clear_all_title
+import org.jetbrains.compose.resources.stringResource
 
 @Composable
 fun ClearAllAlertDialog(
@@ -10,11 +16,11 @@ fun ClearAllAlertDialog(
 ) {
     BasicAlertDialog(
         isAlertDialogVisible = isClearAllAlertDialogVisible,
-        title = "Clear all?",
-        message = "Do you want to clear all the places you have added?",
+        title = stringResource(Res.string.tab_search_dialog_clear_all_title),
+        message = stringResource(Res.string.tab_search_dialog_clear_all_message),
         onDismissRequest = onDismissRequest,
         onConfirm = onConfirmClearAll,
-        confirmButtonText = "Clear",
-        dismissButtonText = "Cancel",
+        confirmButtonText = stringResource(Res.string.tab_search_dialog_clear_all_action_clear),
+        dismissButtonText = stringResource(Res.string.tab_search_dialog_clear_all_action_cancel),
     )
 }

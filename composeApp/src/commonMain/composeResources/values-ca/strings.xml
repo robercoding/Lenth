@@ -1,0 +1,39 @@
+<resources>
+    <string name="app_title_design_your_travel">Dissenya el teu viatge</string>
+    <string name="app_title_settings">Configuració</string>
+
+    <!--  Tab naming -->
+    <string name="tab_search_section">Cercar</string>
+    <string name="tab_history_section">Historial</string>
+
+    <!--  Search tab  -->
+    <string name="tab_search_title_locations">Ubicacions</string>
+    <string name="tab_search_title_searching">Cercar</string>
+    <string name="tab_search_action_clear_all">Esborra-ho tot</string>
+    <string name="tab_search_action_search_optimal_route">Cerca la ruta òptima</string>
+
+    <string name="tab_search_sheet_optimal_route_title">Ruta òptima</string>
+    <string name="tab_search_sheet_optimal_route_total_distance">Distància total</string>
+    <string name="tab_search_sheet_optimal_route_action_open_google_maps">Obre amb Google Maps</string>
+
+    <!--  Dialogs  -->
+    <string name="tab_search_dialog_discard_current_place_title">Descartar el lloc actual?</string>
+    <string name="tab_search_dialog_discard_current_place_message">No has seleccionat cap lloc de la llista. Vols descartar el lloc actual?</string>
+    <string name="tab_search_dialog_discard_current_place_action_discard">Descarta</string>
+    <string name="tab_search_dialog_discard_current_place_action_cancel">Cancel·la</string>
+
+    <string name="tab_search_dialog_clear_all_title">Esborra-ho tot?</string>
+    <string name="tab_search_dialog_clear_all_message">Vols esborrar tots els llocs que has afegit?</string>
+    <string name="tab_search_dialog_clear_all_action_clear">Esborra</string>
+    <string name="tab_search_dialog_clear_all_action_cancel">Cancel·la</string>
+
+    <!--  History tab  -->
+
+    <!--  Settings screen  -->
+    <string name="settings_current_theme_title_light">Tema clar</string>
+    <string name="settings_current_theme_title_dark">Tema fosc</string>
+    <string name="settings_current_theme_subtitle">Toca per canviar el tema!</string>
+
+    <string name="settings_current_language_title">Català</string>
+    <string name="settings_current_language_subtitle">Toca per canviar l’idioma!</string>
+</resources>

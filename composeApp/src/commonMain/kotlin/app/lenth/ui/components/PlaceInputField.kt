@@ -33,8 +33,9 @@ import androidx.compose.ui.unit.dp
 fun PlaceInputField(
     modifier: Modifier = Modifier,
     text: String,
-    isSetByAutocomplete: Boolean,
     hint: String,
+    isSetByAutocomplete: Boolean,
+    isSearchingOrHasOptimalPath: Boolean,
     onQueryChanged: (String) -> Unit,
     onClickDelete: () -> Unit,
     onFocused: () -> Unit,
@@ -66,6 +67,7 @@ fun PlaceInputField(
     ) {
         androidx.compose.material3.TextField(
             shape = RoundedCornerShape(8.dp),
+            enabled = isSearchingOrHasOptimalPath.not(),
             value = internalText,
             textStyle = MaterialTheme.typography.bodyLarge,
             onValueChange = {

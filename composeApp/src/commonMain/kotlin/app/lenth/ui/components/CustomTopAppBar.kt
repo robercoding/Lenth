@@ -32,6 +32,10 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import app.lenth.ui.LenthScreen
+import lenth.composeapp.generated.resources.Res
+import lenth.composeapp.generated.resources.app_title_design_your_travel
+import lenth.composeapp.generated.resources.app_title_settings
+import org.jetbrains.compose.resources.stringResource
 
 @Composable
 fun CustomTopAppBar(
@@ -41,8 +45,10 @@ fun CustomTopAppBar(
     onSurfaceColor: Color = MaterialTheme.colorScheme.onSurface
 
 ) {
+    val designYourTravelTitlte = stringResource(Res.string.app_title_design_your_travel)
+    val settingsTitle = stringResource(Res.string.app_title_settings)
     val isSettingsScreen = currentScreen == LenthScreen.Settings
-    val text = if (isSettingsScreen) "Settings" else "Design your travel"
+    val text = if (isSettingsScreen) settingsTitle else designYourTravelTitlte
 
     Row(
         modifier = Modifier

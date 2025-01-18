@@ -18,7 +18,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalDensity
@@ -34,6 +33,7 @@ fun SearchTabListLocations(
     inputPlaces: List<InputPlace>,
     isTextFieldFocused: Boolean,
     focusedPlaceIndex: Int?,
+    isSearchingOrHasOptimalPath: Boolean,
     onQueryChanged: (String, Int) -> Unit,
     onClearInputPlace: (Int) -> Unit,
     onUpdateTextFieldHeight: (Int) -> Unit,
@@ -83,12 +83,13 @@ fun SearchTabListLocations(
                     },
                     text = inputPlace.place,
                     hint = city.value,
+                    isSearchingOrHasOptimalPath = isSearchingOrHasOptimalPath,
+                    isSetByAutocomplete = inputPlace.selectedFromAutocomplete,
                     onQueryChanged = { query ->
                         if (focusedPlaceIndex == index) {
                             onQueryChanged(query, index)
                         }
                     },
-                    isSetByAutocomplete = inputPlace.selectedFromAutocomplete,
                     onClickDelete = {
                         onClearInputPlace(index)
                     },

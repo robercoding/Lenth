@@ -1,37 +1,23 @@
 package app.lenth.ui
 
-import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.tween
-import androidx.compose.animation.expandIn
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
-import androidx.compose.animation.shrinkOut
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentSize
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Icon
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Surface
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ChevronLeft
-import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -41,7 +27,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.composed
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.debugInspectorInfo
 import androidx.compose.ui.unit.Dp
@@ -53,11 +38,11 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import app.lenth.Platform
-import app.lenth.ui.components.AnimatedText
 import app.lenth.ui.components.CustomTopAppBar
 import app.lenth.ui.screens.start.LenthStart
-import app.lenth.ui.settings.SettingsSharedScreen
+import app.lenth.ui.settings.SettingsScreen
 import app.lenth.ui.settings.SettingsViewModel
+import app.lenth.utils.openLanguageSettings
 import co.touchlab.kermit.Logger
 import org.koin.compose.koinInject
 import org.koin.compose.viewmodel.koinViewModel
@@ -203,14 +188,9 @@ fun LenthScreen(
                                 Text("Settings Content", color = MaterialTheme.colorScheme.onSurface)
                             }
 
-                            SettingsSharedScreen(
+                            SettingsScreen(
                                 modifier = Modifier.fillMaxSize(),
-                                onClickChangeLanguage = {
-
-                                },
-                                onClickManageAccount = {
-
-                                },
+                                onClickChangeLanguage = { openLanguageSettings() },
                                 settingsViewModel = koinViewModel(),
                             )
                         }

@@ -26,9 +26,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.layout.positionInParent
-import androidx.compose.ui.layout.positionInRoot
 import androidx.compose.ui.platform.LocalFocusManager
-import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import app.lenth.ui.SearchViewModel
@@ -42,6 +40,9 @@ import app.lenth.ui.theme.ActionBlue
 import app.lenth.ui.theme.OnActionBlue
 import app.lenth.ui.utils.BackHandler
 import co.touchlab.kermit.Logger
+import lenth.composeapp.generated.resources.Res
+import lenth.composeapp.generated.resources.tab_search_action_search_optimal_route
+import org.jetbrains.compose.resources.stringResource
 
 @Composable
 fun SearchTabContent(viewModel: SearchViewModel) {
@@ -65,6 +66,9 @@ fun SearchTabContent(viewModel: SearchViewModel) {
     var isClearAllAlertDialogVisible by rememberSaveable { mutableStateOf(false) }
     var isDiscardCurrentInputAlertDialogVisible by rememberSaveable { mutableStateOf(false) }
 
+    val isSearchingOrHasOptimalPath by remember(state.isOptimizingRoute, state.minimumCostPath) {
+        mutableStateOf(state.isOptimizingRoute || state.minimumCostPath != null)
+    }
     fun clearFocus() {
         focusManager.clearFocus(force = true)
         isTextFieldFocused = false
@@ -112,6 +116,7 @@ fun SearchTabContent(viewModel: SearchViewModel) {
         ) {
             SearchTabHeader(
                 focusedTextField = isTextFieldFocused,
+                isSearchingOrHasOptimalPath = isSearchingOrHasOptimalPath,
                 showFilterChips = showFilterChips,
                 onCancelSearch = {
                     onBackOnFocusedPlace()
@@ -123,13 +128,7 @@ fun SearchTabContent(viewModel: SearchViewModel) {
 
             Box(
                 modifier = Modifier
-                    .onGloballyPositioned {
-
-                        Logger.i("Size of List: ${it.size.height}")
-                        Logger.i("Position in parent: ${it.positionInParent().y}")
-                        Logger.i("Position in root: ${it.positionInRoot().y}")
-                        listOffsetInParent = it.positionInParent().y
-                    },
+                    .onGloballyPositioned { listOffsetInParent = it.positionInParent().y },
             ) {
                 Column {
                     Column(modifier = Modifier.weight(1f)) {
@@ -140,6 +139,7 @@ fun SearchTabContent(viewModel: SearchViewModel) {
                                 .animateContentSize(),
                             lazyListState = lazyColumnState,
                             inputPlaces = state.inputPlaces,
+                            isSearchingOrHasOptimalPath = isSearchingOrHasOptimalPath,
                             isTextFieldFocused = isTextFieldFocused,
                             focusedPlaceIndex = focusedPlaceIndex,
                             onQueryChanged = viewModel::onQueryChanged,
@@ -164,16 +164,6 @@ fun SearchTabContent(viewModel: SearchViewModel) {
                         Spacer(modifier = Modifier.height(8.dp))
 
                         ArrowIndicator(lazyColumnState = lazyColumnState)
-                        // Box(
-                        //     modifier = Modifier.padding(16.dp),
-                        // ) {
-                        //     LenthPrimaryButton(
-                        //         text = "Clear all",
-                        //         textColor = MaterialTheme.colorScheme.onSecondaryContainer,
-                        //         backgroundColor = MaterialTheme.colorScheme.secondaryContainer,
-                        //         onClick = { viewModel.resetInputPlaces() },
-                        //     )
-                        // }
                     }
 
                     AnimatedVisibility(
@@ -183,7 +173,7 @@ fun SearchTabContent(viewModel: SearchViewModel) {
                         exit = fadeOut(),
                     ) {
                         LenthPrimaryButton(
-                            text = "Search optimal route",
+                            text = stringResource(Res.string.tab_search_action_search_optimal_route),
                             textColor = OnActionBlue,
                             backgroundColor = ActionBlue,
                             isLoading = state.isOptimizingRoute,

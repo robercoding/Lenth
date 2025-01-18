@@ -119,16 +119,19 @@ private val mockExamplesToFilter = listOf(
 )
 
 private val mockInitialState =listOf(
-        // InputPlace("Valencia", true),
-        InputPlace(place = "Barcelona",  selectedFromAutocomplete = true),
+    InputPlace(place = "Valencia", selectedFromAutocomplete = true),
         InputPlace(place = "Zaragoza", selectedFromAutocomplete = true),
+        InputPlace(place = "Barcelona",  selectedFromAutocomplete = true),
         InputPlace(place = "Madrid", selectedFromAutocomplete = true),
         InputPlace(place = "Seville",selectedFromAutocomplete =  true),
         InputPlace(place = "Bilbao", selectedFromAutocomplete = true),
         InputPlace(place = "Malaga", selectedFromAutocomplete = true),
         InputPlace(place = "Granada",selectedFromAutocomplete =  true),
+    InputPlace(place = "Castellon", selectedFromAutocomplete = true),
+        InputPlace(place = "Estivella", selectedFromAutocomplete = true),
         InputPlace(place = "Alicante",selectedFromAutocomplete =  true),
         InputPlace(place = "Albacete", selectedFromAutocomplete = true),
+    InputPlace(place = "Huesca", selectedFromAutocomplete = true),
         InputPlace(place = "", selectedFromAutocomplete = false),
 )
 

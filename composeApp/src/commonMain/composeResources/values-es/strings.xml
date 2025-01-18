@@ -1,0 +1,39 @@
+<resources>
+    <string name="app_title_design_your_travel">Diseña tu viaje</string>
+    <string name="app_title_settings">Configuración</string>
+
+    <!--  Tab naming -->
+    <string name="tab_search_section">Buscar</string>
+    <string name="tab_history_section">Historial</string>
+
+    <!--  Search tab  -->
+    <string name="tab_search_title_locations">Ubicaciones</string>
+    <string name="tab_search_title_searching">Buscar</string>
+    <string name="tab_search_action_clear_all">Borrar todo</string>
+    <string name="tab_search_action_search_optimal_route">Buscar ruta óptima</string>
+
+    <string name="tab_search_sheet_optimal_route_title">Ruta óptima</string>
+    <string name="tab_search_sheet_optimal_route_total_distance">Distancia total</string>
+    <string name="tab_search_sheet_optimal_route_action_open_google_maps">Abrir en Google Maps</string>
+
+    <!--  Dialogs  -->
+    <string name="tab_search_dialog_discard_current_place_title">¿Descartar lugar actual?</string>
+    <string name="tab_search_dialog_discard_current_place_message">No has seleccionado ningún lugar de la lista. ¿Quieres descartar el lugar actual?</string>
+    <string name="tab_search_dialog_discard_current_place_action_discard">Descartar</string>
+    <string name="tab_search_dialog_discard_current_place_action_cancel">Cancelar</string>
+
+    <string name="tab_search_dialog_clear_all_title">¿Borrar todo?</string>
+    <string name="tab_search_dialog_clear_all_message">¿Quieres borrar todos los lugares que has añadido?</string>
+    <string name="tab_search_dialog_clear_all_action_clear">Borrar</string>
+    <string name="tab_search_dialog_clear_all_action_cancel">Cancelar</string>
+
+    <!--  History tab  -->
+
+    <!--  Settings screen  -->
+    <string name="settings_current_theme_title_light">Tema claro</string>
+    <string name="settings_current_theme_title_dark">Tema oscuro</string>
+    <string name="settings_current_theme_subtitle">¡Toca para cambiar el tema!</string>
+
+    <string name="settings_current_language_title">Español</string>
+    <string name="settings_current_language_subtitle">¡Toca para cambiar el idioma!</string>
+</resources>

@@ -23,7 +23,6 @@ import androidx.compose.material.icons.filled.DarkMode
 import androidx.compose.material.icons.filled.Language
 import androidx.compose.material.icons.filled.LightMode
 import androidx.compose.material.icons.filled.Palette
-import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.Icon
 import androidx.compose.material3.ListItem
 import androidx.compose.material3.MaterialTheme
@@ -43,13 +42,19 @@ import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import lenth.composeapp.generated.resources.Res
+import lenth.composeapp.generated.resources.settings_current_language_subtitle
+import lenth.composeapp.generated.resources.settings_current_language_title
+import lenth.composeapp.generated.resources.settings_current_theme_subtitle
+import lenth.composeapp.generated.resources.settings_current_theme_title_dark
+import lenth.composeapp.generated.resources.settings_current_theme_title_light
+import org.jetbrains.compose.resources.stringResource
 
 private val TileMarginBetween = 8.dp
 @Composable
-fun SettingsSharedScreen(
+fun SettingsScreen(
     modifier: Modifier = Modifier,
     onClickChangeLanguage: () -> Unit,
-    onClickManageAccount: () -> Unit,
     settingsViewModel: SettingsViewModel,
 ) {
     // trackScreenView(name = "SettingsScreen")
@@ -76,9 +81,7 @@ private fun SettingsComposable(
     onClickChangeTheme: (Boolean) -> Unit,
 ) {
     val scrollableState = rememberScrollState()
-
     val isDarkMode = state?.appConfiguration?.isDarkMode ?: isSystemInDarkTheme()
-    var showMergeAccountDialog by remember { mutableStateOf(false) }
 
     Box {
         Column(
@@ -91,7 +94,6 @@ private fun SettingsComposable(
             PreferencesSection(
                 modifier = Modifier.align(Alignment.Start),
                 isDarkMode = isDarkMode,
-                currentLanguageName = state?.appConfiguration?.language,
                 onClickLanguage = { onClickChangeLanguage() },
                 onClickChangeTheme = onClickChangeTheme,
             )
@@ -125,14 +127,9 @@ private fun Header(modifier: Modifier, text: String, icon: ImageVector) {
 private fun PreferencesSection(
     modifier: Modifier,
     isDarkMode: Boolean,
-    currentLanguageName: String?,
     onClickLanguage: () -> Unit,
     onClickChangeTheme: (Boolean) -> Unit,
 ) {
-    // val mode =
-    //     if (isDarkMode) SharedRes.strings.settings_theme_section_theme_mode_title_change_to_dark_item else SharedRes.strings.settings_theme_section_theme_mode_title_change_to_light_item
-    val mode = if (isDarkMode) "Dark" else "Light"
-
     Column(modifier = modifier) {
         // Header(modifier = Modifier, text = stringResource(resource = SharedRes.strings.settings_header_preferences), icon = Icons.Default.Star)
         // Header(modifier = Modifier, text = "Preferences", icon = Icons.Default.Star)
@@ -151,20 +148,13 @@ private fun PreferencesSection(
             },
             headlineContent = {
                 Text(
-                    text = "Your language is $currentLanguageName",
+                    text = stringResource(Res.string.settings_current_language_title),
                     style = MaterialTheme.typography.bodyLarge,
                 )
-                // Text(
-                //     text = stringResource(
-                //         resource = SharedRes.strings.settings_preferences_section_language_title,
-                //         currentLanguage?.originalLanguageName ?: stringResource(resource = SharedRes.strings.app_generic_error),
-                //     ),
-                //     style = MaterialTheme.typography.bodyLarge,
-                // )
             },
             supportingContent = {
                 Text(
-                    text = "Tap to change language",
+                    text = stringResource(Res.string.settings_current_language_subtitle),
                     // text = stringResource(resource = SharedRes.strings.settings_preferences_section_language_subtitle),
                     style = MaterialTheme.typography.labelSmall,
                 )
@@ -188,16 +178,17 @@ private fun PreferencesSection(
                 }
             },
             headlineContent = {
+                val resource = if(isDarkMode) Res.string.settings_current_theme_title_dark else Res.string.settings_current_theme_title_light
                 Text(
-                    text = "Mode",
-                    // text = stringResource(resource = SharedRes.strings.settings_preferences_section_language_title, stringResource(resource = mode)),
+                    // text = "Mode",
+                    text = stringResource(resource = resource),
                     style = MaterialTheme.typography.bodyLarge,
                 )
             },
             supportingContent = {
                 Text(
-                    text = "Tap to change theme",
-                    // text = stringResource(resource = SharedRes.strings.settings_theme_section_theme_mode_subtitle_item),
+                    // text = "Tap to change theme",
+                    text = stringResource(resource = Res.string.settings_current_theme_subtitle),
                     style = MaterialTheme.typography.labelSmall,
                 )
             },

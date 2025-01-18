@@ -11,6 +11,9 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Flag
 import androidx.compose.material.icons.filled.Map
@@ -36,6 +39,10 @@ import app.lenth.ui.components.LenthPrimaryButton
 import app.lenth.ui.theme.ActionBlue
 import app.lenth.ui.theme.OnActionBlue
 import app.lenth.ui.utils.openGoogleMaps
+import lenth.composeapp.generated.resources.Res
+import lenth.composeapp.generated.resources.tab_search_sheet_optimal_route_action_open_google_maps
+import lenth.composeapp.generated.resources.tab_search_sheet_optimal_route_title
+import org.jetbrains.compose.resources.stringResource
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -64,7 +71,7 @@ fun OptimalPathSheet(
                     ) {
                         // Title
                         Text(
-                            text = "Optimal Route",
+                            text = stringResource(Res.string.tab_search_sheet_optimal_route_title),
                             style = MaterialTheme.typography.titleLarge,
                             color = MaterialTheme.colorScheme.onSurface,
                             modifier = Modifier.align(Alignment.CenterHorizontally),
@@ -77,7 +84,7 @@ fun OptimalPathSheet(
                                 SummaryCard(modifier = Modifier,totalDistance = it.cost)
                                 Spacer(modifier = Modifier.height(8.dp))
                                 LenthPrimaryButton(
-                                    text = "Open in Google Maps",
+                                    text = stringResource(Res.string.tab_search_sheet_optimal_route_action_open_google_maps),
                                     textColor = OnActionBlue,
                                     backgroundColor = ActionBlue,
                                     onClick = { openGoogleMaps(it.path) },
@@ -86,15 +93,28 @@ fun OptimalPathSheet(
                         }
 
                         // Route List
+
                         minimumCostPath?.let {
-                            it.path.forEachIndexed { index, place ->
-                                RouteItem(
-                                    index = index,
-                                    place = place,
-                                    isStart = index == 0,
-                                    isEnd = index == it.path.size - 1,
-                                )
+                            LazyColumn(
+                                modifier = Modifier.fillMaxSize(),
+                            ) {
+                                itemsIndexed(it.path, key = { index, place -> place }) { index, place ->
+                                    RouteItem(
+                                        index = index,
+                                        place = place,
+                                        isStart = index == 0,
+                                        isEnd = index == it.path.size - 1,
+                                    )
+                                }
                             }
+                        //     it.path.forEachIndexed { index, place ->
+                        //         RouteItem(
+                        //             index = index,
+                        //             place = place,
+                        //             isStart = index == 0,
+                        //             isEnd = index == it.path.size - 1,
+                        //         )
+                        //     }
                         }
                     }
 

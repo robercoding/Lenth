@@ -19,6 +19,12 @@ import app.lenth.ui.HistoryTabContent
 import app.lenth.ui.SearchViewModel
 import app.lenth.ui.TabPositionText
 import app.lenth.ui.search.SearchTabContent
+import lenth.composeapp.generated.resources.Res
+import lenth.composeapp.generated.resources.tab_history_section
+import lenth.composeapp.generated.resources.tab_search_dialog_discard_current_place_title
+import lenth.composeapp.generated.resources.tab_search_section
+import lenth.composeapp.generated.resources.tab_search_title_locations
+import org.jetbrains.compose.resources.stringResource
 
 @Composable
 fun LenthStart(
@@ -26,7 +32,8 @@ fun LenthStart(
     searchViewModel: SearchViewModel,
     onTabSelected: (Int) -> Unit,
 ) {
-    val tabs = listOf("Search", "History")
+
+    val tabs = listOf(stringResource(Res.string.tab_search_section), stringResource(Res.string.tab_history_section))
     var tabPositionText by remember { mutableStateOf(TabPositionText(0.dp, 0.dp)) }
     Column(
         modifier = Modifier.fillMaxSize(),
