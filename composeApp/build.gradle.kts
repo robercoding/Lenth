@@ -7,7 +7,12 @@ plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.composeMultiplatform)
     alias(libs.plugins.composeCompiler)
+    alias(libs.plugins.ksp)
+    alias(libs.plugins.room)
+}
 
+room {
+    schemaDirectory("$projectDir/schemas")
 }
 
 kotlin {
@@ -53,7 +58,9 @@ kotlin {
             implementation(libs.androidx.lifecycle.runtime.compose)
             implementation(libs.jetbrains.androidx.navigation.compose)
 
-            // Datastore
+            // Local database
+            implementation(libs.room.runtime)
+            implementation(libs.sqlite.bundled)
             implementation(libs.androidx.datastore)
             implementation(libs.androidx.datastore.preferences)
 
@@ -84,6 +91,11 @@ kotlin {
             implementation(libs.ktor.client.darwin)
         }
     }
+}
+
+dependencies {
+    // KSP support for Room Compiler.
+    kspCommonMainMetadata(libs.room.compiler)
 }
 
 android {

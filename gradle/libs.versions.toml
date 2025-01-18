@@ -1,8 +1,11 @@
 [versions]
+kotlin = "2.1.0"
+ksp = "2.1.0-1.0.29" #https://github.com/google/ksp/releases
 agp = "8.5.2"
 android-compileSdk = "35"
 android-minSdk = "29"
 android-targetSdk = "35"
+
 androidx-activityCompose = "1.9.3"
 androidx-appcompat = "1.7.0"
 androidx-constraintlayout = "2.2.0"
@@ -16,9 +19,14 @@ androidx-datastore = "1.1.1"
 jetbrains-androidx-navigation-compose = "2.8.0-alpha11"
 
 
+
+room = "2.7.0-alpha12"
+sqlite = "2.5.0-alpha12"
+
+
 compose-multiplatform = "1.7.3"
 junit = "4.13.2"
-kotlin = "2.1.0"
+
 
 # Network
 ktor = "3.0.3"
@@ -48,6 +56,10 @@ androidx-datastore-preferences = { module = "androidx.datastore:datastore-prefer
 androidx-core-splashscreen = { group = "androidx.core", name = "core-splashscreen", version = "1.0.1" }
 jetbrains-androidx-navigation-compose = { module = "org.jetbrains.androidx.navigation:navigation-compose", version.ref = "jetbrains-androidx-navigation-compose" }
 
+room-runtime = { group = "androidx.room", name = "room-runtime", version.ref = "room" }
+room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "room" }
+sqlite-bundled = { module= "androidx.sqlite:sqlite-bundled", version.ref = "sqlite" }
+
 # Network
 ktor-client-content-negotiation = { module = "io.ktor:ktor-client-content-negotiation", version.ref = "ktor" }
 ktor-client-core = { module = "io.ktor:ktor-client-core", version.ref = "ktor" }
@@ -69,10 +81,13 @@ touchlab-kermit = { module = "co.touchlab:kermit", version.ref = "touchlabKermit
 essenty-backHandler = { module = "com.arkivanov.essenty:back-handler", version.ref = "essenty"}
 
 [plugins]
+composeCompiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
+kotlinMultiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
+kotlinSerialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
+ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
+
 androidApplication = { id = "com.android.application", version.ref = "agp" }
 androidLibrary = { id = "com.android.library", version.ref = "agp" }
 composeMultiplatform = { id = "org.jetbrains.compose", version.ref = "compose-multiplatform" }
 
-composeCompiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
-kotlinMultiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
-kotlinSerialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
+room = { id = "androidx.room", version.ref = "room" }
