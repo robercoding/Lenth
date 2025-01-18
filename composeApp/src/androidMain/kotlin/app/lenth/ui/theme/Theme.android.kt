@@ -23,10 +23,6 @@ actual fun UpdateStatusBarColor(useDarkIcons: Boolean) {
         // Set light or dark status bar icons
         windowInsetsController?.isAppearanceLightStatusBars = useDarkIcons
     }
-    // setStatusBarColor(
-    //     window = (context as Activity).window,
-    //     color = color.toArgb(),
-    // )
 }
 
 fun setStatusBarColor(window: Window, color: Int) {
