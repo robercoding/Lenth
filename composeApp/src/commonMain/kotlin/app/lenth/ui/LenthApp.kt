@@ -1,9 +1,15 @@
 package app.lenth.ui
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.scaleIn
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -31,21 +37,18 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.debugInspectorInfo
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.IntOffset
-import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import app.lenth.Platform
 import app.lenth.ui.components.CustomTopAppBar
-import app.lenth.ui.history.HistoryViewModel
+import app.lenth.ui.history.ExpandedImageOverlay
 import app.lenth.ui.screens.start.LenthStart
 import app.lenth.ui.settings.SettingsScreen
-import app.lenth.ui.settings.SettingsViewModel
+import app.lenth.ui.utils.thenIf
 import app.lenth.utils.openLanguageSettings
 import co.touchlab.kermit.Logger
-import org.koin.compose.koinInject
 import org.koin.compose.viewmodel.koinViewModel
 
 /**
@@ -65,10 +68,7 @@ fun LenthScreen(
 ) {
     var selectedTab by remember { mutableStateOf(0) }
 
-    val platform = koinInject<Platform>()
-
     val searchViewModel = koinViewModel<SearchViewModel>()
-    val settingsViewModel = koinViewModel<SettingsViewModel>()
 
     // Get current back stack entry
     val backStackEntry by navController.currentBackStackEntryAsState()
@@ -80,6 +80,8 @@ fun LenthScreen(
     val backgroundColor by rememberUpdatedState(MaterialTheme.colorScheme.background)
     val onSurfaceColor by rememberUpdatedState(MaterialTheme.colorScheme.onSurface)
 
+    var showOverlay by remember { mutableStateOf(false) }
+    var selectedItem by remember { mutableStateOf<String?>(null) } // To track the selected image for animation
 
     Surface(
         modifier = Modifier.background(MaterialTheme.colorScheme.background),
@@ -98,74 +100,6 @@ fun LenthScreen(
                     backgroundColor = backgroundColor,
                     onSurfaceColor = onSurfaceColor,
                 )
-                // val isSettingsScreen = currentScreen == LenthScreen.Settings
-                // val text = if (isSettingsScreen) "Settings" else "Design your travel"
-                // // val arrowBack = if(platform.type == Platform.Type.IOS) Icons.Default.ChevronLeft else Icons.AutoMirrored.Default.ArrowBack
-                // TopAppBar(
-                //     navigationIcon = {
-                //         AnimatedVisibility(
-                //             visible = isSettingsScreen,
-                //             enter = fadeIn() + expandIn(expandFrom = Alignment.Center),
-                //             exit = fadeOut() + shrinkOut(shrinkTowards = Alignment.CenterStart),
-                //         ) {
-                //             Icon(
-                //                 imageVector = Icons.Default.ChevronLeft,
-                //                 contentDescription = Icons.Default.ChevronLeft.name,
-                //                 tint = MaterialTheme.colorScheme.onSurface, // Adjusted for consistency
-                //                 modifier = Modifier
-                //                     .padding(start = 8.dp)
-                //                     .size(32.dp)
-                //                     .clip(RoundedCornerShape(percent = 50))
-                //                     .clickable {
-                //                         navController.popBackStack()
-                //                     },
-                //             )
-                //         }
-                //     },
-                //     colors = TopAppBarDefaults.topAppBarColors().copy(
-                //         containerColor = backgroundColor,
-                //         // co = onSurfaceColor,
-                //     ),
-                //     title = {
-                //         Box(modifier = Modifier.fillMaxWidth()) {
-                //             AnimatedText(
-                //                 text = text,
-                //                 modifier = Modifier.fillMaxWidth(),
-                //             ) { animatedText ->
-                //                 Text(
-                //                     text = animatedText,
-                //                     style = MaterialTheme.typography.headlineSmall,
-                //                     color = MaterialTheme.colorScheme.onSurface, // Adjusted for better contrast
-                //                 )
-                //             }
-                //         }
-                //
-                //     },
-                //
-                //     actions = {
-                //         AnimatedVisibility(!isSettingsScreen) {
-                //             Icon(
-                //                 imageVector = Icons.Default.Settings,
-                //                 contentDescription = "Settings",
-                //                 tint = onSurfaceColor, // Adjusted for consistency
-                //                 modifier = Modifier
-                //                     .padding(end = 8.dp)
-                //                     .size(24.dp)
-                //                     .clip(RoundedCornerShape(percent = 50))
-                //                     .clickable {
-                //                         if (isSettingsScreen) {
-                //                             navController.popBackStack()
-                //                         } else {
-                //                             navController.navigate(
-                //                                 LenthScreen.Settings.name,
-                //                             )
-                //                         }
-                //                     },
-                //             )
-                //         }
-                //
-                //     },
-                // )
 
                 NavHost(
                     modifier = Modifier.fillMaxSize().padding(paddingValues),
@@ -177,6 +111,10 @@ fun LenthScreen(
                                 selectedTab = selectedTab,
                                 onTabSelected = { selectedTab = it },
                                 searchViewModel = searchViewModel,
+                                onClickImage = { imageUrl ->
+                                    selectedItem = imageUrl
+                                    showOverlay = true
+                                },
                             )
                         }
 
@@ -197,6 +135,34 @@ fun LenthScreen(
                         }
                     },
                 )
+            }
+        }
+
+        val overlayBackgroundImage by animateColorAsState(
+            targetValue = if (showOverlay) Color.Black.copy(alpha = 0.8f) else Color.Transparent,
+            animationSpec = tween(300),
+            finishedListener = {
+                if (it == Color.Transparent) {
+                    selectedItem = null
+                }
+            },
+        )
+
+        Box(
+            modifier = Modifier.fillMaxSize().background(overlayBackgroundImage).thenIf(showOverlay, Modifier.clickable { showOverlay = false }),
+            contentAlignment = Alignment.Center,
+        ) {
+            AnimatedVisibility(
+                visible = showOverlay,
+                enter = fadeIn() + scaleIn(),
+                exit = fadeOut(),
+            ) {
+                selectedItem?.let {
+                    ExpandedImageOverlay(
+                        imageUrl = it,
+                        onClose = { showOverlay = false }, // Close overlay
+                    )
+                }
             }
         }
     }
