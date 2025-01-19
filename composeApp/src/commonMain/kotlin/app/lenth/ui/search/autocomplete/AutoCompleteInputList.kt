@@ -23,6 +23,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.dp
+import app.lenth.ui.search.HeaderTopPadding
 import app.lenth.ui.search.SearchResultItem
 
 @Composable
@@ -45,7 +46,7 @@ fun AutoCompleteInputList(
                 .fillMaxHeight()
                 .absoluteOffset(
                     x = 0.dp,
-                    y = with(LocalDensity.current) { (listOffsetInParent + textFieldHeight).toDp() + 16.dp },
+                    y = with(LocalDensity.current) { (listOffsetInParent + textFieldHeight).toDp() + HeaderTopPadding },
                 )
                 .background(MaterialTheme.colorScheme.surface, RoundedCornerShape(8.dp))
                 .padding(horizontal = 16.dp)

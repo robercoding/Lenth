@@ -45,6 +45,7 @@ import lenth.composeapp.generated.resources.Res
 import lenth.composeapp.generated.resources.tab_search_action_search_optimal_route
 import org.jetbrains.compose.resources.stringResource
 
+internal val HeaderTopPadding = 8.dp
 @Composable
 fun SearchTabContent(viewModel: SearchViewModel) {
     val state by viewModel.state.collectAsStateWithLifecycle()
@@ -113,8 +114,9 @@ fun SearchTabContent(viewModel: SearchViewModel) {
             modifier = Modifier
                 .fillMaxWidth()
                 .statusBarsPadding()
+                // .padding(16.dp)
                 .padding(horizontal = 16.dp)
-                .padding(top = 8.dp, bottom = 0.dp)
+                .padding(top = HeaderTopPadding)
                 .navigationBarsPadding()
         ) {
             SearchTabHeader(
