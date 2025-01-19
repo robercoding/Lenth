@@ -2,7 +2,8 @@ package app.lenth.domain
 
 import androidx.compose.runtime.Immutable
 import app.lenth.data.GeoCodingRepository
-import app.lenth.data.models.LocationDomain
+import app.lenth.data.network.models.LocationDomain
+import app.lenth.ui.history.models.OptimalRouteUi
 import co.touchlab.kermit.Logger
 import kotlin.math.*
 
@@ -10,7 +11,7 @@ data class PlaceWithCoordinates(val place: String, val lat: Double, val lng: Dou
 @Immutable
 data class MinimumCostPath(val cost: Double, val path: List<String>)
 class FindHamiltonianCycleMinimumCostUseCase(private val geoCodingRepository: GeoCodingRepository) {
-    suspend operator fun invoke(places: List<String>): MinimumCostPath {
+    suspend operator fun invoke(places: List<String>): OptimalRouteUi {
         val geoCoding = places.filter { it.isNotBlank() && it.isNotEmpty() }.map {
             val coordinates = geoCodingRepository.getGeoCoding(it)
             PlaceWithCoordinates(it, coordinates.lat, coordinates.lng)
@@ -20,7 +21,7 @@ class FindHamiltonianCycleMinimumCostUseCase(private val geoCodingRepository: Ge
         val cityNames = geoCoding.map { it.place }
 
         val (minCost, path) = heldKarpWithNames(distanceMatrix, cityNames)
-        return MinimumCostPath(minCost, path)
+        return OptimalRouteUi(distance = minCost, path = path)
     }
 
     fun toRadians(deg: Double): Double = deg / 180.0 * PI

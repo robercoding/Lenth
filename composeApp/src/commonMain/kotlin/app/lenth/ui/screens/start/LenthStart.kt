@@ -15,9 +15,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.onPlaced
 import androidx.compose.ui.layout.positionInRoot
 import androidx.compose.ui.unit.dp
-import app.lenth.ui.HistoryTabContent
 import app.lenth.ui.SearchViewModel
 import app.lenth.ui.TabPositionText
+import app.lenth.ui.history.HistoryTabContent
 import app.lenth.ui.search.SearchTabContent
 import lenth.composeapp.generated.resources.Res
 import lenth.composeapp.generated.resources.tab_history_section

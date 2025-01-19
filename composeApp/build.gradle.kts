@@ -1,3 +1,4 @@
+import com.google.devtools.ksp.gradle.KspTaskMetadata
 import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
@@ -8,14 +9,20 @@ plugins {
     alias(libs.plugins.composeMultiplatform)
     alias(libs.plugins.composeCompiler)
     alias(libs.plugins.ksp)
-    alias(libs.plugins.room)
+    // alias(libs.plugins.room) Commented because workaround: // Workaround: https://stackoverflow.com/a/79082144/9420348
 }
 
-room {
-    schemaDirectory("$projectDir/schemas")
+// Workaround: https://stackoverflow.com/a/79082144/9420348
+ksp {
+    arg("room.schemaLocation", "${projectDir}/schemas")
 }
+
 
 kotlin {
+    sourceSets.commonMain {
+        kotlin.srcDir("build/generated/ksp/metadata")
+    }
+
     androidTarget {
         @OptIn(ExperimentalKotlinGradlePluginApi::class)
         compilerOptions {
@@ -42,6 +49,7 @@ kotlin {
             implementation(libs.koin.android)
             implementation(libs.androidx.startup.runtime)
             implementation(libs.androidx.core.splashscreen)
+            implementation(libs.room.runtime.android)
 
             implementation(libs.ktor.client.okhttp)
         }
@@ -57,6 +65,8 @@ kotlin {
             implementation(libs.androidx.lifecycle.viewmodel)
             implementation(libs.androidx.lifecycle.runtime.compose)
             implementation(libs.jetbrains.androidx.navigation.compose)
+            implementation(libs.coil.compose)
+            implementation(libs.coil.compose.ktor) // Needed otherwise error shows up on runtime: Unable to create a fetcher that supports: (Also need darwin and ktor http for each platform)
 
             // Local database
             implementation(libs.room.runtime)
@@ -93,10 +103,17 @@ kotlin {
     }
 }
 
+
 dependencies {
-    // KSP support for Room Compiler.
-    kspCommonMainMetadata(libs.room.compiler)
+    // Workaround: https://stackoverflow.com/a/79082144/9420348
+    // KSP support for Room Compiler. Don't add kspCommonMetadataOnly
+    add("kspCommonMainMetadata", libs.room.compiler)
+    add("kspAndroid", libs.room.compiler)
+    add("kspIosSimulatorArm64", libs.room.compiler)
+    add("kspIosX64", libs.room.compiler)
+    add("kspIosArm64", libs.room.compiler)
 }
+
 
 android {
     namespace = "app.lenth"

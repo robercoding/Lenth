@@ -4,8 +4,10 @@ import androidx.compose.runtime.Immutable
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import app.lenth.domain.FindHamiltonianCycleMinimumCostUseCase
-import app.lenth.domain.MinimumCostPath
 import app.lenth.domain.SearchPlacesByInputQueryUseCase
+import app.lenth.domain.history.InsertOptimalRouteUseCase
+import app.lenth.domain.mapper.toDomainModel
+import app.lenth.ui.history.models.OptimalRouteUi
 import app.lenth.ui.search.filter.SearchTypeUi
 import app.lenth.ui.search.filter.toDomain
 import kotlin.random.Random
@@ -138,6 +140,7 @@ private val mockInitialState =listOf(
 class SearchViewModel(
     private val findHamiltonianCycleMinimumCostUseCase: FindHamiltonianCycleMinimumCostUseCase,
     private val searchPlacesByInputQueryUseCase: SearchPlacesByInputQueryUseCase,
+    private val insertOptimalRouteUseCase: InsertOptimalRouteUseCase,
 ) : ViewModel() {
     private val _state: MutableStateFlow<SearchState> = MutableStateFlow(
         SearchState(
@@ -189,15 +192,16 @@ class SearchViewModel(
             // Check for network connection use konnectivity library
             // Check if you can travel it with car, walking or any other terrestrial vehicle. If not, send back an error
             val minimumCostPath = findHamiltonianCycleMinimumCostUseCase(_state.value.inputPlaces.map { it.place })
+            insertOptimalRouteUseCase(minimumCostPath.toDomainModel())
             _state.update {
-                it.copy(isOptimizingRoute = false, minimumCostPath = minimumCostPath)
+                it.copy(isOptimizingRoute = false, optimalRouteUi = minimumCostPath)
             }
         }
     }
 
     fun onDismissMinimumCostPath() {
         _state.update {
-            it.copy(minimumCostPath = null)
+            it.copy(optimalRouteUi = null)
         }
     }
 
@@ -261,7 +265,7 @@ data class SearchState(
     val autoCompleteResults: List<String> = emptyList(),
     val isOptimizingRoute: Boolean = false,
     val searchType: SearchTypeUi = SearchTypeUi.ALL,
-    val minimumCostPath: MinimumCostPath? = null,
+    val optimalRouteUi: OptimalRouteUi? = null,
 )
 
 @Immutable

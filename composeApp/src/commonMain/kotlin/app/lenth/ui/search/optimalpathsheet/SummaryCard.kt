@@ -14,18 +14,13 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import app.lenth.utils.formatToDistanceKm
+import app.lenth.utils.formatToDistanceKmNoDecimals
 import kotlin.math.pow
 import kotlin.math.round
 import lenth.composeapp.generated.resources.Res
 import lenth.composeapp.generated.resources.tab_search_sheet_optimal_route_total_distance
 import org.jetbrains.compose.resources.stringResource
-
-fun Double.toTwoDecimalString(): String {
-    val factor = 10.0.pow(2) // Multiply by 100 for 2 decimals
-    val roundedValue = round(this * factor) / factor
-    return roundedValue.toString()
-}
-
 
 @Composable
 fun SummaryCard(
@@ -49,7 +44,7 @@ fun SummaryCard(
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
             Text(
-                text = "${totalDistance.toTwoDecimalString()} km", // Display with 2 decimals
+                text = totalDistance.formatToDistanceKmNoDecimals(), // Display with 2 decimals
                 style = MaterialTheme.typography.headlineSmall,
                 color = MaterialTheme.colorScheme.onSurface
             )

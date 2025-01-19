@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.rememberLazyListState
@@ -66,8 +67,8 @@ fun SearchTabContent(viewModel: SearchViewModel) {
     var isClearAllAlertDialogVisible by rememberSaveable { mutableStateOf(false) }
     var isDiscardCurrentInputAlertDialogVisible by rememberSaveable { mutableStateOf(false) }
 
-    val isSearchingOrHasOptimalPath by remember(state.isOptimizingRoute, state.minimumCostPath) {
-        mutableStateOf(state.isOptimizingRoute || state.minimumCostPath != null)
+    val isSearchingOrHasOptimalPath by remember(state.isOptimizingRoute, state.optimalRouteUi) {
+        mutableStateOf(state.isOptimizingRoute || state.optimalRouteUi != null)
     }
     fun clearFocus() {
         focusManager.clearFocus(force = true)
@@ -112,7 +113,9 @@ fun SearchTabContent(viewModel: SearchViewModel) {
             modifier = Modifier
                 .fillMaxWidth()
                 .statusBarsPadding()
-                .padding(16.dp),
+                .padding(horizontal = 16.dp)
+                .padding(top = 8.dp, bottom = 0.dp)
+                .navigationBarsPadding()
         ) {
             SearchTabHeader(
                 focusedTextField = isTextFieldFocused,
@@ -228,7 +231,7 @@ fun SearchTabContent(viewModel: SearchViewModel) {
         )
 
         OptimalPathSheet(
-            minimumCostPath = state.minimumCostPath,
+            optimalRouteUi = state.optimalRouteUi,
             onDismissMinimumCostPath = { viewModel.onDismissMinimumCostPath() },
         )
     }

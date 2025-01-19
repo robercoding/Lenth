@@ -1,8 +1,8 @@
 package app.lenth.data
 
-import app.lenth.data.models.LocationDomain
-import app.lenth.data.models.PlacePredictionsResponse
-import app.lenth.data.models.Response
+import app.lenth.data.network.models.LocationDomain
+import app.lenth.data.network.models.PlacePredictionsResponse
+import app.lenth.data.network.models.Response
 import co.touchlab.kermit.Logger
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body

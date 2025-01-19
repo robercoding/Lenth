@@ -39,6 +39,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import app.lenth.Platform
 import app.lenth.ui.components.CustomTopAppBar
+import app.lenth.ui.history.HistoryViewModel
 import app.lenth.ui.screens.start.LenthStart
 import app.lenth.ui.settings.SettingsScreen
 import app.lenth.ui.settings.SettingsViewModel
@@ -198,19 +199,6 @@ fun LenthScreen(
                 )
             }
         }
-    }
-}
-
-@Composable
-fun HistoryTabContent() {
-    // Add the History Tab's content here
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(16.dp),
-        contentAlignment = Alignment.Center,
-    ) {
-        Text("History Content", color = Color.White)
     }
 }
 

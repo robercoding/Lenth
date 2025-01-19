@@ -7,6 +7,7 @@ import androidx.compose.animation.expandVertically
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.shrinkVertically
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -64,8 +65,8 @@ fun SearchTabHeader(
         mutableStateOf(headerText)
     }
 
-    Column {
-        Row(verticalAlignment = Alignment.CenterVertically) {
+    Column(modifier = Modifier) {
+        Row(modifier = Modifier.height(54.dp), verticalAlignment = Alignment.CenterVertically) {
             AnimatedText(
                 modifier = Modifier.weight(1f),
                 text = headerText,
@@ -112,27 +113,27 @@ fun SearchTabHeader(
             Spacer(modifier = Modifier.width(8.dp))
         }
 
-        Spacer(modifier = Modifier.height(16.dp))
-        AnimatedVisibility(
-            visible = showFilterChips,
-            enter = fadeIn(tween(ANIMATION_TIME)) + expandVertically(
-                expandFrom = Alignment.Top,
-                animationSpec = tween(ANIMATION_TIME),
-            ),
-            exit = fadeOut(tween(ANIMATION_TIME)) + shrinkVertically(
-                shrinkTowards = Alignment.Top,
-                animationSpec = tween(ANIMATION_TIME),
-            ),
-        ) {
-            Column {
-                SearchTypeChips(
-                    selectedSearchType = searchType,
-                    onChipSelected = { searchType ->
-                        onSearchTypeChanged(searchType)
-                    },
-                )
-                Spacer(modifier = Modifier.height(16.dp))
-            }
-        }
+        // Spacer(modifier = Modifier.height(16.dp))
+        // AnimatedVisibility(
+        //     visible = showFilterChips,
+        //     enter = fadeIn(tween(ANIMATION_TIME)) + expandVertically(
+        //         expandFrom = Alignment.Top,
+        //         animationSpec = tween(ANIMATION_TIME),
+        //     ),
+        //     exit = fadeOut(tween(ANIMATION_TIME)) + shrinkVertically(
+        //         shrinkTowards = Alignment.Top,
+        //         animationSpec = tween(ANIMATION_TIME),
+        //     ),
+        // ) {
+        //     Column {
+        //         SearchTypeChips(
+        //             selectedSearchType = searchType,
+        //             onChipSelected = { searchType ->
+        //                 onSearchTypeChanged(searchType)
+        //             },
+        //         )
+        //         Spacer(modifier = Modifier.height(16.dp))
+        //     }
+        // }
     }
 }

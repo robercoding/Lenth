@@ -1,4 +1,4 @@
-package app.lenth.data.models
+package app.lenth.data.network.models
 
 data class LocationDomain(
     val lat: Double,
