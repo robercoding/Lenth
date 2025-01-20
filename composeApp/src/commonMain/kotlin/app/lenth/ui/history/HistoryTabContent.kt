@@ -1,13 +1,5 @@
 package app.lenth.ui.history
 
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.animateColorAsState
-import androidx.compose.animation.core.tween
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
-import androidx.compose.animation.scaleIn
-import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -26,9 +18,10 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import app.lenth.ui.history.models.OptimalRouteUi
+import app.lenth.ui.search.optimalpathsheet.OptimalPathSheet
 import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
@@ -38,9 +31,9 @@ fun HistoryTabContent(
 ) {
     // Add the History Tab's content here
     val state = historyViewModel.state.collectAsStateWithLifecycle(null).value
+    var selectedOptimalRoute by remember { mutableStateOf<OptimalRouteUi?>(null) }
 
     Box(modifier = Modifier.fillMaxSize()) {
-
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -72,11 +65,22 @@ fun HistoryTabContent(
                             title = "From ${it.path.first()} to ${it.path.last()}",
                             locations = it.path.size,
                             distance = it.distance,
-                            onClick = onClickImage,
+                            onClickImage = onClickImage,
+                            onClick = { selectedOptimalRoute = it },
                         )
                     }
                 }
             }
+        }
+
+
+        selectedOptimalRoute?.let {
+            OptimalPathSheet(
+                optimalRouteUi = it,
+                onDismissMinimumCostPath = {
+                    selectedOptimalRoute = null
+                }
+            )
         }
     }
 }

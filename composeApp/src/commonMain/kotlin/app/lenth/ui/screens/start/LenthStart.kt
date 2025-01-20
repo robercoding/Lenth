@@ -1,12 +1,6 @@
 package app.lenth.ui.screens.start
 
-import androidx.compose.animation.animateColorAsState
-import androidx.compose.animation.core.tween
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
-import androidx.compose.animation.scaleIn
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -22,13 +16,11 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.onPlaced
 import androidx.compose.ui.layout.positionInRoot
 import androidx.compose.ui.unit.dp
 import app.lenth.ui.SearchViewModel
 import app.lenth.ui.TabPositionText
-import app.lenth.ui.history.ExpandedImageOverlay
 import app.lenth.ui.history.HistoryTabContent
 import app.lenth.ui.search.SearchTabContent
 import lenth.composeapp.generated.resources.Res
@@ -83,7 +75,7 @@ fun LenthStart(
             // Content based on selected tab
             when (selectedTab) {
                 0 -> SearchTabContent(viewModel = searchViewModel)
-                1 -> HistoryTabContent(onClickImage =onClickImage)
+                1 -> HistoryTabContent(onClickImage = onClickImage)
             }
 
         }

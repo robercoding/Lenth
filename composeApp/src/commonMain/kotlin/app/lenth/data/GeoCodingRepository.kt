@@ -28,7 +28,11 @@ class GeoCodingRepository(private val httpClient: HttpClient) {
             Logger.e(tag = "this.", throwable = e, messageString = "Error: $e")
             return emptyList()
         }
+    }
 
+    suspend fun getStaticMapUrlImage() {
+        val response = httpClient.get
+        
     }
 }
 

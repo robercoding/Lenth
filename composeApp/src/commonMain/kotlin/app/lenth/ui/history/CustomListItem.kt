@@ -34,12 +34,13 @@ fun CustomListItem(
     title: String,
     locations: Int,
     distance: Double,
-    onClick: (String) -> Unit,
+    onClickImage: (String) -> Unit,
+    onClick: () -> Unit,
 ) {
     Row(
         modifier = modifier
             .clip(RoundedCornerShape(12.dp))
-            .clickable { onClick(imageUrl) }
+            .clickable { onClick() }
             .padding(8.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
@@ -47,6 +48,7 @@ fun CustomListItem(
         Box(
             modifier = Modifier
                 .clip(RoundedCornerShape(8.dp))
+                .clickable { onClickImage(imageUrl) }
                 .background(Color.Red),
             contentAlignment = Alignment.Center,
         ) {
