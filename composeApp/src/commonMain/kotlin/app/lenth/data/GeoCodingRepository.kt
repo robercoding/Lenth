@@ -12,6 +12,7 @@ import io.ktor.client.request.get
 import io.ktor.client.request.parameter
 import io.ktor.client.statement.bodyAsText
 import io.ktor.client.statement.readRawBytes
+import io.ktor.client.statement.request
 import io.ktor.http.isSuccess
 import kotlin.io.encoding.ExperimentalEncodingApi
 
@@ -55,22 +56,47 @@ class GeoCodingRepository(private val httpClient: HttpClient) {
     suspend fun getStaticMapUrlImage(
         places: List<PlaceDomain>,
     ): ByteArray? {
+        val availableColors = listOf("blue", "green", "yellow", "purple", "gray", "orange", "black")
+        val alphabet = ('A'..'Z').toList()
         // Base URL for the Static Maps API
         val baseUrl = "https://maps.googleapis.com/maps/api/staticmap"
 
         // val urlSafe = Base64.UrlSafe.encode("&path=enc:yo|oFhshA??ugcB{n~@k~pGajoL`x|Dvwxb@".encodeToByteArray())
+        val latAverage = places.map { it.lat }.average()
+        val lngAverage = places.map { it.lng }.average()
+        val center = "$latAverage,$lngAverage"
+
 
         // Base64.UrlSafe.encodeToAppendable()
         // val response = httpClient.get(urlBuilder.build()) {
         val encodedPolyline = getEncodedPolyline(places) ?: return null
         Logger.i(tag = "this.", throwable = null, messageString = "Calling to static map now")
 
+        val firstPlace = places.first()
+        val lastPlace = places.last()
+        val remainingPlaces = places.subList(1, places.size - 1)
+
+        var currentColorIndex = 0
+        var currentAlphabetIndex = 0
+        val firstPlaceLabel = 0
+        val lastPlaceLabel = 1
         val response = try {
             httpClient.get(baseUrl) {
                 this.parameter("size", "800x600")
-                // this.parameter("center", "39.5728,-0.3472359")
+                this.parameter("markers", "color:red|label:$firstPlaceLabel|${firstPlace.lat}, ${firstPlace.lng}")
+                this.parameter("markers", "color:white|label:$lastPlaceLabel|${lastPlace.lat},${lastPlace.lng}")
+                remainingPlaces.forEachIndexed { index, place ->
+                    this.parameter("markers", "color:${availableColors[currentColorIndex]}|label:${alphabet[currentAlphabetIndex]}|${place.lat},${place.lng}")
+                    if(index == alphabet.size) {
+                        // Reset and change color
+                        currentAlphabetIndex = 0
+                        currentColorIndex++
+                    } else {
+                        currentAlphabetIndex++
+                    }
+                }
+                this.parameter("center", center)
                 this.parameter("path", "enc:$encodedPolyline")
-                // this.parameter("path", "enc:unopFrd`AwAzKc@pCsBy@w@YWnB}@fFA?E@IFCJANBJHJH@HAHG@ElMpElNbF`@b@@JFTDF?l@Cd@SfAs@~DgDjRUjAo@lCg@tAk@pAi@~@e@t@eAnAm@l@u@l@iAr@_Ab@aBh@cFlAqBTkC`@wElAyMdDcDp@cD|@g[rHuItB_Bd@uCdAoCpAkDnByDpCwC`CkB`BuCpCuIvIg@f@wAfB]n@]r@c@pAOp@[`CGjBIjFQtAQRGVAZHXNPLDD@PNVh@L^J~@TdBJl@f@jE@VEf@GVKXQP]NW@SCQIUUQUiAkFQk@_@aAq@iA]k@Wg@sDyKgBsE_@{@[c@kDuI]w@kCaGyEsJsGuLmCkEeF{H{EyGeDeEsEmFaDqDmCoCuFoF}BqBoE{D{FmF_C}BuGgHgCwC_AeAmB_CiCiDwAsB_AyA_G_JkD_GcAiB_DaG}DgIoCgGkDuIuEiMsDkL{BeIgBeHqBqIqCgLeC{IwAqEiAcDkBwEmBoEeBqDaD}FU]AMCSk@kAi@iAk@}AW{@_AaE_C{L_DoP}EiWq@qDk@qC[iAc@eA}@qA}@_Au@m@}GwE_BgAYS[IgCeBm@c@iCeB_BkAsAgAkCaCoGiGaH}GwBoBeBkAcAg@_Bo@{Cy@uA[eS{EiM_DwEgAkHiBcCq@oBs@_A_@qBaAmOcHaGeCWKWUiBq@y@WuBi@iB_@kBQ{AIkJ]mIWqI[s@GIBkA_@m@[q@k@wA{AuAiAi@a@eAo@oA{@q@_@kDuBOKGKEIKYC]JQB[EYKOMIO?K@IFIA[G_DkFo@cA]c@iA}@AUIOMAKDEF]G_@Km@W}KoEuAk@U]BSAQGQIIMGQ?MHILE`@BXLNRDJ?DCt@Tr@VBn@K`@cCtHg@x@m@dAW`@Wl@YpBg@dE?ZMvAYpBg@xDQz@UxAe@lDtBhALDfC?XqBP@")
                 this.parameter("key", API_KEY)
             }
         }catch (e: Exception) {
@@ -80,7 +106,8 @@ class GeoCodingRepository(private val httpClient: HttpClient) {
 
 
         if(response.status.isSuccess()) {
-            Logger.i(tag = "this.", throwable = null, messageString = "Response static maps: ${response.status}")
+            Logger.i(tag = "this.", throwable = null, messageString = "Response static maps: ${response.status}, ")
+            Logger.i(tag = "this.", throwable = null, messageString = "URL request: ${response.request.url}, ")
             // Logger.i(tag = "this.", throwable = null, messageString = "Response text: ${response.bodyAsText()}")
             return response.readRawBytes() // Read the image data
         } else {

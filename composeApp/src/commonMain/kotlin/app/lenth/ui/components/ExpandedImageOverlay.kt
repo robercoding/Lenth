@@ -50,7 +50,7 @@ fun ExpandedImageOverlay(
             Image(
                 bitmap = imageBitmap,
                 contentDescription = "Expanded Image",
-                modifier = Modifier.aspectRatio(1f).fillMaxWidth().clip(RoundedCornerShape(16.dp)),
+                modifier = Modifier.aspectRatio(1f).fillMaxWidth().clip(RoundedCornerShape(16.dp)).clickable(interactionSource = null, indication = null, onClick = {}),
                 contentScale = ContentScale.Crop,
             )
         }
