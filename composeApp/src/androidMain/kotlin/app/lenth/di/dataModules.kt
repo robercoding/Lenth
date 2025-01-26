@@ -3,6 +3,7 @@ package app.lenth.di
 import android.content.Context
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.preferencesDataStore
 import androidx.sqlite.driver.AndroidSQLiteDriver
 import app.lenth.data.preferences.PREFERENCE_DATA_STORE_SETTINGS
 import app.lenth.data.preferences.createSharedDataStore

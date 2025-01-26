@@ -1,32 +1,34 @@
 package app.lenth.domain
 
-import androidx.compose.runtime.Immutable
 import app.lenth.data.GeoCodingRepository
-import app.lenth.data.network.models.LocationDomain
 import app.lenth.ui.history.models.OptimalRouteUi
-import co.touchlab.kermit.Logger
 import kotlin.math.*
 
-data class PlaceWithCoordinates(val place: String, val lat: Double, val lng: Double)
-@Immutable
-data class MinimumCostPath(val cost: Double, val path: List<String>)
+data class PlaceUi(val name: String, val lat: Double, val lng: Double)
+
 class FindHamiltonianCycleMinimumCostUseCase(private val geoCodingRepository: GeoCodingRepository) {
+    // TODO Return domain instead of ui...
     suspend operator fun invoke(places: List<String>): OptimalRouteUi {
+        // Step 1: Geocode the places to get coordinates
         val geoCoding = places.filter { it.isNotBlank() && it.isNotEmpty() }.map {
-            val coordinates = geoCodingRepository.getGeoCoding(it)
-            PlaceWithCoordinates(it, coordinates.lat, coordinates.lng)
+            geoCodingRepository.getGeoCoding(it)
         }
 
+        // Step 2: Generate the distance matrix
         val distanceMatrix = generateDistanceMatrix(geoCoding.map { it.lat to it.lng })
-        val cityNames = geoCoding.map { it.place }
 
-        val (minCost, path) = heldKarpWithNames(distanceMatrix, cityNames)
-        return OptimalRouteUi(distance = minCost, path = path)
+        // Step 3: Solve the TSP and get the optimal path
+        val (minCost, pathIndices) = heldKarp(distanceMatrix)
+
+        // Step 4: Map the path indices back to PlaceWithCoordinates
+        val orderedPath = pathIndices.map { geoCoding[it] }.map { PlaceUi(it.name, it.lat, it.lng) } // TODO Use PlaceDomain
+
+        // Step 5: Return OptimalRouteUi with the full path including coordinates
+        return OptimalRouteUi(distance = minCost, path = orderedPath, mapImage = null)
     }
 
     fun toRadians(deg: Double): Double = deg / 180.0 * PI
 
-    fun toDegrees(rad: Double): Double = rad * 180.0 / PI
     fun generateDistanceMatrix(locations: List<Pair<Double, Double>>): Array<DoubleArray> {
         val n = locations.size
         val matrix = Array(n) { DoubleArray(n) }
@@ -53,14 +55,6 @@ class FindHamiltonianCycleMinimumCostUseCase(private val geoCodingRepository: Ge
         val c = 2 * atan2(sqrt(a), sqrt(1 - a))
         return R * c // Distance in kilometers
     }
-
-    fun heldKarpWithNames(distanceMatrix: Array<DoubleArray>, cityNames: List<String>): Pair<Double, List<String>> {
-        val n = distanceMatrix.size
-        val (minCost, path) = heldKarp(distanceMatrix) // Use the fixed-start implementation
-        val namedPath = path.map { cityNames[it] }
-        return Pair(minCost, namedPath)
-    }
-
 
     fun heldKarp(distanceMatrix: Array<DoubleArray>): Pair<Double, List<Int>> {
         val n = distanceMatrix.size
@@ -114,13 +108,5 @@ class FindHamiltonianCycleMinimumCostUseCase(private val geoCodingRepository: Ge
         path.reverse()
 
         return Pair(minCost, path)
-    }
-
-
-
-    private fun LocationDomain.distanceTo(other: LocationDomain): Double {
-        val x = this.lat - other.lat
-        val y = this.lng - other.lng
-        return sqrt(x * x + y * y)
     }
 }

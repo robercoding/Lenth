@@ -42,7 +42,7 @@ fun ArrowIndicator(lazyColumnState: LazyListState) {
         if (alreadyScrolled) {
             return@LaunchedEffect
         }
-        Logger.i("First visible item index: ${lazyColumnState.firstVisibleItemIndex}")
+
         if (lazyColumnState.firstVisibleItemScrollOffset > 20) {
             alreadyScrolled = true
         }

@@ -1,15 +1,10 @@
 package app.lenth.ui
 
-import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.tween
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
-import androidx.compose.animation.scaleIn
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -34,6 +29,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.composed
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.platform.debugInspectorInfo
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.IntOffset
@@ -43,10 +39,8 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import app.lenth.ui.components.CustomTopAppBar
-import app.lenth.ui.history.ExpandedImageOverlay
 import app.lenth.ui.screens.start.LenthStart
 import app.lenth.ui.settings.SettingsScreen
-import app.lenth.ui.utils.thenIf
 import app.lenth.utils.openLanguageSettings
 import co.touchlab.kermit.Logger
 import org.koin.compose.viewmodel.koinViewModel
@@ -81,7 +75,7 @@ fun LenthScreen(
     val onSurfaceColor by rememberUpdatedState(MaterialTheme.colorScheme.onSurface)
 
     var showOverlay by remember { mutableStateOf(false) }
-    var selectedItem by remember { mutableStateOf<String?>(null) } // To track the selected image for animation
+    var selectedItem by remember { mutableStateOf<ImageBitmap?>(null) } // To track the selected image for animation
 
     Surface(
         modifier = Modifier.background(MaterialTheme.colorScheme.background),
@@ -111,8 +105,8 @@ fun LenthScreen(
                                 selectedTab = selectedTab,
                                 onTabSelected = { selectedTab = it },
                                 searchViewModel = searchViewModel,
-                                onClickImage = { imageUrl ->
-                                    selectedItem = imageUrl
+                                onClickImage = { imageBitmap ->
+                                    selectedItem = imageBitmap
                                     showOverlay = true
                                 },
                             )
@@ -148,23 +142,32 @@ fun LenthScreen(
             },
         )
 
-        Box(
-            modifier = Modifier.fillMaxSize().background(overlayBackgroundImage).thenIf(showOverlay, Modifier.clickable { showOverlay = false }),
-            contentAlignment = Alignment.Center,
-        ) {
-            AnimatedVisibility(
-                visible = showOverlay,
-                enter = fadeIn() + scaleIn(),
-                exit = fadeOut(),
-            ) {
-                selectedItem?.let {
-                    ExpandedImageOverlay(
-                        imageUrl = it,
-                        onClose = { showOverlay = false }, // Close overlay
-                    )
-                }
-            }
-        }
+        OverlayImage(
+            showOverlay = showOverlay,
+            selectedItem = selectedItem,
+            onDismiss = { showOverlay = false },
+            onFinishAnimation = { selectedItem = null },
+        )
+
+        // Box(
+        //     modifier = Modifier.fillMaxSize().background(overlayBackgroundImage).thenIf(showOverlay, Modifier.clickable { showOverlay = false }),
+        //     contentAlignment = Alignment.Center,
+        // ) {
+        //     AnimatedVisibility(
+        //         visible = showOverlay,
+        //         enter = fadeIn() + scaleIn(),
+        //         exit = fadeOut() + shrinkOut(shrinkTowards = Alignment.Center),
+        //         modifier = Modifier.zIndex(100f)
+        //     ) {
+        //         selectedItem?.let {
+        //             ExpandedImageOverlay(
+        //                 imageBitmap = it,
+        //                 hasCloseButton = true,
+        //                 onClose = { showOverlay = false }, // Close overlay
+        //             )
+        //         }
+        //     }
+        // }
     }
 }
 

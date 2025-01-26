@@ -5,8 +5,15 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 
 @Entity("optimal_route")
-data class OptimalRouteEntity(
+class OptimalRouteEntity(
     @PrimaryKey(autoGenerate = true) val id: Int = 0,
-    @ColumnInfo(name = "route_list") val list: List<String>,
+    @ColumnInfo(name = "route_list") val list: List<PlaceEntity>,
     @ColumnInfo(name = "distance") val distance: Double,
+    @ColumnInfo(name = "map_image") val mapImage: ByteArray?
+)
+
+data class PlaceEntity(
+    val place: String,
+    val lat: Double,
+    val lng: Double
 )

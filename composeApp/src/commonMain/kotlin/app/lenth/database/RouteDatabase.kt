@@ -13,7 +13,7 @@ import app.lenth.data.db.models.OptimalRouteEntity
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
 
-@Database(entities = [OptimalRouteEntity::class], version = 1, exportSchema = true)
+@Database(entities = [OptimalRouteEntity::class], version = 3, exportSchema = true)
 @TypeConverters(RouteListConverter::class)
 @ConstructedBy(RouteDatabaseConstructor::class)
 abstract class RouteDatabase : RoomDatabase() {
@@ -27,7 +27,8 @@ expect object RouteDatabaseConstructor : RoomDatabaseConstructor<RouteDatabase> 
   override fun initialize(): RouteDatabase
 }
 
-// To inject AndroidSQLDriver to be able to open IDE Database Inspector feature. With BundledSQLDriver the Database looks closed on DatabaseInspector.
+// We want to inject AndroidSQLDriver from android source set to be able to open IDE Database Inspector feature.
+// With BundledSQLDriver the Database looks closed on DatabaseInspector.
 // expect fun getRoomDatabasePlatform(builder: RoomDatabase.Builder<RouteDatabase>): RouteDatabase
 fun getRoomDatabase(
   builder: RoomDatabase.Builder<RouteDatabase>,

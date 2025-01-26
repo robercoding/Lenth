@@ -16,6 +16,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.layout.onPlaced
 import androidx.compose.ui.layout.positionInRoot
 import androidx.compose.ui.unit.dp
@@ -33,13 +34,10 @@ fun LenthStart(
     selectedTab: Int,
     searchViewModel: SearchViewModel,
     onTabSelected: (Int) -> Unit,
-    onClickImage: (String) -> Unit,
+    onClickImage: (ImageBitmap) -> Unit,
 ) {
-
     val tabs = listOf(stringResource(Res.string.tab_search_section), stringResource(Res.string.tab_history_section))
     var tabPositionText by remember { mutableStateOf(TabPositionText(0.dp, 0.dp)) }
-
-
 
     Box(modifier = Modifier.fillMaxSize().background(MaterialTheme.colorScheme.surface)) {
         Column(modifier = Modifier.fillMaxSize()) {
@@ -74,10 +72,9 @@ fun LenthStart(
 
             // Content based on selected tab
             when (selectedTab) {
-                0 -> SearchTabContent(viewModel = searchViewModel)
+                0 -> SearchTabContent(viewModel = searchViewModel, onClickImage = onClickImage)
                 1 -> HistoryTabContent(onClickImage = onClickImage)
             }
-
         }
     }
 }

@@ -5,8 +5,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import app.lenth.domain.FindHamiltonianCycleMinimumCostUseCase
 import app.lenth.domain.SearchPlacesByInputQueryUseCase
+import app.lenth.domain.history.GetOptimalRouteUseCase
 import app.lenth.domain.history.InsertOptimalRouteUseCase
-import app.lenth.domain.mapper.toDomainModel
+import app.lenth.domain.mapper.toDomain
 import app.lenth.ui.history.models.OptimalRouteUi
 import app.lenth.ui.search.filter.SearchTypeUi
 import app.lenth.ui.search.filter.toDomain
@@ -138,7 +139,7 @@ private val mockInitialState =listOf(
 )
 
 class SearchViewModel(
-    private val findHamiltonianCycleMinimumCostUseCase: FindHamiltonianCycleMinimumCostUseCase,
+    private val getOptimalRouteUseCase: GetOptimalRouteUseCase,
     private val searchPlacesByInputQueryUseCase: SearchPlacesByInputQueryUseCase,
     private val insertOptimalRouteUseCase: InsertOptimalRouteUseCase,
 ) : ViewModel() {
@@ -191,8 +192,8 @@ class SearchViewModel(
             }
             // Check for network connection use konnectivity library
             // Check if you can travel it with car, walking or any other terrestrial vehicle. If not, send back an error
-            val minimumCostPath = findHamiltonianCycleMinimumCostUseCase(_state.value.inputPlaces.map { it.place })
-            insertOptimalRouteUseCase(minimumCostPath.toDomainModel())
+            val minimumCostPath = getOptimalRouteUseCase(_state.value.inputPlaces.map { it.place })
+            insertOptimalRouteUseCase(minimumCostPath.toDomain())
             _state.update {
                 it.copy(isOptimizingRoute = false, optimalRouteUi = minimumCostPath)
             }

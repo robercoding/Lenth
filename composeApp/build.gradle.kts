@@ -45,13 +45,18 @@ kotlin {
         
         androidMain.dependencies {
             implementation(compose.preview)
+
             implementation(libs.androidx.activity.compose)
-            implementation(libs.koin.android)
-            implementation(libs.androidx.startup.runtime)
             implementation(libs.androidx.core.splashscreen)
+            implementation(libs.androidx.material3.android)
+            implementation(libs.androidx.startup.runtime)
+
+            implementation(libs.koin.android)
+            implementation(libs.ktor.client.okhttp)
+
             implementation(libs.room.runtime.android)
 
-            implementation(libs.ktor.client.okhttp)
+            implementation(libs.slf4j.simple)
         }
         commonMain.dependencies {
             implementation(compose.runtime)
@@ -60,6 +65,7 @@ kotlin {
             implementation(compose.materialIconsExtended)
             implementation(compose.ui)
             implementation(compose.material3)
+
             implementation(compose.components.resources)
             implementation(compose.components.uiToolingPreview)
             implementation(libs.androidx.lifecycle.viewmodel)
@@ -76,6 +82,7 @@ kotlin {
 
             // Network
             implementation(libs.ktor.client.core)
+            implementation(libs.ktor.client.logging)
             implementation(libs.ktor.client.content.negotiation)
             implementation(libs.ktor.serialization.kotlinx.json)
 

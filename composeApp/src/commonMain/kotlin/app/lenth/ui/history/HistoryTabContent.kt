@@ -18,6 +18,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import app.lenth.ui.history.models.OptimalRouteUi
@@ -27,7 +28,7 @@ import org.koin.compose.viewmodel.koinViewModel
 @Composable
 fun HistoryTabContent(
     historyViewModel: HistoryViewModel = koinViewModel(),
-    onClickImage: (String) -> Unit,
+    onClickImage: (ImageBitmap) -> Unit,
 ) {
     // Add the History Tab's content here
     val state = historyViewModel.state.collectAsStateWithLifecycle(null).value
@@ -61,12 +62,15 @@ fun HistoryTabContent(
                     items(it, key = { item -> item.id }) {
                         CustomListItem(
                             modifier = Modifier.fillMaxWidth(),
-                            imageUrl = it.imageStart,
-                            title = "From ${it.path.first()} to ${it.path.last()}",
+                            byteArray = it.mapImage,
+                            title = "From ${it.path.first().name} to ${it.path.last().name}",
                             locations = it.path.size,
                             distance = it.distance,
                             onClickImage = onClickImage,
-                            onClick = { selectedOptimalRoute = it },
+                            onClick = {
+                                // historyViewModel.onClickItem(it.path)
+                                selectedOptimalRoute = it
+                                      },
                         )
                     }
                 }
@@ -79,7 +83,8 @@ fun HistoryTabContent(
                 optimalRouteUi = it,
                 onDismissMinimumCostPath = {
                     selectedOptimalRoute = null
-                }
+                },
+                onClickImage = onClickImage,
             )
         }
     }

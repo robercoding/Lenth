@@ -25,6 +25,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.layout.positionInParent
 import androidx.compose.ui.platform.LocalFocusManager
@@ -47,7 +48,7 @@ import org.jetbrains.compose.resources.stringResource
 
 internal val HeaderTopPadding = 8.dp
 @Composable
-fun SearchTabContent(viewModel: SearchViewModel) {
+fun SearchTabContent(viewModel: SearchViewModel, onClickImage: (ImageBitmap) -> Unit) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     val focusManager = LocalFocusManager.current
     var focusedPlaceIndex by rememberSaveable { mutableStateOf<Int?>(null) }
@@ -235,6 +236,7 @@ fun SearchTabContent(viewModel: SearchViewModel) {
         OptimalPathSheet(
             optimalRouteUi = state.optimalRouteUi,
             onDismissMinimumCostPath = { viewModel.onDismissMinimumCostPath() },
+            onClickImage = onClickImage
         )
     }
 }

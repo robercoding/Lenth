@@ -4,16 +4,16 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class Response(
+data class GeocodeResponse(
     @SerialName("results")
-    val results: List<Result>,
+    val geocodeResults: List<GeocodeResult>,
 
     @SerialName("status")
     val status: String
 )
 
 @Serializable
-data class Result(
+data class GeocodeResult(
     @SerialName("address_components")
     val addressComponents: List<AddressComponent>,
 
