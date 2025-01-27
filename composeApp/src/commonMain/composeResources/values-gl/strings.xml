@@ -22,10 +22,10 @@
     <string name="tab_search_dialog_discard_current_place_action_discard">Descartar</string>
     <string name="tab_search_dialog_discard_current_place_action_cancel">Cancelar</string>
 
-    <string name="tab_search_dialog_clear_all_title">Borrar todo?</string>
-    <string name="tab_search_dialog_clear_all_message">Queres borrar todos os lugares que engadiches?</string>
-    <string name="tab_search_dialog_clear_all_action_clear">Borrar</string>
-    <string name="tab_search_dialog_clear_all_action_cancel">Cancelar</string>
+    <string name="tab_search_dialog_clear_all_places_title">Borrar todo?</string>
+    <string name="tab_search_dialog_clear_all_places_message">Queres borrar todos os lugares que engadiches?</string>
+    <string name="tab_search_dialog_clear_all_places_action_clear">Borrar</string>
+    <string name="tab_search_dialog_clear_all_places_action_cancel">Cancelar</string>
 
     <!--  History tab  -->
 

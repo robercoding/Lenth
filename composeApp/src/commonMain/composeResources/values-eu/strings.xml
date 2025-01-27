@@ -22,10 +22,10 @@
     <string name="tab_search_dialog_discard_current_place_action_discard">Baztertu</string>
     <string name="tab_search_dialog_discard_current_place_action_cancel">Utzi</string>
 
-    <string name="tab_search_dialog_clear_all_title">Garbitu dena?</string>
-    <string name="tab_search_dialog_clear_all_message">Gehitutako toki guztiak garbitu nahi dituzu?</string>
-    <string name="tab_search_dialog_clear_all_action_clear">Garbitu</string>
-    <string name="tab_search_dialog_clear_all_action_cancel">Utzi</string>
+    <string name="tab_search_dialog_clear_all_places_title">Garbitu dena?</string>
+    <string name="tab_search_dialog_clear_all_places_message">Gehitutako toki guztiak garbitu nahi dituzu?</string>
+    <string name="tab_search_dialog_clear_all_places_action_clear">Garbitu</string>
+    <string name="tab_search_dialog_clear_all_places_action_cancel">Utzi</string>
 
     <!--  History tab  -->
 

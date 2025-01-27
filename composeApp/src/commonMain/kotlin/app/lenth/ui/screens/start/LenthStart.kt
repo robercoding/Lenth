@@ -73,7 +73,9 @@ fun LenthStart(
             // Content based on selected tab
             when (selectedTab) {
                 0 -> SearchTabContent(viewModel = searchViewModel, onClickImage = onClickImage)
-                1 -> HistoryTabContent(onClickImage = onClickImage)
+                1 -> HistoryTabContent(onClickImage = onClickImage, onClickGoSearch = {
+                    onTabSelected(0)
+                })
             }
         }
     }

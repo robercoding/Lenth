@@ -35,7 +35,7 @@ import app.lenth.ui.SearchViewModel
 import app.lenth.ui.components.LenthPrimaryButton
 import app.lenth.ui.components.indicator.ArrowIndicator
 import app.lenth.ui.search.autocomplete.AutoCompleteInputList
-import app.lenth.ui.search.dialog.ClearAllAlertDialog
+import app.lenth.ui.search.dialog.ClearAllPlacesAlertDialog
 import app.lenth.ui.search.dialog.DiscardCurrentPlaceInput
 import app.lenth.ui.search.optimalpathsheet.OptimalPathSheet
 import app.lenth.ui.theme.ActionBlue
@@ -224,7 +224,7 @@ fun SearchTabContent(viewModel: SearchViewModel, onClickImage: (ImageBitmap) -> 
             },
         )
 
-        ClearAllAlertDialog(
+        ClearAllPlacesAlertDialog(
             isClearAllAlertDialogVisible,
             onDismissRequest = { isClearAllAlertDialogVisible = false },
             onConfirmClearAll = {

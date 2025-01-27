@@ -22,10 +22,15 @@
     <string name="tab_search_dialog_discard_current_place_action_discard">Discard</string>
     <string name="tab_search_dialog_discard_current_place_action_cancel">Cancel</string>
 
-    <string name="tab_search_dialog_clear_all_title">Clear all?</string>
-    <string name="tab_search_dialog_clear_all_message">Do you want to clear all the places that you have added?</string>
-    <string name="tab_search_dialog_clear_all_action_clear">Clear</string>
-    <string name="tab_search_dialog_clear_all_action_cancel">Cancel</string>
+    <string name="tab_search_dialog_clear_all_places_title">Clear all?</string>
+    <string name="tab_search_dialog_clear_all_places_message">Do you want to clear all the places that you have added?</string>
+    <string name="tab_search_dialog_clear_all_places_action_clear">Clear</string>
+    <string name="tab_search_dialog_clear_all_places_action_cancel">Cancel</string>
+
+    <string name="tab_search_dialog_clear_all_optimal_routes_title">Clear all?</string>
+    <string name="tab_search_dialog_clear_all_optimal_routes_message">Do you want to clear all the optimal routes that you have searched?</string>
+    <string name="tab_search_dialog_clear_all_optimal_routes_action_clear">Clear</string>
+    <string name="tab_search_dialog_clear_all_optimal_routes_action_cancel">Cancel</string>
 
     <!--  History tab  -->
 

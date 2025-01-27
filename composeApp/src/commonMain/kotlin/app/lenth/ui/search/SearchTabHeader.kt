@@ -109,31 +109,6 @@ fun SearchTabHeader(
                     )
                 }
             }
-
-            Spacer(modifier = Modifier.width(8.dp))
         }
-
-        // Spacer(modifier = Modifier.height(16.dp))
-        // AnimatedVisibility(
-        //     visible = showFilterChips,
-        //     enter = fadeIn(tween(ANIMATION_TIME)) + expandVertically(
-        //         expandFrom = Alignment.Top,
-        //         animationSpec = tween(ANIMATION_TIME),
-        //     ),
-        //     exit = fadeOut(tween(ANIMATION_TIME)) + shrinkVertically(
-        //         shrinkTowards = Alignment.Top,
-        //         animationSpec = tween(ANIMATION_TIME),
-        //     ),
-        // ) {
-        //     Column {
-        //         SearchTypeChips(
-        //             selectedSearchType = searchType,
-        //             onChipSelected = { searchType ->
-        //                 onSearchTypeChanged(searchType)
-        //             },
-        //         )
-        //         Spacer(modifier = Modifier.height(16.dp))
-        //     }
-        // }
     }
 }

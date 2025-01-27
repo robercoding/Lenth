@@ -132,42 +132,12 @@ fun LenthScreen(
             }
         }
 
-        val overlayBackgroundImage by animateColorAsState(
-            targetValue = if (showOverlay) Color.Black.copy(alpha = 0.8f) else Color.Transparent,
-            animationSpec = tween(300),
-            finishedListener = {
-                if (it == Color.Transparent) {
-                    selectedItem = null
-                }
-            },
-        )
-
         OverlayImage(
             showOverlay = showOverlay,
             selectedItem = selectedItem,
             onDismiss = { showOverlay = false },
             onFinishAnimation = { selectedItem = null },
         )
-
-        // Box(
-        //     modifier = Modifier.fillMaxSize().background(overlayBackgroundImage).thenIf(showOverlay, Modifier.clickable { showOverlay = false }),
-        //     contentAlignment = Alignment.Center,
-        // ) {
-        //     AnimatedVisibility(
-        //         visible = showOverlay,
-        //         enter = fadeIn() + scaleIn(),
-        //         exit = fadeOut() + shrinkOut(shrinkTowards = Alignment.Center),
-        //         modifier = Modifier.zIndex(100f)
-        //     ) {
-        //         selectedItem?.let {
-        //             ExpandedImageOverlay(
-        //                 imageBitmap = it,
-        //                 hasCloseButton = true,
-        //                 onClose = { showOverlay = false }, // Close overlay
-        //             )
-        //         }
-        //     }
-        // }
     }
 }
 

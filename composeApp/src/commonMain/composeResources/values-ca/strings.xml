@@ -22,10 +22,10 @@
     <string name="tab_search_dialog_discard_current_place_action_discard">Descarta</string>
     <string name="tab_search_dialog_discard_current_place_action_cancel">Cancel·la</string>
 
-    <string name="tab_search_dialog_clear_all_title">Esborra-ho tot?</string>
-    <string name="tab_search_dialog_clear_all_message">Vols esborrar tots els llocs que has afegit?</string>
-    <string name="tab_search_dialog_clear_all_action_clear">Esborra</string>
-    <string name="tab_search_dialog_clear_all_action_cancel">Cancel·la</string>
+    <string name="tab_search_dialog_clear_all_places_title">Esborra-ho tot?</string>
+    <string name="tab_search_dialog_clear_all_places_message">Vols esborrar tots els llocs que has afegit?</string>
+    <string name="tab_search_dialog_clear_all_places_action_clear">Esborra</string>
+    <string name="tab_search_dialog_clear_all_places_action_cancel">Cancel·la</string>
 
     <!--  History tab  -->
 

@@ -20,6 +20,8 @@ import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import app.lenth.ui.utils.CustomPreview
+import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Composable
 internal fun LenthPrimaryButton(
@@ -30,7 +32,6 @@ internal fun LenthPrimaryButton(
     onClick: () -> Unit,
     isLoading: Boolean = false,
 ) {
-    val density = LocalDensity.current
     Button(
         onClick = onClick,
         modifier = modifier.fillMaxWidth().height(48.dp),
@@ -66,3 +67,4 @@ internal fun LenthPrimaryButton(
         }
     }
 }
+

@@ -24,12 +24,12 @@ kotlin {
     }
 
     androidTarget {
-        @OptIn(ExperimentalKotlinGradlePluginApi::class)
         compilerOptions {
             jvmTarget.set(JvmTarget.JVM_11)
         }
     }
-    
+
+
     listOf(
         iosX64(),
         iosArm64(),
@@ -44,7 +44,7 @@ kotlin {
     sourceSets {
         
         androidMain.dependencies {
-            implementation(compose.preview)
+            implementation(compose.preview) // Needed for Previews on android source set.w
 
             implementation(libs.androidx.activity.compose)
             implementation(libs.androidx.core.splashscreen)
@@ -67,6 +67,8 @@ kotlin {
             implementation(compose.material3)
 
             implementation(compose.components.resources)
+            // This does not work if you don't have JVM target... But already working on Intellij EAP https://kotlinlang.slack.com/archives/CJLTWPH7S/p1737654194601389.
+            // Soon will be available on stable version. (Check on 2025.12.01). For now use Previews on Android source set.
             implementation(compose.components.uiToolingPreview)
             implementation(libs.androidx.lifecycle.viewmodel)
             implementation(libs.androidx.lifecycle.runtime.compose)
