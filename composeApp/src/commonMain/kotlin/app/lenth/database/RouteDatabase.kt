@@ -35,8 +35,6 @@ fun getRoomDatabase(
   sqLiteDriver: SQLiteDriver,
 ): RouteDatabase {
   return builder
-    // .fallbackToDestructiveMigrationOnDowngrade(true)
-    .fallbackToDestructiveMigration(true)
     .setDriver(sqLiteDriver)
     .setQueryCoroutineContext(Dispatchers.IO)
     .build()

@@ -16,12 +16,3 @@ fun getDatabaseBuilder(ctx: Context): RoomDatabase.Builder<RouteDatabase> {
     name = dbFile.absolutePath
   )
 }
-
-// actual fun getRoomDatabasePlatform(builder: RoomDatabase.Builder<RouteDatabase>): RouteDatabase {
-//   return builder
-//     // .fallbackToDestructiveMigrationOnDowngrade(true)
-//     .fallbackToDestructiveMigration(true)
-//     .setDriver(AndroidSQLiteDriver())
-//     .setQueryCoroutineContext(Dispatchers.IO)
-//     .build()
-// }

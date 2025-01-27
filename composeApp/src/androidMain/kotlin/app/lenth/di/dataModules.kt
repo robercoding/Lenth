@@ -18,7 +18,6 @@ import org.koin.dsl.module
 private val dataStore: DataStore<Preferences> = createDataStore(applicationContext, PREFERENCE_DATA_STORE_SETTINGS)
 actual val dataModule: Module = module {
     single { dataStore }
-    // single { createDataStore(androidContext(), PREFERENCE_DATA_STORE_SETTINGS) }
     single<RouteDatabase> { getRoomDatabase(get(), AndroidSQLiteDriver()) }
     single { getDatabaseBuilder(androidContext()) }
 }

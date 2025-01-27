@@ -17,15 +17,6 @@ fun getDatabaseBuilder(): RoomDatabase.Builder<RouteDatabase> {
         name = dbFilePath,
     )
 }
-//
-// actual fun getRoomDatabasePlatform(builder: RoomDatabase.Builder<RouteDatabase>): RouteDatabase {
-//     return builder
-//         // .fallbackToDestructiveMigrationOnDowngrade(true)
-//         .fallbackToDestructiveMigration(true)
-//         .setDriver(BundledSQLiteDriver())
-//         .setQueryCoroutineContext(Dispatchers.IO)
-//         .build()
-// }
 
 @OptIn(ExperimentalForeignApi::class)
 private fun documentDirectory(): String {
