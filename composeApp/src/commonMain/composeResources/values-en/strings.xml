@@ -23,6 +23,9 @@
     <string name="tab_search_dialog_clear_all_places_action_cancel">Cancel</string>
 
     <!--  History tab  -->
+    <string name="tab_history_empty_routes_message">You haven't searched for any optimal routes yet, start searching now!</string>
+    <string name="tab_history_empty_routes_start_searching_action">Start searching</string>
+
     <string name="tab_history_dialog_clear_all_optimal_routes_title">Clear all?</string>
     <string name="tab_history_dialog_clear_all_optimal_routes_message">Do you want to clear all the optimal routes that you have searched?</string>
     <string name="tab_history_dialog_clear_all_optimal_routes_action_clear">Clear</string>

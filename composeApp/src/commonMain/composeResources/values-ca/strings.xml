@@ -23,6 +23,9 @@
     <string name="tab_search_dialog_clear_all_places_action_cancel">Cancel·la</string>
 
     <!--  History tab  -->
+    <string name="tab_history_empty_routes_message">Encara no has cercat cap ruta òptima, comença a cercar ara!</string>
+    <string name="tab_history_empty_routes_start_searching_action">Comença a cercar</string>
+
     <string name="tab_history_dialog_clear_all_optimal_routes_title">Esborra-ho tot?</string>
     <string name="tab_history_dialog_clear_all_optimal_routes_message">Vols esborrar totes les rutes òptimes que has cercat?</string>
     <string name="tab_history_dialog_clear_all_optimal_routes_action_clear">Esborra</string>

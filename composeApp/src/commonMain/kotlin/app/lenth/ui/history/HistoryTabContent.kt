@@ -45,6 +45,8 @@ import app.lenth.ui.search.optimalpathsheet.OptimalPathSheet
 import app.lenth.ui.theme.ActionBlue
 import app.lenth.ui.theme.OnActionBlue
 import lenth.composeapp.generated.resources.Res
+import lenth.composeapp.generated.resources.tab_history_empty_routes_message
+import lenth.composeapp.generated.resources.tab_history_empty_routes_start_searching_action
 import lenth.composeapp.generated.resources.tab_search_action_clear_all
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
@@ -90,17 +92,15 @@ fun HistoryTabContent(
                         Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                             Column {
                                 Text(
-                                    text = "You have not searched for any optimal routes yet, start searching now!",
+                                    text = stringResource(Res.string.tab_history_empty_routes_message),
                                     style = MaterialTheme.typography.bodyLarge,
                                     color = MaterialTheme.colorScheme.onSurface,
                                     modifier = Modifier.fillMaxWidth(),
                                 )
                                 Spacer(modifier = Modifier.height(8.dp))
                                 LenthPrimaryButton(
-                                    text = "Start searching",
-                                    onClick = {
-                                        onClickGoSearch()
-                                    },
+                                    text = stringResource(Res.string.tab_history_empty_routes_start_searching_action),
+                                    onClick = { onClickGoSearch() },
                                     textColor = OnActionBlue,
                                     backgroundColor = ActionBlue,
                                 )

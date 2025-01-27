@@ -23,6 +23,9 @@
     <string name="tab_search_dialog_clear_all_places_action_cancel">Cancelar</string>
 
     <!--  History tab  -->
+    <string name="tab_history_empty_routes_message">Aínda non buscaches rutas óptimas, comeza a buscar agora!</string>
+    <string name="tab_history_empty_routes_start_searching_action">Comezar a buscar</string>
+
     <string name="tab_history_dialog_clear_all_optimal_routes_title">Borrar todo?</string>
     <string name="tab_history_dialog_clear_all_optimal_routes_message">Queres borrar todas as rutas óptimas que buscaches?</string>
     <string name="tab_history_dialog_clear_all_optimal_routes_action_clear">Borrar</string>

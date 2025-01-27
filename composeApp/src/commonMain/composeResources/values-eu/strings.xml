@@ -23,6 +23,9 @@
     <string name="tab_search_dialog_clear_all_places_action_cancel">Utzi</string>
 
     <!--  History tab  -->
+    <string name="tab_history_empty_routes_message">Oraindik ez duzu ibilbide optimoak bilatu, hasi bilatzen orain!</string>
+    <string name="tab_history_empty_routes_start_searching_action">Hasi bilatzen</string>
+
     <string name="tab_history_dialog_clear_all_optimal_routes_title">Garbitu dena?</string>
     <string name="tab_history_dialog_clear_all_optimal_routes_message">Bilatu dituzun ibilbide optimo guztiak garbitu nahi dituzu?</string>
     <string name="tab_history_dialog_clear_all_optimal_routes_action_clear">Garbitu</string>
