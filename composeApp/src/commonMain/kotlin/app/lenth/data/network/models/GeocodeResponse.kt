@@ -44,17 +44,17 @@ data class AddressComponent(
 
 @Serializable
 data class Geometry(
-    @SerialName("bounds")
-    val bounds: Bounds?,
+    // @SerialName("bounds")
+    // val bounds: Bounds?,
 
     @SerialName("location")
     val location: Location,
 
-    @SerialName("location_type")
-    val locationType: String,
-
-    @SerialName("viewport")
-    val viewport: Bounds
+    // @SerialName("location_type")
+    // val locationType: String,
+    //
+    // @SerialName("viewport")
+    // val viewport: Bounds
 )
 
 @Serializable

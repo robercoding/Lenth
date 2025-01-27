@@ -17,7 +17,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ChevronRight
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.SwipeToDismissBox
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -33,18 +32,22 @@ import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import app.lenth.utils.formatToDistanceKmNoDecimals
-import co.touchlab.kermit.Logger
-import coil3.compose.AsyncImage
 import kotlinx.coroutines.launch
+import lenth.composeapp.generated.resources.Res
+import lenth.composeapp.generated.resources.tab_history_item_subtitle_distance
+import lenth.composeapp.generated.resources.tab_history_item_subtitle_locations
+import lenth.composeapp.generated.resources.tab_history_item_title_from_to
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.decodeToImageBitmap
+import org.jetbrains.compose.resources.stringResource
 
 @OptIn(ExperimentalResourceApi::class)
 @Composable
 fun CustomListItem(
     modifier: Modifier = Modifier,
     byteArray: ByteArray?,
-    title: String,
+    startPlace: String,
+    endPlace: String,
     locations: Int,
     distance: Double,
     onClickImage: (ImageBitmap) -> Unit,
@@ -58,7 +61,6 @@ fun CustomListItem(
         launch {
             imageBitmap = byteArray.decodeToImageBitmap()
         }
-        // imageBitmap = null
     }
 
     Row(
@@ -68,8 +70,6 @@ fun CustomListItem(
             .padding(8.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
-        // Leading Content
-
         Box(
             modifier = Modifier
                 .clip(RoundedCornerShape(8.dp))
@@ -78,14 +78,8 @@ fun CustomListItem(
             contentAlignment = Alignment.Center,
         ) {
             imageBitmap?.let {
-                Logger.i("Paint!: imageBitmap: $it")
-                // Image(
-                //     bitmap = it,
-                //     contentDescription = null,
-                //     // modifier = Modifier.clip(RoundedCornerShape(16.dp)).size(70.dp),
-                // )
                 Image(
-                    bitmap= it,
+                    bitmap = it,
                     contentDescription = "Image",
                     modifier = Modifier.size(70.dp),
                     contentScale = ContentScale.Crop,
@@ -95,22 +89,21 @@ fun CustomListItem(
 
         Spacer(modifier = Modifier.width(12.dp))
 
-        // Main Content
         Column(modifier = Modifier.weight(1f).fillMaxHeight()) {
             Text(
-                text = title,
+                text = stringResource(Res.string.tab_history_item_title_from_to, startPlace, endPlace),
                 style = MaterialTheme.typography.bodyLarge,
                 color = MaterialTheme.colorScheme.onSurface,
             )
             Spacer(Modifier.weight(1f))
             Text(
-                text = "Locations: $locations",
+                text = stringResource(Res.string.tab_history_item_subtitle_locations, locations),
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurface,
             )
             Spacer(modifier = Modifier.height(2.dp))
             Text(
-                text = "Distance: ${distance.formatToDistanceKmNoDecimals()}",
+                text = stringResource(Res.string.tab_history_item_subtitle_distance, distance.formatToDistanceKmNoDecimals()),
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurface,
             )
@@ -118,7 +111,6 @@ fun CustomListItem(
 
         Spacer(modifier = Modifier.width(8.dp))
 
-        // Trailing Content
         Icon(
             imageVector = Icons.Default.ChevronRight,
             contentDescription = "Navigate",

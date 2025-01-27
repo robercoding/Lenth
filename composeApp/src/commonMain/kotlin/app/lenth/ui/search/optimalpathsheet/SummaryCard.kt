@@ -26,7 +26,8 @@ import app.lenth.utils.formatToDistanceKmNoDecimals
 import kotlin.math.pow
 import kotlin.math.round
 import lenth.composeapp.generated.resources.Res
-import lenth.composeapp.generated.resources.sheet_optimal_route_total_distance
+import lenth.composeapp.generated.resources.sheet_optimal_route_total_distance_label
+import lenth.composeapp.generated.resources.sheet_optimal_route_total_distance_number
 import org.jetbrains.compose.resources.stringResource
 
 @Composable
@@ -48,14 +49,14 @@ fun SummaryCard(
             ) {
                 // Total Distance
                 Text(
-                    text = stringResource(Res.string.sheet_optimal_route_total_distance),
+                    text = stringResource(Res.string.sheet_optimal_route_total_distance_label),
                     style = MaterialTheme.typography.labelMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
                 Text(
-                    text = totalDistance.formatToDistanceKmNoDecimals(), // Display with 2 decimals
+                    text = stringResource(Res.string.sheet_optimal_route_total_distance_number, totalDistance.formatToDistanceKmNoDecimals()),
                     style = MaterialTheme.typography.headlineSmall,
-                    color = MaterialTheme.colorScheme.onSurface
+                    color = MaterialTheme.colorScheme.onSurface,
                 )
             }
             Spacer(modifier = Modifier.weight(1f))

@@ -12,7 +12,6 @@
     <string name="tab_search_action_clear_all">Esborra-ho tot</string>
     <string name="tab_search_action_search_optimal_route">Cerca la ruta òptima</string>
 
-    <!--  Dialogs  -->
     <string name="tab_search_dialog_discard_current_place_title">Descartar el lloc actual?</string>
     <string name="tab_search_dialog_discard_current_place_message">No has seleccionat cap lloc de la llista. Vols descartar el lloc actual?</string>
     <string name="tab_search_dialog_discard_current_place_action_discard">Descarta</string>
@@ -28,6 +27,11 @@
     <string name="tab_history_dialog_clear_all_optimal_routes_message">Vols esborrar totes les rutes òptimes que has cercat?</string>
     <string name="tab_history_dialog_clear_all_optimal_routes_action_clear">Esborra</string>
     <string name="tab_history_dialog_clear_all_optimal_routes_action_cancel">Cancel·la</string>
+
+    <string name="tab_history_title_routes">Rutes</string>
+    <string name="tab_history_item_title_from_to">De %1$s a %2$s</string>
+    <string name="tab_history_item_subtitle_locations">Ubicacions: %1$d</string>
+    <string name="tab_history_item_subtitle_distance">Distància: %1$d km</string>
 
     <!-- Sheet -->
     <string name="sheet_optimal_route_title">Ruta òptima</string>

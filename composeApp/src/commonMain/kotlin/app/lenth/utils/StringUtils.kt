@@ -8,9 +8,7 @@ fun Double.formatToDistanceKm(): String {
 }
 
 // Create af unction that formats the distance withotu decimals
-fun Double.formatToDistanceKmNoDecimals(): String {
-    return "${this.toInt()} km"
-}
+fun Double.formatToDistanceKmNoDecimals(): Int = toInt()
 
 private fun Double.toTwoDecimalString(): String {
     val factor = 10.0.pow(2) // Multiply by 100 for 2 decimals

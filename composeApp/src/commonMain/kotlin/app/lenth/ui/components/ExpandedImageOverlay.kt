@@ -28,8 +28,7 @@ fun ExpandedImageOverlay(
     onClose: () -> Unit,
 ) {
     Box(
-        modifier = Modifier
-            .fillMaxWidth(0.90f),
+        modifier = Modifier.fillMaxWidth(0.9f),
         contentAlignment = Alignment.Center,
     ) {
         Column {

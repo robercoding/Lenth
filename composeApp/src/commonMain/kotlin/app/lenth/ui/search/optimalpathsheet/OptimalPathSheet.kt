@@ -19,7 +19,6 @@ import androidx.compose.material3.BottomSheetDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
-import androidx.compose.material3.ModalBottomSheetProperties
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
@@ -63,20 +62,21 @@ fun OptimalPathSheet(
     var image by remember { mutableStateOf<ImageBitmap?>(null) }
 
     LaunchedEffect(optimalRouteUi?.mapImage) {
+        if (optimalRouteUi == null) {
+            image = null
+            return@LaunchedEffect
+        }
         if (image != null) return@LaunchedEffect
-        launch { image = optimalRouteUi?.mapImage?.decodeToImageBitmap() }
+        launch { image = optimalRouteUi.mapImage?.decodeToImageBitmap() }
     }
 
     var showOverlay by remember { mutableStateOf(false) }
-    var selectedItem by remember { mutableStateOf<ImageBitmap?>(null) } // To track the selected image for animation
-
+    // var selectedItem by remember { mutableStateOf<ImageBitmap?>(null) } // To track the selected image for animation
 
     if (showBottomSheet) {
         ModalBottomSheet(
             modifier = Modifier.statusBarsPadding(),
             contentWindowInsets = { BottomSheetDefaults.windowInsets.only(WindowInsetsSides.Top) },
-            properties = ModalBottomSheetProperties(
-            ),
             content = {
                 UpdateStatusBarColor(useDarkIcons = false)
                 Box(
@@ -84,8 +84,6 @@ fun OptimalPathSheet(
                         .fillMaxSize()
                         .background(MaterialTheme.colorScheme.surface),
                 ) {
-                    // UpdateStatusBarColor(useDarkIcons = !darkTheme)
-                    // Content Column
                     Column(
                         modifier = Modifier
                             .fillMaxWidth()
@@ -105,7 +103,6 @@ fun OptimalPathSheet(
                                 SummaryCard(
                                     modifier = Modifier, totalDistance = it.distance, imageBitmap = image,
                                     onClickImage = {
-                                        selectedItem = image
                                         showOverlay = true
                                         // image?.let(onClickImage)
                                     },
@@ -140,25 +137,14 @@ fun OptimalPathSheet(
                                     )
                                 }
                             }
-                            //     it.path.forEachIndexed { index, place ->
-                            //         RouteItem(
-                            //             index = index,
-                            //             place = place,
-                            //             isStart = index == 0,
-                            //             isEnd = index == it.path.size - 1,
-                            //         )
-                            //     }
                         }
                     }
 
-
                     OverlayImage(
-                        selectedItem = selectedItem,
                         showOverlay = showOverlay,
+                        selectedItem = image,
                         onDismiss = { showOverlay = false },
-                        onFinishAnimation = { selectedItem = null },
                     )
-
 
                     ClearOptimalRouteAlertDialog(
                         isDeleteOptimalRouteVisible = showDeleteDialog,
@@ -177,5 +163,4 @@ fun OptimalPathSheet(
             },
         )
     }
-
 }

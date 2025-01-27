@@ -136,27 +136,21 @@ fun HistoryTabContent(
                                     CustomListItem(
                                         modifier = Modifier.fillMaxWidth(),
                                         byteArray = it.mapImage,
-                                        title = "From ${it.path.first().name} to ${it.path.last().name}",
+                                        startPlace = it.path.first().name,
+                                        endPlace = it.path.last().name,
                                         locations = it.path.size,
                                         distance = it.distance,
                                         onClickImage = onClickImage,
-                                        onClick = {
-                                            // historyViewModel.onClickItem(it.path)
-                                            selectedOptimalRoute = it
-                                        },
+                                        onClick = { selectedOptimalRoute = it },
                                     )
                                 }
                             }
                         }
                     }
                 }
-
             }
-
         }
 
-
-        // selectedOptimalRoute?.let {
             OptimalPathSheet(
                 optimalRouteUi = selectedOptimalRoute,
                 onDismissMinimumCostPath = {
@@ -167,7 +161,6 @@ fun HistoryTabContent(
                     selectedOptimalRoute = null
                 }
             )
-        // }
 
         ClearAllOptimalRoutesAlertDialog(
             isClearAllAlertDialogVisible = showClearAllDialog,

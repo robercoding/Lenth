@@ -12,7 +12,6 @@
     <string name="tab_search_action_clear_all">Clear all</string>
     <string name="tab_search_action_search_optimal_route">Search optimal route</string>
 
-    <!--  Dialogs  -->
     <string name="tab_search_dialog_discard_current_place_title">Discard current place?</string>
     <string name="tab_search_dialog_discard_current_place_message">You haven't selected any place from the list. Do you want to discard the current place?</string>
     <string name="tab_search_dialog_discard_current_place_action_discard">Discard</string>
@@ -28,6 +27,11 @@
     <string name="tab_history_dialog_clear_all_optimal_routes_message">Do you want to clear all the optimal routes that you have searched?</string>
     <string name="tab_history_dialog_clear_all_optimal_routes_action_clear">Clear</string>
     <string name="tab_history_dialog_clear_all_optimal_routes_action_cancel">Cancel</string>
+
+    <string name="tab_history_title_routes">Routes</string>
+    <string name="tab_history_item_title_from_to">From %1$s to %2$s</string>
+    <string name="tab_history_item_subtitle_locations">Locations: %1$d</string>
+    <string name="tab_history_item_subtitle_distance">Distance: %1$d km</string>
 
     <!--  Sheet  -->
     <string name="sheet_optimal_route_title">Optimal route</string>

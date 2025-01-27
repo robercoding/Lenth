@@ -10,11 +10,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ImageBitmap
@@ -27,26 +22,13 @@ fun OverlayImage(
     showOverlay: Boolean,
     selectedItem: ImageBitmap?,
     onDismiss: () -> Unit,
-    onFinishAnimation: () -> Unit,
+    onFinishAnimation: () -> Unit = {},
 ) {
-
-    val showDialog by remember(showOverlay, selectedItem) {
-        val boolean = showOverlay || selectedItem != null
-        mutableStateOf(boolean)
-    }
-
-    var currentState by remember {
-        mutableStateOf(false)
-    }
-    LaunchedEffect(showOverlay) {
-        currentState = showOverlay
-    }
-
     Box(
         modifier = Modifier.fillMaxSize(),
         contentAlignment = Alignment.Center,
     ) {
-        if (showDialog) {
+        if (showOverlay) {
             Dialog(
                 onDismissRequest = onDismiss,
                 properties = DialogProperties(
@@ -56,7 +38,7 @@ fun OverlayImage(
                 ),
             ) {
                 AnimatedVisibility(
-                    visible = showOverlay && currentState,
+                    visible = showOverlay,
                     enter = fadeIn() + slideInVertically(initialOffsetY = { it / 5 }),
                     exit = fadeOut() + slideOutVertically(targetOffsetY = { -it / 5 }),
                     modifier = Modifier.fillMaxSize().clickable(interactionSource = null, indication = null) { onDismiss() },
