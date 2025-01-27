@@ -12,6 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.unit.dp
+import app.lenth.ui.utils.SemaphoreEmoji
 
 // @Composable
 // fun CanvasWithCircleAndLine(
@@ -53,9 +54,9 @@ import androidx.compose.ui.unit.dp
 @Composable
 fun CanvasWithCircleAndLine(
     index: Int,
-    isNotEnd: Boolean,
+    isStart: Boolean,
+    isEnd: Boolean,
 ) {
-    // val onSurfaceColor = MaterialTheme.colorScheme.onSurfaceVariant
     val onSurfaceColor =  MaterialTheme.colorScheme.onSurface
     Box(
         contentAlignment = Alignment.Center,
@@ -70,7 +71,7 @@ fun CanvasWithCircleAndLine(
             )
 
             // Draw the line below the circle
-            if (isNotEnd) {
+            if (!isEnd) {
                 drawLine(
                     color = onSurfaceColor, // Subtle color for the line
                     start = Offset(x = size.width / 2, y = size.height),
@@ -80,9 +81,13 @@ fun CanvasWithCircleAndLine(
             }
         }
 
-        // Draw the index inside the circle
+        val text = when {
+            isStart -> SemaphoreEmoji
+            isEnd -> "🏁"
+            else -> "${index + 1}"
+        }
         Text(
-            text = "${index + 1}",
+            text = text,
             color = onSurfaceColor, // Match the circle color
             style = MaterialTheme.typography.bodyMedium,
         )

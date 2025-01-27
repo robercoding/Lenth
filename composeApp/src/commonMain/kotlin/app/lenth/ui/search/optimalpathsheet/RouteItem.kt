@@ -23,7 +23,7 @@ fun RouteItem(
         modifier = Modifier.padding(vertical = 8.dp),
     ) {
         // Draw circle with index inside and line below
-        CanvasWithCircleAndLine(index = index, isNotEnd = !isEnd)
+        CanvasWithCircleAndLine(index = index, isStart = isStart, isEnd = isEnd)
 
         Spacer(modifier = Modifier.width(8.dp))
 
@@ -34,32 +34,17 @@ fun RouteItem(
             style = MaterialTheme.typography.bodyMedium,
         )
 
-        Spacer(modifier = Modifier.width(8.dp))
+        // Spacer(modifier = Modifier.width(8.dp))
 
-        // Start and End Indicators
-        if (isStart) {
-            // Icon(
-            //     imageVector = Icons.Default.Flag,
-            //     contentDescription = "Start point",
-            //     // tint = MaterialTheme.colorScheme.primary, // Start icon color
-            //     modifier = Modifier.size(20.dp),
-            // )
-            Text(
-                text = "🏁"
-
-            )
-        } else if (isEnd) {
-            Text(
-                text = "🏁"
-
-            )
-            // Icon(
-            //     imageVector = Icons.Default.Flag,
-            //     contentDescription = "End point",
-            //     // tint = MaterialTheme.colorScheme.secondary, // End icon color
-            //     modifier = Modifier.size(20.dp),
-            // )
-        }
+        // // Start and End Indicators
+        // if (isStart) {
+        //     Text(
+        //         text = "🏁"
+        //
+        //     )
+        // } else if (isEnd) {
+        //     Text(text = "🏁")
+        // }
     }
 }
 

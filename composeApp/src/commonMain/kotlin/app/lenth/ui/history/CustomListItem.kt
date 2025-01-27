@@ -30,7 +30,10 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import app.lenth.ui.utils.FlagEmoji
+import app.lenth.ui.utils.SemaphoreEmoji
 import app.lenth.utils.formatToDistanceKmNoDecimals
 import kotlinx.coroutines.launch
 import lenth.composeapp.generated.resources.Res
@@ -81,7 +84,7 @@ fun CustomListItem(
                 Image(
                     bitmap = it,
                     contentDescription = "Image",
-                    modifier = Modifier.size(70.dp),
+                    modifier = Modifier.size(80.dp),
                     contentScale = ContentScale.Crop,
                 )
             }
@@ -91,9 +94,18 @@ fun CustomListItem(
 
         Column(modifier = Modifier.weight(1f).fillMaxHeight()) {
             Text(
-                text = stringResource(Res.string.tab_history_item_title_from_to, startPlace, endPlace),
+                text = "$SemaphoreEmoji $startPlace",
                 style = MaterialTheme.typography.bodyLarge,
                 color = MaterialTheme.colorScheme.onSurface,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
+            )
+            Text(
+                text = "$FlagEmoji $endPlace",
+                style = MaterialTheme.typography.bodyLarge,
+                color = MaterialTheme.colorScheme.onSurface,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
             )
             Spacer(Modifier.weight(1f))
             Text(

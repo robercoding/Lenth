@@ -122,11 +122,11 @@ class GeoCodingRepository(private val httpClient: HttpClient) {
         val baseurl = "https://maps.googleapis.com/maps/api/directions/json"
 
         val origin = "${places[0].lat},${places[0].lng}"
-        // val destination = "${places.last().lat},${places.last().lng}"
-        val waypoints = places.subList(1, places.size).joinToString(separator = "|") { "${it.lat},${it.lng}" }
+        val destination = "${places.last().lat},${places.last().lng}"
+        val waypoints = places.subList(1, places.size - 1).joinToString(separator = "|") { "${it.lat},${it.lng}" }
         val response = httpClient.get(urlString = baseurl) {
             this.parameter("origin", origin)
-            this.parameter("destination", origin)
+            this.parameter("destination", destination)
             this.parameter("waypoints", waypoints)
             this.parameter("key", API_KEY)
         }
