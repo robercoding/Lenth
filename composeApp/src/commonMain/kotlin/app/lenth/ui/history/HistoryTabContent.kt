@@ -5,7 +5,6 @@ import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.togetherWith
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -19,6 +18,10 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.ButtonColors
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.ButtonElevation
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -35,7 +38,9 @@ import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import app.lenth.ui.components.LenthPrimaryButton
+import app.lenth.ui.components.text.TextButtonAction
 import app.lenth.ui.history.models.OptimalRouteUi
+import app.lenth.ui.search.dialog.ClearAllOptimalRoutesAlertDialog
 import app.lenth.ui.search.optimalpathsheet.OptimalPathSheet
 import app.lenth.ui.theme.ActionBlue
 import app.lenth.ui.theme.OnActionBlue
@@ -53,6 +58,7 @@ fun HistoryTabContent(
     // Add the History Tab's content here
     val state = historyViewModel.state.collectAsStateWithLifecycle(null).value
     var selectedOptimalRoute by remember { mutableStateOf<OptimalRouteUi?>(null) }
+    var showClearAllDialog by remember { mutableStateOf(false) }
 
     Box(modifier = Modifier.fillMaxSize()) {
         Column(
@@ -111,23 +117,18 @@ fun HistoryTabContent(
                                     contentAlignment = Alignment.CenterStart,
                                 ) {
                                     Text(
-                                        text = "Recent optimal routes",
+                                        text = "Routes",
                                         style = MaterialTheme.typography.headlineSmall,
                                         color = MaterialTheme.colorScheme.onSurface,
                                         modifier = Modifier,
                                     )
                                 }
                                 Spacer(modifier = Modifier.weight(1f))
-                                TextButton(
-                                    enabled = true,
-                                    onClick = {},
-                                ) {
-                                    Text(
-                                        text = stringResource(Res.string.tab_search_action_clear_all),
-                                        color = MaterialTheme.colorScheme.onSurface,
-                                        style = MaterialTheme.typography.bodyMedium,
-                                    )
-                                }
+                                TextButtonAction(
+                                    text = stringResource(Res.string.tab_search_action_clear_all),
+                                    isEnabled = true,
+                                    onClick = { showClearAllDialog = true },
+                                )
                             }
 
                             LazyColumn(verticalArrangement = Arrangement.spacedBy(8.dp),) {
@@ -155,14 +156,27 @@ fun HistoryTabContent(
         }
 
 
-        selectedOptimalRoute?.let {
+        // selectedOptimalRoute?.let {
             OptimalPathSheet(
-                optimalRouteUi = it,
+                optimalRouteUi = selectedOptimalRoute,
                 onDismissMinimumCostPath = {
                     selectedOptimalRoute = null
                 },
-                onClickImage = onClickImage,
+                onClickDelete = { id ->
+                    historyViewModel.onClickDeleteOptimalRoute(id)
+                    selectedOptimalRoute = null
+                }
             )
-        }
+        // }
+
+        ClearAllOptimalRoutesAlertDialog(
+            isClearAllAlertDialogVisible = showClearAllDialog,
+            onDismissClearAll = { showClearAllDialog = false },
+            onConfirmClearAll = {
+                showClearAllDialog = false
+                historyViewModel.onClickClearAll()
+            },
+
+        )
     }
 }

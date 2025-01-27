@@ -12,10 +12,6 @@
     <string name="tab_search_action_clear_all">Garbitu dena</string>
     <string name="tab_search_action_search_optimal_route">Bila ezazu ibilbide optimoa</string>
 
-    <string name="tab_search_sheet_optimal_route_title">Ibilbide optimoa</string>
-    <string name="tab_search_sheet_optimal_route_total_distance">Distantzia osoa</string>
-    <string name="tab_search_sheet_optimal_route_action_open_google_maps">Ireki Google Maps-en</string>
-
     <!--  Dialogs  -->
     <string name="tab_search_dialog_discard_current_place_title">Uneko lekua baztertu?</string>
     <string name="tab_search_dialog_discard_current_place_message">Ez duzu zerrendatik tokirik aukeratu. Uneko lekua baztertu nahi duzu?</string>
@@ -28,6 +24,20 @@
     <string name="tab_search_dialog_clear_all_places_action_cancel">Utzi</string>
 
     <!--  History tab  -->
+    <string name="tab_history_dialog_clear_all_optimal_routes_title">Garbitu dena?</string>
+    <string name="tab_history_dialog_clear_all_optimal_routes_message">Bilatu dituzun ibilbide optimo guztiak garbitu nahi dituzu?</string>
+    <string name="tab_history_dialog_clear_all_optimal_routes_action_clear">Garbitu</string>
+    <string name="tab_history_dialog_clear_all_optimal_routes_action_cancel">Utzi</string>
+
+    <!--  Sheet  -->
+    <string name="sheet_optimal_route_title">Ibilbide optimoa</string>
+    <string name="sheet_optimal_route_total_distance">Distantzia osoa</string>
+    <string name="sheet_optimal_route_action_open_google_maps">Ireki Google Maps-en</string>
+
+    <string name="sheet_dialog_clear_optimal_route_title">Ibilbide optimoa ezabatu?</string>
+    <string name="sheet_dialog_clear_optimal_route_message">Ibilbide optimoa ezabatu nahi duzu?</string>
+    <string name="sheet_dialog_clear_optimal_route_action_delete">Ezabatu</string>
+    <string name="sheet_dialog_clear_optimal_route_action_cancel">Utzi</string>
 
     <!--  Settings screen  -->
     <string name="settings_current_theme_title_light">Argi gaia</string>

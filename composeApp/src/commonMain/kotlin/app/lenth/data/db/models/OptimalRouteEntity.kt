@@ -3,6 +3,7 @@ package app.lenth.data.db.models
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import kotlinx.serialization.Serializable
 
 @Entity("optimal_route")
 class OptimalRouteEntity(
@@ -12,6 +13,7 @@ class OptimalRouteEntity(
     @ColumnInfo(name = "map_image") val mapImage: ByteArray?
 )
 
+@Serializable
 data class PlaceEntity(
     val place: String,
     val lat: Double,

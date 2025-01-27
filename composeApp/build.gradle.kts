@@ -44,7 +44,7 @@ kotlin {
     sourceSets {
         
         androidMain.dependencies {
-            implementation(compose.preview) // Needed for Previews on android source set.w
+            implementation(compose.preview) // Needed for Previews on android source set.
 
             implementation(libs.androidx.activity.compose)
             implementation(libs.androidx.core.splashscreen)

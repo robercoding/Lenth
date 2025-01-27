@@ -132,6 +132,7 @@ fun SearchTabContent(viewModel: SearchViewModel, onClickImage: (ImageBitmap) -> 
                 onClearAll = { isClearAllAlertDialogVisible = true },
             )
 
+            Spacer(modifier = Modifier.height(4.dp))
             Box(
                 modifier = Modifier
                     .onGloballyPositioned { listOffsetInParent = it.positionInParent().y },
@@ -236,7 +237,8 @@ fun SearchTabContent(viewModel: SearchViewModel, onClickImage: (ImageBitmap) -> 
         OptimalPathSheet(
             optimalRouteUi = state.optimalRouteUi,
             onDismissMinimumCostPath = { viewModel.onDismissMinimumCostPath() },
-            onClickImage = onClickImage
+            onClickDelete = { viewModel.onClickDeleteOptimalRoute(it)
+            }
         )
     }
 }

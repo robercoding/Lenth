@@ -4,7 +4,6 @@ import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
@@ -17,11 +16,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.StrokeCap
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import app.lenth.ui.utils.CustomPreview
-import org.jetbrains.compose.ui.tooling.preview.Preview
+import app.lenth.ui.utils.ButtonHeight
+import app.lenth.ui.utils.ButtonRoundedCornerShape
 
 @Composable
 internal fun LenthPrimaryButton(
@@ -34,14 +32,14 @@ internal fun LenthPrimaryButton(
 ) {
     Button(
         onClick = onClick,
-        modifier = modifier.fillMaxWidth().height(48.dp),
+        modifier = modifier.height(ButtonHeight),
         colors = ButtonDefaults.buttonColors(backgroundColor = backgroundColor),
-        shape = RoundedCornerShape(8.dp),
+        shape = RoundedCornerShape(ButtonRoundedCornerShape),
     ) {
         Crossfade(targetState = isLoading) { isLoading ->
             if (isLoading) {
                 Box(
-                    modifier = Modifier.fillMaxWidth().height(48.dp),
+                    modifier = Modifier.fillMaxWidth().height(ButtonHeight),
                     contentAlignment = Alignment.Center,
                 ) {
                     CircularProgressIndicator(
@@ -53,7 +51,7 @@ internal fun LenthPrimaryButton(
                 }
             } else {
                 Box(
-                    modifier = Modifier.fillMaxWidth().height(48.dp),
+                    modifier = Modifier.fillMaxWidth().height(ButtonHeight),
                     contentAlignment = Alignment.Center,
                 ) {
                     Text(

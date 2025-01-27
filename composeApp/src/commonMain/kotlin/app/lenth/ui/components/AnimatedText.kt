@@ -7,8 +7,10 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.togetherWith
 import androidx.compose.animation.with
+import androidx.compose.foundation.layout.Box
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import app.lenth.ui.search.ANIMATION_TIME
 
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
@@ -21,9 +23,11 @@ fun AnimatedText(
         modifier = modifier,
         targetState = text,
         transitionSpec = {
-            fadeIn(animationSpec = tween(300)) togetherWith fadeOut(animationSpec = tween(300))
+            fadeIn(animationSpec = tween(ANIMATION_TIME)) togetherWith fadeOut(animationSpec = tween(ANIMATION_TIME))
         },
     ) { targetText ->
-        component(targetText)
+        Box {
+            component(targetText)
+        }
     }
 }

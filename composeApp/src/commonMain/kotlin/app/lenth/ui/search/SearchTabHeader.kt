@@ -1,13 +1,9 @@
 package app.lenth.ui.search
 
-import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.tween
-import androidx.compose.animation.expandVertically
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
-import androidx.compose.animation.shrinkVertically
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -15,14 +11,12 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -33,7 +27,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import app.lenth.ui.components.AnimatedText
-import app.lenth.ui.search.filter.SearchTypeChips
+import app.lenth.ui.components.text.TextButtonAction
 import app.lenth.ui.search.filter.SearchTypeUi
 import lenth.composeapp.generated.resources.Res
 import lenth.composeapp.generated.resources.tab_search_action_clear_all
@@ -41,7 +35,7 @@ import lenth.composeapp.generated.resources.tab_search_title_locations
 import lenth.composeapp.generated.resources.tab_search_title_searching
 import org.jetbrains.compose.resources.stringResource
 
-private const val ANIMATION_TIME = 200
+const val ANIMATION_TIME = 200
 
 @Composable
 fun SearchTabHeader(
@@ -68,7 +62,7 @@ fun SearchTabHeader(
     Column(modifier = Modifier) {
         Row(modifier = Modifier.height(54.dp), verticalAlignment = Alignment.CenterVertically) {
             AnimatedText(
-                modifier = Modifier.weight(1f),
+                modifier = Modifier,
                 text = headerText,
             ) { animatedText ->
                 Text(
@@ -79,19 +73,31 @@ fun SearchTabHeader(
                 )
             }
 
+            Spacer(modifier = Modifier.weight(1f))
             Box(
                 contentAlignment = Alignment.CenterEnd,
             ) {
-                TextButton(
-                    enabled = !isSearchingOrHasOptimalPath && !focusedTextField,
-                    onClick = { onClearAll() },
+                androidx.compose.animation.AnimatedVisibility(
+                    visible = !isSearchingOrHasOptimalPath && !focusedTextField,
+                    enter = fadeIn(tween(ANIMATION_TIME)),
+                    exit = fadeOut(tween(ANIMATION_TIME)),
                 ) {
-                    Text(
+                    TextButtonAction(
                         text = stringResource(Res.string.tab_search_action_clear_all),
-                        color = clearAllTextColor,
-                        style = MaterialTheme.typography.bodyMedium,
+                        isEnabled = !isSearchingOrHasOptimalPath && !focusedTextField,
+                        onClick = { onClearAll() },
                     )
                 }
+                // TextButton(
+                //     enabled = !isSearchingOrHasOptimalPath && !focusedTextField,
+                //     onClick = { onClearAll() },
+                // ) {
+                //     Text(
+                //         text = stringResource(Res.string.tab_search_action_clear_all),
+                //         color = clearAllTextColor,
+                //         style = MaterialTheme.typography.bodyMedium,
+                //     )
+                // }
 
                 androidx.compose.animation.AnimatedVisibility(
                     visible = focusedTextField,

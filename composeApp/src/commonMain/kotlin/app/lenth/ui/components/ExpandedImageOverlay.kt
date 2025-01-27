@@ -29,7 +29,7 @@ fun ExpandedImageOverlay(
 ) {
     Box(
         modifier = Modifier
-            .fillMaxWidth(0.95f),
+            .fillMaxWidth(0.90f),
         contentAlignment = Alignment.Center,
     ) {
         Column {

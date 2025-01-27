@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import app.lenth.domain.FindHamiltonianCycleMinimumCostUseCase
 import app.lenth.domain.SearchPlacesByInputQueryUseCase
+import app.lenth.domain.history.DeleteOptimalRouteUseCase
 import app.lenth.domain.history.GetOptimalRouteUseCase
 import app.lenth.domain.history.InsertOptimalRouteUseCase
 import app.lenth.domain.mapper.toDomain
@@ -142,6 +143,7 @@ class SearchViewModel(
     private val getOptimalRouteUseCase: GetOptimalRouteUseCase,
     private val searchPlacesByInputQueryUseCase: SearchPlacesByInputQueryUseCase,
     private val insertOptimalRouteUseCase: InsertOptimalRouteUseCase,
+    private val deleteOptimalRouteUseCase: DeleteOptimalRouteUseCase,
 ) : ViewModel() {
     private val _state: MutableStateFlow<SearchState> = MutableStateFlow(
         SearchState(
@@ -257,6 +259,13 @@ class SearchViewModel(
 
     fun onSearchTypeChanged(searchType: SearchTypeUi) {
         _state.update { it.copy(searchType = searchType) }
+    }
+
+    fun onClickDeleteOptimalRoute(id: Int) {
+        viewModelScope.launch {
+            _state.update { it.copy(optimalRouteUi = null) }
+            deleteOptimalRouteUseCase(id)
+        }
     }
 }
 

@@ -22,6 +22,9 @@ interface RouteDao {
     @Query("DELETE FROM optimal_route WHERE id = :id")
     suspend fun deleteById(id: Int): Int
 
+    @Query("DELETE FROM optimal_route")
+    suspend fun clearAllRoutes()
+
     @Query("SELECT * FROM optimal_route")
     suspend fun getAllRoutes(): List<OptimalRouteEntity>
 

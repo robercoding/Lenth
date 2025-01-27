@@ -2,19 +2,34 @@ package app.lenth.data.db.converter
 
 import androidx.room.TypeConverter
 import app.lenth.data.db.models.PlaceEntity
-import app.lenth.domain.models.PlaceDomain
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
 
 class RouteListConverter {
     @TypeConverter
     fun fromStringList(value: List<PlaceEntity>): String {
-        return value.joinToString(";") { "${it.place},${it.lat},${it.lng}" }
+        return Json.encodeToString(value)
     }
 
     @TypeConverter
     fun toStringList(value: String): List<PlaceEntity> {
-        return value.split(";").map {
-            val (place, lat, lng) = it.split(",")
-            PlaceEntity(place, lat.toDouble(), lng.toDouble())
+        return try {
+
+        Json.decodeFromString(value)
+        } catch (e: Exception) {
+            e.printStackTrace()
+            listOf(
+                PlaceEntity(
+                    place = "Unknown",
+                    lat = 0.0,
+                    lng = 0.0
+                ),
+                PlaceEntity(
+                    place = "Unknown",
+                    lat = 0.0,
+                    lng = 0.0
+                )
+            )
         }
     }
 }
