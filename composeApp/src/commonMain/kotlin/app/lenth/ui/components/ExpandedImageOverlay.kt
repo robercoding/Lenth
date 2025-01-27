@@ -34,9 +34,7 @@ fun ExpandedImageOverlay(
         Column {
             if (hasCloseButton) {
                 Box(Modifier.fillMaxWidth().clickable { onClose() }, contentAlignment = Alignment.CenterEnd) {
-                    IconButton(
-                        onClick = onClose
-                    ) {
+                    IconButton(onClick = onClose) {
                         Icon(
                             modifier = Modifier.size(28.dp),
                             imageVector = Icons.Default.Close,

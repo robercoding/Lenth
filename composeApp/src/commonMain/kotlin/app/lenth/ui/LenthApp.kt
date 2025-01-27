@@ -135,8 +135,10 @@ fun LenthScreen(
         OverlayImage(
             showOverlay = showOverlay,
             selectedItem = selectedItem,
-            onDismiss = { showOverlay = false },
-            onFinishAnimation = { selectedItem = null },
+            onDismiss = {
+                showOverlay = false
+                selectedItem = null
+                        },
         )
     }
 }

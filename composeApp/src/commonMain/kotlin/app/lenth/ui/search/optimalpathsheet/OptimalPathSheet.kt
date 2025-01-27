@@ -71,7 +71,6 @@ fun OptimalPathSheet(
     }
 
     var showOverlay by remember { mutableStateOf(false) }
-    // var selectedItem by remember { mutableStateOf<ImageBitmap?>(null) } // To track the selected image for animation
 
     if (showBottomSheet) {
         ModalBottomSheet(
