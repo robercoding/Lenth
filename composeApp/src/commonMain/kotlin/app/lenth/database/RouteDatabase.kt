@@ -1,5 +1,6 @@
 package app.lenth.database
 
+import androidx.room.AutoMigration
 import androidx.room.ConstructedBy
 import androidx.room.Database
 import androidx.room.RoomDatabase
@@ -13,7 +14,17 @@ import app.lenth.data.db.models.OptimalRouteEntity
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
 
-@Database(entities = [OptimalRouteEntity::class], version = 3, exportSchema = true)
+@Database(
+  entities = [OptimalRouteEntity::class],
+  version = 3,
+  autoMigrations = [
+    AutoMigration (
+      from = 2,
+      to = 3,
+    )
+  ],
+  exportSchema = true,
+)
 @TypeConverters(RouteListConverter::class)
 @ConstructedBy(RouteDatabaseConstructor::class)
 abstract class RouteDatabase : RoomDatabase() {
