@@ -1,6 +1,7 @@
 package app.lenth.data
 
 import androidx.compose.ui.graphics.Color
+import app.lenth.BuildKonfig
 import app.lenth.data.network.models.GeocodeResponse
 import app.lenth.data.network.models.PlacePredictionsResponse
 import app.lenth.data.network.models.directions.DirectionsResponse
@@ -15,7 +16,7 @@ import io.ktor.client.statement.readRawBytes
 import io.ktor.http.isSuccess
 import kotlin.io.encoding.ExperimentalEncodingApi
 
-private const val API_KEY = "AIzaSyAzZxcgwEhBH4S6WPTE9FNfPHqeAS9EqqY"
+private val API_KEY = BuildKonfig.API_MAPS
 
 class GeoCodingRepository(private val httpClient: HttpClient) {
 
@@ -24,7 +25,6 @@ class GeoCodingRepository(private val httpClient: HttpClient) {
      */
     suspend fun getGeoCoding(place: String): PlaceDomain {
         val baseUrl = "https://maps.googleapis.com/maps/api/geocode/json"
-        // val geocodeResponse = httpClient.get(urlString = "$baseUrl?address=$place&key=$API_KEY").body<GeocodeResponse>()
         val geocodeResponse = httpClient.get(urlString = "$baseUrl") {
             this.parameter("address", place)
             this.parameter("key", API_KEY)

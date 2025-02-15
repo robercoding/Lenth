@@ -101,3 +101,4 @@ androidLibrary = { id = "com.android.library", version.ref = "agp" }
 composeMultiplatform = { id = "org.jetbrains.compose", version.ref = "compose-multiplatform" }
 
 room = { id = "androidx.room", version.ref = "room" }
+buildKonfig = { id = "com.codingfeline.buildkonfig", version = "0.15.2" }

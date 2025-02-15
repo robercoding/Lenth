@@ -1,6 +1,6 @@
-import com.google.devtools.ksp.gradle.KspTaskMetadata
-import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+import com.codingfeline.buildkonfig.compiler.FieldSpec
+
 
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
@@ -9,7 +9,7 @@ plugins {
     alias(libs.plugins.composeMultiplatform)
     alias(libs.plugins.composeCompiler)
     alias(libs.plugins.ksp)
-    // alias(libs.plugins.room) Commented because workaround: // Workaround: https://stackoverflow.com/a/79082144/9420348
+    alias(libs.plugins.buildKonfig)
 }
 
 // Workaround: https://stackoverflow.com/a/79082144/9420348
@@ -92,18 +92,12 @@ kotlin {
             implementation(libs.koin.core)
             implementation(libs.koin.compose)
             implementation(libs.koin.compose.viewModel)
-            // implementation(libs.koin.androidx.compose)
 
             // Logger
             implementation(libs.touchlab.kermit)
 
-            // implementation(compose)
-            // implementation(libs.essenty.backHandler)
-
             val nav_version = "2.8.0-alpha11"
             implementation("org.jetbrains.androidx.navigation:navigation-compose:$nav_version")
-
-                // implementation("androidx.navigation:navigation-compose:$nav_version")
         }
 
         iosMain.dependencies {
@@ -143,6 +137,7 @@ android {
     buildTypes {
         getByName("release") {
             isMinifyEnabled = false
+            signingConfig = signingConfigs.getByName("debug")
         }
     }
     compileOptions {
@@ -158,3 +153,9 @@ dependencies {
     debugImplementation(compose.uiTooling)
 }
 
+buildkonfig {
+    packageName = "app.lenth"
+    defaultConfigs {
+        buildConfigField(FieldSpec.Type.STRING, "API_MAPS", "${project.property("lenth.maps.apikey")}")
+    }
+}
