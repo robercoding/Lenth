@@ -156,6 +156,6 @@ dependencies {
 buildkonfig {
     packageName = "app.lenth"
     defaultConfigs {
-        buildConfigField(FieldSpec.Type.STRING, "API_MAPS", "${project.property("lenth.maps.apikey")}")
+        buildConfigField(FieldSpec.Type.STRING, "API_MAPS", project.property("lenth.maps.apikey") as String)
     }
 }
